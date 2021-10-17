@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
+[ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=2]
+[ext_resource path="res://scripts/modules/module_shaper.gd" type="Script" id=3]
+[ext_resource path="res://scripts/modules/module_slasher.gd" type="Script" id=4]
+[ext_resource path="res://scripts/modules/module_manager.gd" type="Script" id=5]
+[ext_resource path="res://scripts/modules/module_input.gd" type="Script" id=6]
+[ext_resource path="res://scripts/modules/module_mover.gd" type="Script" id=7]
+[ext_resource path="res://scripts/modules/module_knives.gd" type="Script" id=8]
+
+[node name="Player" type="KinematicBody2D" groups=[
+"Players",
+]]
+script = ExtResource( 5 )
+
+[node name="Col" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -0.173355, -15.0607, -14.3155, -3.39339, -15.0226, 7.56676, -4.06244, 26.3051, 12.9081, 11.4558, 19.6256, -4.80761 )
+
+[node name="Status" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="Input" type="Node" parent="."]
+script = ExtResource( 6 )
+
+[node name="Mover" type="Node" parent="."]
+script = ExtResource( 7 )
+
+[node name="Slasher" type="Node" parent="."]
+script = ExtResource( 4 )
+
+[node name="Shaper" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="Drawer" type="Node2D" parent="."]
+script = ExtResource( 1 )
+
+[node name="Knives" type="Node2D" parent="."]
+show_behind_parent = true
+script = ExtResource( 8 )
+
+[connection signal="button_press" from="Input" to="Mover" method="_on_Input_button_press"]
+[connection signal="button_press" from="Input" to="Slasher" method="_on_Input_button_press"]
+[connection signal="button_release" from="Input" to="Mover" method="_on_Input_button_release"]
+[connection signal="button_release" from="Input" to="Slasher" method="_on_Input_button_release"]
+[connection signal="move_vec" from="Input" to="Mover" method="_on_Input_move_vec"]
+[connection signal="move_vec" from="Input" to="Slasher" method="_on_Input_move_vec"]
+[connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]

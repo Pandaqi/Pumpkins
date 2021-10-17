@@ -1,0 +1,52 @@
+extends PhysicsBody2D
+
+var modules = {}
+var shoot_away : Vector2 = Vector2.ZERO
+var teleport_pos : Vector2 = Vector2.ZERO
+
+var last_velocity : Vector2 = Vector2.ZERO
+var last_rotation : float = 0.0
+
+func _ready():
+	register_modules()
+
+func register_modules():
+	for child in get_children():
+		var key = child.name.to_lower()
+		modules[key] = child
+
+func slowly_orient_towards_vec(vec):
+	var cur_vec = get_forward_vec()
+	var lerp_vec = cur_vec.slerp(vec, 0.2)
+	set_rotation(lerp_vec.angle())
+
+func get_forward_vec():
+	var rot = get_rotation()
+	return Vector2(cos(rot), sin(rot))
+
+func plan_shoot_away(vec):
+	shoot_away = vec
+
+func plan_teleport(pos):
+	teleport_pos = pos
+
+func _integrate_forces(state):
+	state.angular_velocity = 0.0
+	
+	if teleport_pos.length() > 0.5:
+		state.transform.origin = teleport_pos
+		teleport_pos = Vector2.ZERO
+
+	if shoot_away.length() > 0.5:
+		state.linear_velocity = shoot_away
+		shoot_away = Vector2.ZERO
+	
+	if modules.has('projectile'):
+		modules.projectile._integrate_forces(state)
+	
+	last_velocity = state.linear_velocity
+	last_rotation = get_rotation()
+
+func reset_velocity_to_last_point(state):
+	state.linear_velocity = last_velocity
+	set_rotation(last_rotation)

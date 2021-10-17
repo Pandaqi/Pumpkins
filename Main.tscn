@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scripts/main.gd" type="Script" id=1]
+[ext_resource path="res://scripts/players.gd" type="Script" id=2]
+[ext_resource path="res://scripts/slicer.gd" type="Script" id=3]
+[ext_resource path="res://scenes/level_bound.tscn" type="PackedScene" id=4]
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Players" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="Slicer" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="Bounds" type="Node2D" parent="."]
+
+[node name="StaticBody2D" parent="Bounds" instance=ExtResource( 4 )]
+
+[node name="StaticBody2D2" parent="Bounds" instance=ExtResource( 4 )]
+position = Vector2( 922.067, 1083.29 )
+rotation = 3.14159
+
+[node name="StaticBody2D3" parent="Bounds" instance=ExtResource( 4 )]
+position = Vector2( 1926.16, 684.479 )
+rotation = 1.5708
+
+[node name="StaticBody2D4" parent="Bounds" instance=ExtResource( 4 )]
+position = Vector2( -5.65723, 692.965 )
+rotation = -1.5708

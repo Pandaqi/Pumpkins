@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 1200, 50 )
+
+[node name="StaticBody2D" type="StaticBody2D" groups=[
+"Deflectables",
+]]
+position = Vector2( 922.067, -2.82846 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -50 )
+shape = SubResource( 1 )
