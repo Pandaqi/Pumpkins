@@ -9,7 +9,7 @@ func set_color(col):
 	color = col
 	
 	# DEBUGGING/TO DO => not sure if I want all players the same color or not
-	color = pumpkin_orange
+	#color = pumpkin_orange
 
 func _draw():
 	var num_shapes = body.shape_owner_get_shape_count(0)

@@ -6,6 +6,9 @@ const GROWTH_FACTOR : float = 0.2
 
 var temporary = []
 onready var body = get_parent()
+onready var map = get_node("/root/Main/Map")
+
+var powerup_fb_scene = preload("res://scenes/powerup_feedback.tscn")
 
 func grab(type):
 	show_feedback(type)
@@ -21,11 +24,13 @@ func remove_powerup_if_already_exists(type : String):
 		temporary.erase(obj)
 		return
 
-# TO DO: Show icon above our heads or something
 func show_feedback(type):
-	pass
+	var fb = powerup_fb_scene.instance()
+	fb.set_type(type)
+	fb.set_player(body)
+	map.overlay.add_child(fb)
 
-func _physics_process(dt):
+func _physics_process(_dt):
 	handle_temporary_effects()
 
 func handle_temporary_effects():
@@ -55,7 +60,7 @@ func activate_effect(type):
 			body.modules.grower.shrink(GROWTH_FACTOR)
 		
 		"morph":
-			pass
+			body.modules.shaper.morph_to_random_shape()
 		
 		"ghost":
 			body.modules.status.make_ghost()
@@ -78,6 +83,36 @@ func activate_effect(type):
 		
 		"boomerang":
 			body.modules.knives.are_boomerang = true
+		
+		"curved":
+			body.modules.knives.use_curve = true
+		
+		"faster_throw":
+			body.modules.slasher.change_throw_multiplier(1.5)
+		
+		"slower_throw":
+			body.modules.slasher.change_throw_multiplier(0.5)
+		
+		"faster_move":
+			body.modules.mover.change_speed_multiplier(1.5)
+		
+		"slower_move":
+			body.modules.mover.change_speed_multiplier(0.5)
+		
+		"reversed_controls":
+			body.modules.mover.reversed = true
+		
+		"ice":
+			body.modules.mover.ice = true
+		
+		"magnet":
+			body.modules.collector.enable_magnet()
+		
+		"duplicator":
+			body.modules.collector.multiplier = 1
+		
+		"clueless":
+			body.modules.collector.disable_collection()
 
 func deactivate_effect(type):
 	match type:
@@ -89,3 +124,21 @@ func deactivate_effect(type):
 		
 		"boomerang":
 			body.modules.knives.are_boomerang = false
+		
+		"curved":
+			body.modules.knives.use_curve = false
+		
+		"reversed_controls":
+			body.modules.mover.reversed = false
+		
+		"ice":
+			body.modules.mover.ice = false
+		
+		"magnet":
+			body.modules.collector.disable_magnet()
+		
+		"duplicator":
+			body.modules.collector.multiplier = 2
+		
+		"clueless":
+			body.modules.collector.enable_collection()

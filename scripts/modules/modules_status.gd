@@ -7,16 +7,23 @@ var is_ghost : bool = false
 
 onready var body = get_parent()
 
+var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
+
 func set_player_num(num):
 	player_num = num
 	
 	var is_player = body.modules.has('input')
+	body.modules.drawer.set_color(GlobalDict.player_colors[num])
+	
 	if not is_player: return
 	
 	body.modules.input.set_player_num(num)
-	body.modules.drawer.set_color(GlobalDict.player_colors[num])
+	
 	body.modules.knives.create_starting_knives()
 	body.modules.topping.set_frame(player_num)
+
+func make_powerup_leftover():
+	body.modules.drawer.set_color(powerup_part_color)
 
 func delete():
 	body.queue_free()

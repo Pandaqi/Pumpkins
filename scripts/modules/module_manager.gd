@@ -2,6 +2,7 @@ extends PhysicsBody2D
 
 # 0->1, 0 means we NEVER reach our new rotation, 1 means we INSTANTLY reach our new rotation
 const AGILITY : float = 0.6
+const MAX_ANGULAR_VEL_ON_IMPACT : float = 50.0
 
 var modules = {}
 var shoot_away : Vector2 = Vector2.ZERO
@@ -34,7 +35,7 @@ func plan_teleport(pos):
 	teleport_pos = pos
 
 func _integrate_forces(state):
-	state.angular_velocity = 0.0
+	#state.angular_velocity = 0.0
 	
 	if teleport_pos.length() > 0.5:
 		state.transform.origin = teleport_pos
@@ -42,6 +43,7 @@ func _integrate_forces(state):
 
 	if shoot_away.length() > 0.5:
 		state.linear_velocity = shoot_away
+		state.angular_velocity = (randf()-0.5)*MAX_ANGULAR_VEL_ON_IMPACT
 		shoot_away = Vector2.ZERO
 	
 	if modules.has('projectile'):

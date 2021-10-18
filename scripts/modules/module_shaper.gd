@@ -7,13 +7,14 @@ var area : float = 0.0
 
 onready var body = get_parent()
 onready var slicer = get_node("/root/Main/Slicer")
+onready var shape_manager = get_node("/root/Main/ShapeManager")
 
 signal shape_updated()
 
 # Shape creation
 func destroy():
 	var num_shapes = body.shape_owner_get_shape_count(0)
-	for i in range(num_shapes):
+	for _i in range(num_shapes):
 		body.shape_owner_remove_shape(0, 0)
 
 func create_from_shape_list(shapes):
@@ -35,6 +36,18 @@ func create_from_shape(shp):
 	body.modules.col.polygon = shape
 	
 	on_shape_updated()
+
+func morph_to_random_shape():
+	var rand_shape = shape_manager.get_random_shape()
+	var points = GlobalDict.predefined_shapes[rand_shape].points
+	
+	var other_area : float = 20.0 # most predefined shapes are roughly radius 20
+	var scale_factor = area / other_area
+	
+	points = shape_manager.scale_shape(points, scale_factor)
+
+	destroy()
+	create_from_shape(points)
 
 func on_shape_updated():
 	recalculate_area()

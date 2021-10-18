@@ -1,11 +1,12 @@
 extends Node2D
 
-const SLICE_EXPLODE_FORCE : float = 1.0
+const SLICE_EXPLODE_FORCE : float = 1000.0
 const MIN_AREA_FOR_SHAPE : float = 400.0
 
 var player_part_scene = preload("res://scenes/player_part.tscn")
 
 onready var main_node = get_parent()
+onready var map = get_node("/root/Main/Map")
 
 var start_point
 var end_point
@@ -40,7 +41,6 @@ func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include
 	update()
 	
 	# create a (narrow, elongated) rectangle along line
-	var max_radius = max( abs(p1.x - p2.x), abs(p1.y - p2.y) )
 	var angle = (p2 - p1).angle()
 	var avg_pos = (p2 + p1)*0.5
 	
@@ -152,8 +152,7 @@ func slice_body(b, p1, p2):
 			b.modules.status.delete()
 	
 	# create bodies for each set of points left over
-	var vec = (p2 - p1)
-	var ortho_vec = vec.rotated(PI)
+	var vec = (p2 - p1).normalized()
 
 	var new_bodies = []
 	for key in shape_layers:
@@ -161,11 +160,27 @@ func slice_body(b, p1, p2):
 
 		if calculate_area(shp) < MIN_AREA_FOR_SHAPE: continue
 		
-		var body = create_body_from_shape_list(shp, original_player_num)
-		body.plan_shoot_away(ortho_vec * SLICE_EXPLODE_FORCE)
+		var body = create_body_from_shape_list(shp, { 'player_num': original_player_num, 'is_powerup': is_powerup })
 		new_bodies.append(body)
+		
+		var side_of_line = point_side_of_line(p1, p2, body.get_global_position())
+		var shoot_vec
+		if side_of_line < 0:
+			shoot_vec = vec.rotated(-0.5*PI)
+		else:
+			shoot_vec = vec.rotated(0.5*PI)
+		
+		# randomize it a bit
+		shoot_vec = shoot_vec.rotated((randf()-0.5)*0.1*PI)
+		
+		print(shoot_vec)
+		
+		body.plan_shoot_away(shoot_vec * SLICE_EXPLODE_FORCE)
 	
 	return new_bodies
+
+func point_side_of_line(p1, p2, point):
+	return sign((p2.x - p1.x) * (point.y - p1.y) - (p2.y - p1.y)*(point.x - p1.x))
 
 func determine_shape_layers(new_shapes, p1, p2):
 	var saved_layers = []
@@ -270,10 +285,12 @@ func create_body_from_shape_list(shapes : Array, params = {}) -> RigidBody2D:
 	avg_pos /= float(shapes.size())
 	body.position = avg_pos
 	
-	main_node.add_child(body)
+	map.ground.add_child(body)
 	body.modules.shaper.create_from_shape_list(shapes)
 	
-	# TO DO: assign correct player num (and thus color) to the new part)
+	body.modules.status.set_player_num(params.player_num)
+	if params.has('is_powerup') and params.is_powerup:
+		body.modules.status.make_powerup_leftover()
 	
 	return body
 

@@ -31,7 +31,7 @@ func add_instructions():
 	instruc_gui.set_visible(true)
 	instruc_gui.set_frame(0)
 
-func _physics_process(dt):
+func _physics_process(_dt):
 	if not my_gui.is_visible(): return
 	
 	var pos = body.get_global_transform_with_canvas().origin

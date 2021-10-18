@@ -1,18 +1,29 @@
 extends Node
 
 const MOVE_SPEED : float = 400.0
+var speed_multiplier : float = 1.0
 
 onready var body : KinematicBody2D = get_parent()
 
 var moving_enabled : bool = true
+var reversed : bool = false
+var ice : bool = false
+
+var forward_vec = Vector2.RIGHT
 
 func _on_Input_move_vec(vec : Vector2):
 	if not moving_enabled: return
 	if vec.length() <= 0.03: return
 	
+	if reversed: vec *= -1
+	
 	body.slowly_orient_towards_vec(vec)
 	
-	var final_vec = body.get_forward_vec()*MOVE_SPEED
+	var lerp_factor = 1.0
+	if ice: lerp_factor = 0.1
+	forward_vec = lerp(forward_vec, body.get_forward_vec(), lerp_factor)
+	
+	var final_vec = forward_vec*speed_multiplier*MOVE_SPEED
 	body.move_and_slide(final_vec)
 
 func _on_Input_button_press():
@@ -20,3 +31,6 @@ func _on_Input_button_press():
 
 func _on_Input_button_release():
 	moving_enabled = true
+
+func change_speed_multiplier(val):
+	speed_multiplier = clamp(speed_multiplier*val, 0.2, 3.0)
