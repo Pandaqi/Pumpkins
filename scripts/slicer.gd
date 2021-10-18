@@ -1,7 +1,7 @@
 extends Node2D
 
 const SLICE_EXPLODE_FORCE : float = 1.0
-const MIN_AREA_FOR_SHAPE : float = 200.0
+const MIN_AREA_FOR_SHAPE : float = 400.0
 
 var player_part_scene = preload("res://scenes/player_part.tscn")
 
@@ -60,12 +60,14 @@ func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include
 	for res in results:
 		var body = res.collider
 		
-		if not body.is_in_group("Players"): continue
+		if not body.is_in_group("Sliceables"): continue
 		if body in exclude: continue
 		if include.size() > 0 and not (body in include): continue
 		if body in bodies: continue
 		
 		bodies.append(body)
+	
+	if bodies.size() <= 0: return []
 
 	# finally, slice whatever is left
 	var final_bodies = []
@@ -75,7 +77,9 @@ func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include
 	return final_bodies
 
 func slice_body(b, p1, p2):
-	var original_player_num = b.modules.status.player_num
+	var original_player_num = -1
+	if b.modules.has("status"):
+		original_player_num = b.modules.status.player_num
 	
 	var num_shapes = b.shape_owner_get_shape_count(0)
 	var cur_shapes = []
@@ -102,6 +106,7 @@ func slice_body(b, p1, p2):
 	var shape_layers = determine_shape_layers(new_shapes, p1, p2)
 	
 	var is_player_body = b.modules.has('input')
+	var is_powerup = b.is_in_group("Powerups")
 	var player_died = false
 	if is_player_body:
 		
@@ -120,9 +125,9 @@ func slice_body(b, p1, p2):
 		
 		# But if the biggest shape is still too small,
 		# the player is officially dead
+		print(biggest_area)
 		if biggest_area < MIN_AREA_FOR_SHAPE:
 			player_died = true
-			main_node.player_died(original_player_num)
 		
 		else:
 			var new_shape_for_this_body = shape_layers[biggest_key]
@@ -130,10 +135,21 @@ func slice_body(b, p1, p2):
 			
 			b.modules.shaper.destroy()
 			b.modules.shaper.create_from_shape_list(new_shape_for_this_body)
+
+	if player_died:
+		# if we died, the body keeps existing, just in a differnt form
+		b.modules.status.die()
 		
-	if (not is_player_body) or player_died:
-		# destroy the old body completely; we'll create new ones
-		b.modules.status.delete()
+		# NOW ask the main node to check game over, because the "dying" has finished
+		main_node.player_died(original_player_num)
+	
+	elif (not is_player_body):
+		if is_powerup:
+			b.reveal_powerup()
+		
+		else:
+			# destroy the old body completely; we'll create new ones
+			b.modules.status.delete()
 	
 	# create bodies for each set of points left over
 	var vec = (p2 - p1)
@@ -142,10 +158,7 @@ func slice_body(b, p1, p2):
 	var new_bodies = []
 	for key in shape_layers:
 		var shp = shape_layers[key]
-		
-		print("AREA OF NEW SHAPE")
-		print(calculate_area(shp))
-		
+
 		if calculate_area(shp) < MIN_AREA_FOR_SHAPE: continue
 		
 		var body = create_body_from_shape_list(shp, original_player_num)

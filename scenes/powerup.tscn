@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scripts/revealed_powerup.gd" type="Script" id=2]
+[ext_resource path="res://scripts/powerup.gd" type="Script" id=3]
+[ext_resource path="res://assets/powerups.png" type="Texture" id=4]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 32, 32 )
+
+[node name="Powerup" type="StaticBody2D" groups=[
+"Powerups",
+"Sliceables",
+]]
+position = Vector2( 1020.85, 410.357 )
+collision_layer = 8
+collision_mask = 8
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -32.5293, -32.1207, 32.0609, -31.898, 32.2836, 32.024, -31.8611, 32.024 )
+
+[node name="RevealedPowerup" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="RevealedPowerup"]
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 4 )
+hframes = 8
+vframes = 8
+
+[node name="Area2D" type="Area2D" parent="RevealedPowerup"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RevealedPowerup/Area2D"]
+shape = SubResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 4 )
+hframes = 8
+vframes = 8
+
+[connection signal="body_entered" from="RevealedPowerup/Area2D" to="RevealedPowerup" method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="RevealedPowerup/Area2D" to="RevealedPowerup" method="_on_Area2D_body_exited"]

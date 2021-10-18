@@ -49,15 +49,23 @@ func execute_slash():
 
 func execute_quick_slash():
 	var start = body.get_global_position()
-	var end = start + body.get_forward_vec() * slash_range
+	var vec = body.modules.knives.get_first_knife_vec()
+	if not vec:
+		# print the "NO KNIVES" feedback
+		return
+	
+	var end = start + vec * slash_range
 	
 	slicer.slice_bodies_hitting_line(start, end, [body])
 
 func execute_thrown_slash():
-	body.modules.knives.throw_first_knife(body.get_forward_vec())
+	body.modules.knives.throw_first_knife()
 
 func determine_slash_range():
 	slash_range = clamp(range_multiplier * DEFAULT_SLASH_RANGE, SLASH_RANGE_BOUNDS.min, SLASH_RANGE_BOUNDS.max)
+
+func change_range_multiplier(val):
+	range_multiplier = clamp(range_multiplier * val, 0.2, 3.0)
 
 func get_throw_strength():
 	var time_held = (OS.get_ticks_msec() - slash_start_time)

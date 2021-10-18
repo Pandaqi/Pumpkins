@@ -1,5 +1,8 @@
 extends PhysicsBody2D
 
+# 0->1, 0 means we NEVER reach our new rotation, 1 means we INSTANTLY reach our new rotation
+const AGILITY : float = 0.6
+
 var modules = {}
 var shoot_away : Vector2 = Vector2.ZERO
 var teleport_pos : Vector2 = Vector2.ZERO
@@ -17,7 +20,7 @@ func register_modules():
 
 func slowly_orient_towards_vec(vec):
 	var cur_vec = get_forward_vec()
-	var lerp_vec = cur_vec.slerp(vec, 0.2)
+	var lerp_vec = cur_vec.slerp(vec, AGILITY)
 	set_rotation(lerp_vec.angle())
 
 func get_forward_vec():

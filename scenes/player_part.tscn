@@ -6,8 +6,11 @@
 [ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=4]
 
 [node name="PlayerPart" type="RigidBody2D" groups=[
-"Players",
+"Parts",
+"Sliceables",
 ]]
+collision_layer = 4
+collision_mask = 4
 linear_damp = 0.9
 script = ExtResource( 3 )
 

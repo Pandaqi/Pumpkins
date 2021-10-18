@@ -1,5 +1,8 @@
 extends Node
 
+const MAX_AREA : float = 5000.0
+const MIN_AREA : float = 400.0
+
 var area : float = 0.0
 
 onready var body = get_parent()
@@ -24,18 +27,27 @@ func create_from_shape_list(shapes):
 		var shape_node = ConvexPolygonShape2D.new()
 		shape_node.points = shp
 		body.shape_owner_add_shape(0, shape_node)
-
-	recalculate_area()
-	emit_signal("shape_updated")
+	
+	on_shape_updated()
 
 func create_from_shape(shp):
 	var shape = reposition_around_centroid(shp)
 	body.modules.col.polygon = shape
 	
+	on_shape_updated()
+
+func on_shape_updated():
 	recalculate_area()
 	emit_signal("shape_updated")
 
+
 # Area calculation
+func at_max_size():
+	return area >= MAX_AREA
+
+func at_min_size():
+	return area <= MIN_AREA
+
 func recalculate_area():
 	var shape_list = []
 	var num_shapes = body.shape_owner_get_shape_count(0)
