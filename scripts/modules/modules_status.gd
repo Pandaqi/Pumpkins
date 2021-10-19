@@ -54,7 +54,7 @@ func make_ghost():
 	body.collision_layer = 0
 	body.collision_mask = 0
 	
-	body.modules.topping.set_frame(player_num + 6)
+	body.modules.topping.make_ghost()
 
 func undo_ghost():
 	body.modulate.a = 1.0

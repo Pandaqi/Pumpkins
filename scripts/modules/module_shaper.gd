@@ -68,7 +68,7 @@ func recalculate_area():
 		var shape = body.shape_owner_get_shape(0, i)
 		shape_list.append(shape.points)
 	
-	area = slicer.calculate_area(shape_list)
+	area = shape_manager.calculate_area(shape_list)
 
 func approximate_radius():
 	return sqrt(area / PI)

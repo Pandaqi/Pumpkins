@@ -67,7 +67,6 @@ func activate_effect(type):
 		
 		"hungry":
 			body.modules.collector.is_hungry = true
-			print("MADE HUNGRY")
 		
 		"grow_range":
 			body.modules.slasher.change_range_multiplier(1.5)

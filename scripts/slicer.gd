@@ -1,13 +1,17 @@
 extends Node2D
 
 const SLICE_EXPLODE_FORCE : float = 1000.0
-const MIN_AREA_FOR_SHAPE : float = 400.0
+const MIN_AREA_FOR_SHAPE : float = 350.0
+
+# NOTE: if player falls below this size, they die
+const PLAYER_MIN_AREA_FOR_SHAPE : float = 600.0
 
 var player_part_scene = preload("res://scenes/player_part.tscn")
 
 onready var main_node = get_parent()
 onready var dramatic_slice = get_node("/root/Main/DramaticSlice")
 onready var map = get_node("/root/Main/Map")
+onready var shape_manager = get_node("/root/Main/ShapeManager")
 
 var start_point
 var end_point
@@ -119,7 +123,7 @@ func slice_body(b, p1, p2):
 		
 		for key in shape_layers:
 			var shp = shape_layers[key]
-			var area = calculate_area(shp)
+			var area = shape_manager.calculate_area(shp)
 			
 			if area > biggest_area:
 				biggest_area = area
@@ -128,7 +132,7 @@ func slice_body(b, p1, p2):
 		# But if the biggest shape is still too small,
 		# the player is officially dead
 		print(biggest_area)
-		if biggest_area < MIN_AREA_FOR_SHAPE:
+		if biggest_area < PLAYER_MIN_AREA_FOR_SHAPE:
 			player_died = true
 		
 		else:
@@ -160,7 +164,7 @@ func slice_body(b, p1, p2):
 	for key in shape_layers:
 		var shp = shape_layers[key]
 
-		if calculate_area(shp) < MIN_AREA_FOR_SHAPE: continue
+		if shape_manager.calculate_area(shp) < MIN_AREA_FOR_SHAPE: continue
 		
 		var body = create_body_from_shape_list(shp, { 'player_num': original_player_num, 'is_powerup': is_powerup })
 		new_bodies.append(body)
@@ -302,25 +306,6 @@ func create_body_from_shape_list(shapes : Array, params = {}) -> RigidBody2D:
 # Helper functions
 #
 ###
-func calculate_area(shape_list):
-	var area = 0
-	
-	for shp in shape_list:
-		area += calculate_shape_area_shoelace(shp)
-	
-	return area
-
-func calculate_shape_area_shoelace(shp):
-	var A = 0
-	
-	for i in range(shp.size()):
-		var next_index = (i+1) % int(shp.size())
-		var p1 = shp[i]
-		var p2 = shp[next_index]
-		
-		A += p1.x * p2.y - p1.y * p2.x
-	
-	return A * 0.5
 
 func make_shape_global(owner, shape : ConvexPolygonShape2D) -> Array:
 	var trans = owner.get_global_transform()

@@ -4,12 +4,16 @@ onready var players = $Players
 onready var powerups = $Powerups
 onready var game_state = $GameState
 onready var shape_manager = $ShapeManager
+onready var arena = $ArenaLoader
+onready var mode = $ModeManager
 
 func _ready():
 	if GlobalInput.get_player_count() <= 0:
 		GlobalInput.create_debugging_players()
 	
 	shape_manager.activate()
+	mode.activate()
+	arena.activate()
 	players.activate()
 	powerups.activate()
 	game_state.activate()

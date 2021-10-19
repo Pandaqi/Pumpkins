@@ -1,0 +1,291 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://assets/arenas/graveyard/graveyard_bg.png" type="Texture" id=1]
+[ext_resource path="res://assets/arenas/graveyard/graveyard_objects.png" type="Texture" id=2]
+[ext_resource path="res://assets/arenas/graveyard/graveyard_overlay.png" type="Texture" id=3]
+[ext_resource path="res://assets/arenas/graveyard/light_texture.png" type="Texture" id=4]
+[ext_resource path="res://arenas/tombstone.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scripts/arenas/graveyard/light_mover.gd" type="Script" id=6]
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 116.131
+
+[sub_resource type="CircleShape2D" id=7]
+radius = 59.1248
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 91.2479
+
+[sub_resource type="Animation" id=4]
+resource_name = "LightFlicker"
+length = 2.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.6, 1, 1.4, 1.6, 1.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 0.9, 1.05, 0.95, 1.1, 0.97, 1.03 ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:texture_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 9.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+
+[node name="Graveyard" type="Node2D"]
+
+[node name="Map" type="Node2D" parent="."]
+
+[node name="BG" type="Node2D" parent="Map"]
+
+[node name="GraveyardBg" type="Sprite" parent="Map/BG"]
+light_mask = 3
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Entities" type="Node2D" parent="Map"]
+
+[node name="GraveyardObjects" type="Sprite" parent="Map/Entities"]
+position = Vector2( 960, 540 )
+texture = ExtResource( 2 )
+
+[node name="StaticBody2D" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D2" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 448.985, 5.6123 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D3" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 448.985, -162.757 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D4" parent="Map/Entities" groups=[
+"Deflectables",
+] instance=ExtResource( 5 )]
+position = Vector2( 281.738, -162.757 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D5" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 1054.82, 0 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D6" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 1518.06, 2.04871 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D7" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 1204.47, -164.539 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D8" parent="Map/Entities" groups=[
+"Deflectables",
+] instance=ExtResource( 5 )]
+position = Vector2( 1350.82, -0.61348 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D9" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 435.578, 1091.77 )
+rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D10" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 884.563, 1258.61 )
+rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D11" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 607.377, 1087.41 )
+rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D12" parent="Map/Entities" groups=[
+"Deflectables",
+] instance=ExtResource( 5 )]
+position = Vector2( 607.007, 1259.94 )
+rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D13" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 1487.57, 1097.43 )
+rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D14" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 1956.47, 1255.04 )
+rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D15" parent="Map/Entities" groups=[
+"Stuckables",
+] instance=ExtResource( 5 )]
+position = Vector2( 1787.12, 1096.94 )
+rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D16" parent="Map/Entities" groups=[
+"Deflectables",
+] instance=ExtResource( 5 )]
+position = Vector2( 1489.41, 1255.21 )
+rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
+
+[node name="StaticBody2D17" type="StaticBody2D" parent="Map/Entities" groups=[
+"Deflectables",
+]]
+position = Vector2( 958.837, 540.23 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D17"]
+shape = SubResource( 6 )
+
+[node name="StaticBody2D18" type="StaticBody2D" parent="Map/Entities" groups=[
+"Deflectables",
+]]
+position = Vector2( 1914.85, 540.23 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D18"]
+shape = SubResource( 7 )
+
+[node name="StaticBody2D19" type="StaticBody2D" parent="Map/Entities" groups=[
+"Deflectables",
+]]
+position = Vector2( -2.82861, 540.23 )
+collision_layer = 13
+collision_mask = 13
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D19"]
+shape = SubResource( 7 )
+
+[node name="Overlay" type="Node2D" parent="Map"]
+
+[node name="GraveyardOverlay" type="Sprite" parent="Map/Overlay"]
+position = Vector2( 960, 540 )
+texture = ExtResource( 3 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Deflectables",
+]]
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Overlay/StaticBody2D"]
+position = Vector2( 4.78239, 2.31363 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Map/Overlay/StaticBody2D"]
+position = Vector2( 1.95396, 1070.26 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Map/Overlay/StaticBody2D"]
+position = Vector2( 1909.01, 1075.92 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Map/Overlay/StaticBody2D"]
+position = Vector2( 1911.84, 17.0729 )
+shape = SubResource( 2 )
+
+[node name="Light2D" type="Light2D" parent="Map/Overlay"]
+position = Vector2( 956.008, 543.058 )
+texture = ExtResource( 4 )
+texture_scale = 9.0
+range_layer_min = -2
+range_layer_max = 2
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_item_cull_mask = 2
+script = ExtResource( 6 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Map/Overlay/Light2D"]
+autoplay = "LightFlicker"
+anims/LightFlicker = SubResource( 4 )
+anims/RESET = SubResource( 5 )
+
+[node name="Timer" type="Timer" parent="Map/Overlay/Light2D"]
+wait_time = 15.0
+
+[node name="CanvasLayer" type="CanvasModulate" parent="Map/Overlay"]
+color = Color( 0.109804, 0.247059, 0.337255, 1 )
+
+[connection signal="timeout" from="Map/Overlay/Light2D/Timer" to="Map/Overlay/Light2D" method="_on_Timer_timeout"]

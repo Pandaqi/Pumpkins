@@ -11,6 +11,7 @@ extents = Vector2( 32, 32 )
 
 [node name="Powerup" type="StaticBody2D" groups=[
 "Powerups",
+"Pullables",
 "Sliceables",
 ]]
 position = Vector2( 1020.85, 410.357 )

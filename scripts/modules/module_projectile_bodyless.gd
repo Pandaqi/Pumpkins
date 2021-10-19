@@ -1,9 +1,11 @@
 extends Node2D
 
-const LINEAR_DAMPING : float = 0.999
+const LINEAR_DAMPING : float = 0.995
 
 const CURVE_SPEED : float = 0.016
 const CURVE_DAMPING : float = 0.98
+
+const VELOCITY_LEFT_AFTER_DEFLECTION : float = 0.9
 
 const BOOMERANG_PRECISION : float = 3.0 # higher is better
 
@@ -13,11 +15,14 @@ onready var sprite = get_node("../Sprite")
 
 onready var slicer = get_node("/root/Main/Slicer")
 
+var knife_half_size = 0.5 * (0.25*256)
+
 var ignore_deflections : bool = false
 var collision_exceptions = []
 
 var being_held : bool = false
 var my_owner = null # NOTE "owner" is a registered word with Godot, so use something else
+var is_stuck : bool = false
 
 var velocity : Vector2 = Vector2.ZERO
 var curve_force : Vector3 = Vector3.ZERO # NOTE: fake 3D vector makes calculating forces easier for 2D
@@ -66,6 +71,9 @@ func _physics_process(dt):
 	apply_boomerang(dt)
 	move(dt)
 	shoot_raycast()
+	
+	if is_stuck:
+		shoot_back_raycast()
 
 func apply_boomerang(dt):
 	if not is_boomerang: return
@@ -117,13 +125,31 @@ func calculate_next_curve_step(vel : Vector2, curve : Vector3):
 		"curve": curve
 	}
 
+func shoot_back_raycast():
+	var space_state = get_world_2d().direct_space_state 
+
+	var normal = Vector2(cos(body.rotation), sin(body.rotation))
+	var start = body.get_global_position() + normal*knife_half_size
+	var end = body.get_global_position() - normal * knife_half_size * 2
+	
+	var exclude = []
+	var collision_layer = 2
+	
+	var result = space_state.intersect_ray(start, end, exclude, collision_layer)
+	if not result: return
+	
+	var hit_body = result.collider
+	if hit_body.is_in_group("Grabbers"):
+		check_knife_grab(hit_body)
+
 func shoot_raycast():
 	var space_state = get_world_2d().direct_space_state
 	
-	var raycast_length = 50 * (velocity.length() / 1000.0)
-	
+	var margin = 6
+	var raycast_length = 2*knife_half_size + velocity.length() * 0.016 + margin
+
 	var normal = velocity.normalized()
-	var start = body.get_global_position()
+	var start = body.get_global_position() - normal*knife_half_size
 	var end = start + normal * raycast_length
 	
 	clean_up_collision_exceptions()
@@ -161,6 +187,8 @@ func get_stuck(result):
 	
 	my_owner = null
 	velocity = Vector2.ZERO
+	body.set_position(result.position)
+	is_stuck = true
 
 func slice_through_body(obj):
 	var normal = velocity.normalized()
@@ -185,7 +213,7 @@ func deflect(res):
 	var norm = res.normal
 	var new_vel = -(2 * norm.dot(velocity) * norm - velocity)
 
-	velocity = new_vel
+	velocity = VELOCITY_LEFT_AFTER_DEFLECTION*new_vel
 	reset_collision_exceptions()
 
 func reset_collision_exceptions():
@@ -211,4 +239,5 @@ func check_knife_grab(other_body):
 	if not other_body.modules.knives.is_mine(body): return false
 
 	other_body.modules.knives.grab_knife(body)
+	is_stuck = false
 	return true

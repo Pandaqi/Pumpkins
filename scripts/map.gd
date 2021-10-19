@@ -1,6 +1,6 @@
 extends Node2D
 
-onready var shadows = $Shadows
+onready var bg = $BG
 onready var ground = $Ground
 onready var knives = $Knives
 onready var entities = $Entities

@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 const THROW_TIME_THRESHOLD : float = 250.0
 
@@ -9,15 +9,15 @@ var slashing_enabled : bool = false
 
 var slash_start_time : float
 
-const SLASH_RANGE_BOUNDS = { 'min': 100, 'max': 260 }
-const DEFAULT_SLASH_RANGE = 200
+const SLASH_RANGE_BOUNDS = { 'min': 70, 'max': 260 }
+const DEFAULT_SLASH_RANGE = 150
 var range_multiplier : float = 1.0
 var slash_range : float
 onready var range_sprite = $Sprite
 
 const MAX_TIME_HELD : float = 800.0 # holding longer than this changing nothing anymore
-const THROW_STRENGTH_BOUNDS = { 'min': 900, 'max': 2000 }
-const BASE_THROW_STRENGTH : float = 1800.0
+const THROW_STRENGTH_BOUNDS = { 'min': 600, 'max': 1500 }
+const BASE_THROW_STRENGTH : float = 1000.0
 var strength_multiplier : float = 1.0
 
 func _ready():
@@ -65,11 +65,27 @@ func execute_quick_slash():
 		# print the "NO KNIVES" feedback
 		return
 	
+	body.modules.knives.move_first_knife_to_back()
+	
 	var end = start + vec * slash_range
 	
-	slicer.slice_bodies_hitting_line(start, end, [body])
+	# first check if a body is there
+	var res = shoot_raycast(start, end)
+	if not res: return
 	
-	body.modules.knives.move_first_knife_to_back()
+	# if there is, extend the line to make sure we get a clean slice through
+	end += vec * slash_range * 2
+	
+	# @params start, end, exclude, include
+	slicer.slice_bodies_hitting_line(start, end, [body], [res.collider])
+
+func shoot_raycast(start, end):
+	var space_state = get_world_2d().direct_space_state 
+
+	var exclude = [body]
+	var collision_layer = 1 + 2 + 4 + 8
+	
+	return space_state.intersect_ray(start, end, exclude, collision_layer)
 
 func execute_thrown_slash():
 	body.modules.knives.throw_first_knife()

@@ -38,7 +38,11 @@ func check_magnet(dt):
 	for other_body in magnet_area.get_overlapping_bodies():
 		var vec_to_me = (body.get_global_position() - other_body.get_global_position()).normalized()
 		
-		if other_body.is_in_group("Unpullable"): continue
+		if other_body.is_in_group("Unpullables"): continue
+		
+		# Static bodies are unpullable by default (as 99% of them are)
+		# and need an exception to become pullable
+		if other_body is StaticBody2D and not other_body.is_in_group("Pullables"): continue
 		
 		if other_body is RigidBody2D:
 			other_body.apply_central_impulse(vec_to_me * MAGNET_STRENGTH)

@@ -23,9 +23,14 @@ func _ready():
 	build_input_map()
 
 func create_debugging_players():
-	var num_players = 2
-	for _i in range(num_players):
-		add_new_player('keyboard')
+	var num_players = 6
+	for i in range(num_players):
+		GlobalDict.player_data[i].active = true
+		
+		if i < 4: 
+			add_new_player('keyboard')
+		else:
+			add_new_player('controller', i)
 		# ('controller', i)
 
 #

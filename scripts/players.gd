@@ -6,30 +6,13 @@ const MIN_DIST_BETWEEN_PLAYERS : float = 200.0
 var num_players
 var player_scene = preload("res://scenes/player.tscn")
 
-var pumpkin_shape_scene = preload("res://PumpkinShapes.tscn")
-var pumpkin_shapes = []
-
 onready var main_node = get_parent()
 onready var map = get_node("/root/Main/Map")
 onready var spawner = get_node("/root/Main/Spawner")
+onready var shape_manager = get_node("/root/Main/ShapeManager")
 
 func activate():
-	load_pumpkin_shapes()
 	create_players()
-
-func load_pumpkin_shapes():
-	var arr = []
-	
-	var ps = pumpkin_shape_scene.instance()
-	for child in ps.get_children():
-		if not (child is CollisionPolygon2D): continue
-		
-		arr.append(Array(child.polygon))
-		
-	pumpkin_shapes = arr
-
-func select_random_pumpkin_shape():
-	return pumpkin_shapes[randi() % pumpkin_shapes.size()]
 
 func create_players():
 	var max_players = 6
@@ -45,7 +28,7 @@ func create_players():
 		
 		p.set_position(spawner.get_valid_pos(params))
 		
-		p.modules.shaper.create_from_shape(select_random_pumpkin_shape())
+		p.modules.shaper.create_from_shape(shape_manager.select_random_pumpkin_shape())
 		p.modules.status.set_player_num(i)
 		p.modules.status.set_team_num(player_data[i].team)
 		

@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="OccluderPolygon2D" id=6]
+polygon = PoolVector2Array( 185.445, 386.06, 253.915, 386.06, 256.16, 298.508, 267.385, 300.753, 267.385, 265.956, 166.363, 268.201, 166.363, 301.875, 182.078, 301.875 )
+
+[node name="StaticBody2D" type="StaticBody2D"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( 184.323, 383.815, 252.793, 383.815, 252.793, 300.753, 269.63, 299.63, 268.508, 268.201, 168.608, 270.446, 168.608, 302.998, 184.323, 301.875 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+light_mask = 2
+occluder = SubResource( 6 )
+light_mask = 2

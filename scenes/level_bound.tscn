@@ -5,7 +5,7 @@ extents = Vector2( 1200, 50 )
 
 [node name="StaticBody2D" type="StaticBody2D" groups=[
 "Deflectables",
-"Unpullable",
+"Unpullables",
 ]]
 position = Vector2( 922.067, -2.82846 )
 collision_layer = 5

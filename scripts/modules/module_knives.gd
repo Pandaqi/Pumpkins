@@ -99,6 +99,8 @@ func move_first_knife_to_back():
 	highlight_first_knife()
 
 func throw_knife(knife):
+	if knife_overlaps_problematic_body(knife): return
+	
 	knives_held.erase(knife)
 	knives_thrown.append(knife)
 	
@@ -157,8 +159,6 @@ func snap_vec_to_knife_angles(vec):
 	
 	snap_angles_taken.append(ang_index)
 	var ang = ang_index / float(num_snap_angles) * (2*PI)
-	
-	print(snap_angles_taken)
 	
 	return Vector2(cos(ang), sin(ang))
 
@@ -227,3 +227,23 @@ func destroy_knives():
 
 func disable_pickup():
 	pickup_disabled = true
+
+func knife_overlaps_problematic_body(knife):
+	var space_state = get_world_2d().direct_space_state
+	var half_size = knife.get_node("Projectile").knife_half_size
+	
+	var shp = RectangleShape2D.new()
+	shp.extents = Vector2(half_size, 0.25*half_size)
+	
+	var query_params = Physics2DShapeQueryParameters.new()
+	query_params.set_shape(shp)
+	
+	query_params.transform = query_params.transform.rotated(knife.global_rotation)
+	query_params.transform.origin = knife.get_global_position()
+	
+	var result = space_state.intersect_shape(query_params)
+	if result:
+		for obj in result:
+			if not obj.collider.is_in_group("Sliceables"): return true
+	
+	return false
