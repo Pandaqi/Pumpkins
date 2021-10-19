@@ -1,10 +1,21 @@
 extends Node
 
 var player_colors = [
-	Color(1.0, 0.0, 0.0), 
-	Color(0.0, 1.0, 0.0), 
-	Color(0.0, 0.0, 1.0),
-	Color(1.0, 1.0, 0.0)
+	Color(1.0, 148/255.0, 122/255.0), 
+	Color(177/255.0, 1.0, 140/255.0), 
+	Color(139/255.0, 1.0, 251/255.0),
+	Color(245/255.0, 148/255.0, 1.0),
+	Color(141/255.0, 121/255.0, 25/255.0),
+	Color(184/255.0, 191/255.0, 1.0)
+]
+
+var player_data = [
+	{ "team": 0, "bot": false, "active": true },
+	{ "team": 1, "bot": false, "active": true },
+	{ "team": 2, "bot": false, "active": false },
+	{ "team": 3, "bot": false, "active": false },
+	{ "team": 4, "bot": false, "active": false },
+	{ "team": 5, "bot": false, "active": false },
 ]
 
 var predefined_shapes = {

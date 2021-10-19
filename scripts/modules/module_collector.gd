@@ -1,7 +1,10 @@
 extends Node2D
 
+const MAGNET_STRENGTH : float = 10.0
+
 var is_hungry : bool = false
 onready var body = get_parent()
+onready var magnet_area = $MagnetArea
 onready var main_node = get_node("/root/Main")
 
 var num_collected : int = 0
@@ -25,11 +28,25 @@ func enable_collection():
 
 func enable_magnet():
 	magnet_enabled = true
-	
-	# TO DO: Create actual magnet area, actually listen to it and do something with it (if this is enabled)
 
 func disable_magnet():
 	magnet_enabled = false
+
+func check_magnet(dt):
+	if not magnet_enabled: return
+	
+	for other_body in magnet_area.get_overlapping_bodies():
+		var vec_to_me = (body.get_global_position() - other_body.get_global_position()).normalized()
+		
+		if other_body.is_in_group("Unpullable"): continue
+		
+		if other_body is RigidBody2D:
+			other_body.apply_central_impulse(vec_to_me * MAGNET_STRENGTH)
+		elif other_body is KinematicBody2D:
+			other_body.move_and_slide(vec_to_me * MAGNET_STRENGTH)
+		elif other_body is StaticBody2D:
+			other_body.set_position(other_body.get_position() + vec_to_me*MAGNET_STRENGTH)
+	
 
 func _on_Area2D_body_entered(other_body):
 	print("SOMETHING ENTERED")
@@ -43,3 +60,6 @@ func _on_Area2D_body_entered(other_body):
 	body.modules.grower.grow(0.1)
 	
 	collect(1 * multiplier)
+
+func _physics_process(dt):
+	check_magnet(dt)

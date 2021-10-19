@@ -33,12 +33,23 @@ func set_owner(o):
 func has_no_owner():
 	return (my_owner == null)
 
+func get_owner_rotation():
+	if has_no_owner(): return 0
+	return my_owner.rotation
+
 func set_velocity(vel):
 	velocity = vel
 
 func make_boomerang():
 	is_boomerang = true
 	boomerang_state = "flying"
+
+func make_curving(strength):
+	use_curve = true
+	
+	var final_strength = strength*0.4
+	var rand_dir = 1 if randf() <= 0.5 else -1
+	curve_force = Vector3(0,0,final_strength)*rand_dir
 
 func reset():
 	is_boomerang = false
@@ -109,9 +120,11 @@ func calculate_next_curve_step(vel : Vector2, curve : Vector3):
 func shoot_raycast():
 	var space_state = get_world_2d().direct_space_state
 	
+	var raycast_length = 50 * (velocity.length() / 1000.0)
+	
 	var normal = velocity.normalized()
 	var start = body.get_global_position()
-	var end = start + normal * 50
+	var end = start + normal * raycast_length
 	
 	clean_up_collision_exceptions()
 	

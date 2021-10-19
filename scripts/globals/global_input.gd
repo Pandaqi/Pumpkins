@@ -26,7 +26,7 @@ func create_debugging_players():
 	var num_players = 2
 	for _i in range(num_players):
 		add_new_player('keyboard')
-		# add_new_player('controller', i)
+		# ('controller', i)
 
 #
 # Auto-fill the input map with all the right controls
@@ -96,9 +96,6 @@ func build_input_map():
 					ev.set_axis_value(dir) # <- this one determines if it's positive or negative axis
 					
 					InputMap.action_add_event(key, ev)
-	
-	# FOR DEBUGGING
-	#printout_inputmap()
 
 func printout_inputmap():
 	var ac = InputMap.get_actions()
@@ -134,7 +131,7 @@ func add_new_player(type, id = -1):
 	
 	return id
 
-func remove_player(type, id, return_num : bool = false):
+func remove_player(type, id = null, return_num : bool = false):
 	if no_devices_registered(): return
 	
 	if type == 'keyboard' and not id:
@@ -173,6 +170,9 @@ func no_devices_registered() -> bool:
 
 func max_devices_reached() -> bool:
 	return (get_player_count() >= max_devices)
+
+func get_player_num_from_device_id(id : int):
+	return device_order.find(id)
 
 func device_already_registered(id : int) -> bool:
 	return devices.has(id)

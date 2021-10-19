@@ -15,6 +15,9 @@ func get_valid_pos(params):
 		if params.has('avoid_players'):
 			if num_tries < 100 and too_close_to_player(pos, params.avoid_players): continue
 		
+		if params.has('avoid_powerups'):
+			if num_tries < 200 and too_close_to_powerup(pos, params.avoid_powerups): continue
+		
 		bad_choice = false
 	
 	return pos
@@ -43,6 +46,14 @@ func inside_physics_body(pos, radius : float = 20.0):
 		print(res)
 		return true
 	
+	return false
+
+func too_close_to_powerup(pos, min_separation_dist : float = 50.0):
+	var powerups = get_tree().get_nodes_in_group("Powerups")
+	for p in powerups:
+		var dist = (p.get_global_position() - pos).length()
+		if dist >= min_separation_dist: continue
+		return true
 	return false
 
 func too_close_to_player(pos, min_separation_dist : float = 50.0):

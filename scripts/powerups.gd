@@ -4,6 +4,7 @@ const NUMBERS = { 'min': 1, 'max': 5 }
 const SPAWN_TIMES = { 'min': 2.0, 'max': 5.0 }
 const POWERUP_SIZE : float = 64.0 # 0.5*128
 const MIN_DIST_TO_PLAYER : float = 100.0
+const MIN_DIST_TO_OTHER_POWERUP : float = 200.0
 
 onready var timer = $Timer
 onready var map = get_node("/root/Main/Map")
@@ -19,7 +20,8 @@ func activate():
 	available_powerups = GlobalDict.powerups.keys()
 	placement_params = { 
 		"body_radius": 0.5*POWERUP_SIZE, 
-		"avoid_players": MIN_DIST_TO_PLAYER 
+		"avoid_players": MIN_DIST_TO_PLAYER,
+		"avoid_powerups": MIN_DIST_TO_OTHER_POWERUP
 	}
 	
 	_on_Timer_timeout()

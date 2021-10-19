@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/predefined_shapes.png" type="Texture" id=1]
 [ext_resource path="res://scripts/revealed_powerup.gd" type="Script" id=2]
 [ext_resource path="res://scripts/powerup.gd" type="Script" id=3]
 [ext_resource path="res://assets/powerups.png" type="Texture" id=4]
+[ext_resource path="res://scripts/modules/module_shadow_location.gd" type="Script" id=5]
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 32, 32 )
@@ -23,7 +24,9 @@ texture = ExtResource( 1 )
 hframes = 8
 vframes = 3
 
-[node name="RevealedPowerup" type="Node2D" parent="."]
+[node name="RevealedPowerup" type="Node2D" parent="." groups=[
+"Powerups",
+]]
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="RevealedPowerup"]
@@ -41,5 +44,10 @@ shape = SubResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
 polygon = PoolVector2Array( -32.5293, -32.1207, 32.0609, -31.898, 32.2836, 32.024, -31.8611, 32.024 )
+
+[node name="ShadowLocation" type="Node2D" parent="." groups=[
+"ShadowMakers",
+]]
+script = ExtResource( 5 )
 
 [connection signal="body_entered" from="RevealedPowerup/Area2D" to="RevealedPowerup" method="_on_Area2D_body_entered"]

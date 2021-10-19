@@ -7,6 +7,7 @@ onready var sprite = $Sprite
 
 func reveal(pos : Vector2):
 	set_position(pos)
+	set_rotation(randf()*2*PI)
 	set_visible(true)
 	still_inside = false
 

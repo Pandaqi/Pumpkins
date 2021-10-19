@@ -19,9 +19,9 @@ func register_modules():
 		var key = child.name.to_lower()
 		modules[key] = child
 
-func slowly_orient_towards_vec(vec):
+func slowly_orient_towards_vec(vec, factor : float = 1.0):
 	var cur_vec = get_forward_vec()
-	var lerp_vec = cur_vec.slerp(vec, AGILITY)
+	var lerp_vec = cur_vec.slerp(vec, AGILITY*factor)
 	set_rotation(lerp_vec.angle())
 
 func get_forward_vec():

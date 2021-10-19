@@ -13,6 +13,12 @@ func _ready():
 	players.activate()
 	powerups.activate()
 	game_state.activate()
+	
+	#debug_game_over()
+
+func debug_game_over():
+	var winner = get_tree().get_nodes_in_group("Players")[0].modules.status.team_num
+	game_state.game_over(winner)
 
 func player_died(num):
 	game_state.player_died(num)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=2]
@@ -10,16 +10,21 @@
 [ext_resource path="res://scripts/modules/module_knives.gd" type="Script" id=8]
 [ext_resource path="res://assets/toppings.png" type="Texture" id=9]
 [ext_resource path="res://scripts/modules/module_topping.gd" type="Script" id=10]
-[ext_resource path="res://assets/gameover.png" type="Texture" id=11]
+[ext_resource path="res://scenes/gui/game_over_bubble.tscn" type="PackedScene" id=11]
 [ext_resource path="res://scripts/modules/module_gameover.gd" type="Script" id=12]
 [ext_resource path="res://scripts/modules/module_powerups.gd" type="Script" id=13]
 [ext_resource path="res://scripts/modules/module_grower.gd" type="Script" id=14]
 [ext_resource path="res://scripts/modules/module_collector.gd" type="Script" id=15]
 [ext_resource path="res://assets/ui/ui_slash_range.png" type="Texture" id=16]
 [ext_resource path="res://assets/ui/ui_throw_guide.png" type="Texture" id=17]
+[ext_resource path="res://scripts/modules/module_shadow_location.gd" type="Script" id=18]
+[ext_resource path="res://scripts/modules/module_bot.gd" type="Script" id=19]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 16.0
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 175.49
 
 [node name="Player" type="KinematicBody2D" groups=[
 "Grabbers",
@@ -38,6 +43,9 @@ script = ExtResource( 2 )
 
 [node name="Input" type="Node" parent="."]
 script = ExtResource( 6 )
+
+[node name="Bot" type="Node" parent="."]
+script = ExtResource( 19 )
 
 [node name="Mover" type="Node" parent="."]
 script = ExtResource( 7 )
@@ -75,10 +83,9 @@ texture = ExtResource( 17 )
 [node name="GameOver" type="Node2D" parent="."]
 script = ExtResource( 12 )
 
-[node name="Sprite" type="Sprite" parent="GameOver"]
-scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 11 )
-hframes = 3
+[node name="Container" parent="GameOver" instance=ExtResource( 11 )]
+
+[node name="Container2" parent="GameOver" instance=ExtResource( 11 )]
 
 [node name="Topping" type="Node2D" parent="."]
 scale = Vector2( 0.25, 0.25 )
@@ -98,6 +105,19 @@ collision_mask = 5
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collector/Area2D"]
 shape = SubResource( 1 )
 
+[node name="MagnetArea" type="Area2D" parent="Collector"]
+collision_layer = 15
+collision_mask = 15
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collector/MagnetArea"]
+shape = SubResource( 2 )
+
+[node name="ShadowLocation" type="Node2D" parent="." groups=[
+"ShadowMakers",
+]]
+script = ExtResource( 18 )
+extents = Vector2( 100, 20 )
+
 [connection signal="button_press" from="Input" to="Mover" method="_on_Input_button_press"]
 [connection signal="button_press" from="Input" to="Slasher" method="_on_Input_button_press"]
 [connection signal="button_release" from="Input" to="Mover" method="_on_Input_button_release"]
@@ -107,4 +127,5 @@ shape = SubResource( 1 )
 [connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
 [connection signal="body_entered" from="Collector/Area2D" to="Collector" method="_on_Area2D_body_entered"]

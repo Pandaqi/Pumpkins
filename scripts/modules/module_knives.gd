@@ -26,9 +26,18 @@ func create_starting_knives():
 	
 	loading_done = true
 	randomly_position_knives()
+
+func make_boomerang():
+	for knife in knives_held:
+		knife.get_node("ShadowLocation").type = "circle"
 	
-	# DEBUGGING
 	are_boomerang = true
+
+func undo_boomerang():
+	for knife in knives_held:
+		knife.get_node("ShadowLocation").type = "rect"
+	
+	are_boomerang = false
 
 func create_new_knife():
 	var knife = knife_scene.instance()
@@ -82,6 +91,13 @@ func get_first_knife_vec():
 	var ang = knives_held[0].rotation + body.rotation
 	return Vector2(cos(ang), sin(ang))
 
+func move_first_knife_to_back():
+	var first = knives_held.pop_front()
+	knives_held.append(first)
+	
+	unhighlight_knife(first)
+	highlight_first_knife()
+
 func throw_knife(knife):
 	knives_held.erase(knife)
 	knives_thrown.append(knife)
@@ -90,8 +106,7 @@ func throw_knife(knife):
 	projectile.being_held = false
 	
 	if use_curve:
-		projectile.use_curve = true
-		projectile.curve_force = Vector3(0,0,10)
+		projectile.make_curving(body.modules.slasher.get_curve_strength())
 	
 	if are_boomerang:
 		projectile.make_boomerang()
@@ -190,7 +205,16 @@ func get_radius():
 	return 1.25 * body.modules.shaper.approximate_radius()
 
 func is_mine(other_body):
-	return (other_body in knives_thrown) or other_body.get_node("Projectile").has_no_owner()
+	if (other_body in knives_thrown): return true
+	if other_body.get_node("Projectile").has_no_owner(): return true
+	if same_team(other_body.get_node("Projectile").my_owner): return true
+	
+	return false
+
+func same_team(other_body):
+	var our_team = body.modules.status.team_num
+	var their_team = other_body.modules.status.team_num
+	return (our_team == their_team)
 
 func _on_Shaper_shape_updated():
 	reposition_knives()

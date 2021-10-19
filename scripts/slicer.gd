@@ -6,6 +6,7 @@ const MIN_AREA_FOR_SHAPE : float = 400.0
 var player_part_scene = preload("res://scenes/player_part.tscn")
 
 onready var main_node = get_parent()
+onready var dramatic_slice = get_node("/root/Main/DramaticSlice")
 onready var map = get_node("/root/Main/Map")
 
 var start_point
@@ -105,9 +106,10 @@ func slice_body(b, p1, p2):
 	# determine which shapes belong together ("are in the same layer")
 	var shape_layers = determine_shape_layers(new_shapes, p1, p2)
 	
-	var is_player_body = b.modules.has('input')
+	var is_player_body = b.is_in_group("Players")
 	var is_powerup = b.is_in_group("Powerups")
 	var player_died = false
+	
 	if is_player_body:
 		
 		# Find the BIGGEST of them all
@@ -173,9 +175,10 @@ func slice_body(b, p1, p2):
 		# randomize it a bit
 		shoot_vec = shoot_vec.rotated((randf()-0.5)*0.1*PI)
 		
-		print(shoot_vec)
-		
 		body.plan_shoot_away(shoot_vec * SLICE_EXPLODE_FORCE)
+	
+	if is_player_body:
+		dramatic_slice.execute()
 	
 	return new_bodies
 

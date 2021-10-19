@@ -1,0 +1,21 @@
+extends CanvasLayer
+
+onready var tween = $Tween
+onready var game_state = get_node("../GameState")
+
+func tween_appearance(obj):
+	var old_scale = Vector2(0,0)
+	var target_scale = Vector2(1,1)
+	
+	var duration = 0.3 + randf()*0.4
+	var delay = randf()*2.0
+	
+	tween.interpolate_property(obj, "scale", 
+		old_scale, target_scale, duration,
+		Tween.TRANS_ELASTIC, Tween.EASE_OUT, 
+		delay)
+	
+	tween.start()
+
+func _on_Tween_tween_all_completed():
+	game_state.interface_available = true

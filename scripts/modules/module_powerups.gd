@@ -82,7 +82,7 @@ func activate_effect(type):
 			body.modules.knives.lose_random_knife()
 		
 		"boomerang":
-			body.modules.knives.are_boomerang = true
+			body.modules.knives.make_boomerang()
 		
 		"curved":
 			body.modules.knives.use_curve = true
@@ -123,7 +123,7 @@ func deactivate_effect(type):
 			body.modules.collector.is_hungry = false
 		
 		"boomerang":
-			body.modules.knives.are_boomerang = false
+			body.modules.knives.undo_boomerang()
 		
 		"curved":
 			body.modules.knives.use_curve = false

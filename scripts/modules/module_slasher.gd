@@ -38,7 +38,8 @@ func _on_Input_move_vec(vec : Vector2):
 	if not slashing_enabled: return
 	if vec.length() <= 0.1: return
 	
-	body.slowly_orient_towards_vec(vec)
+	var factor = clamp(1.0 - (OS.get_ticks_msec() - slash_start_time)/(2*MAX_TIME_HELD), 0.02, 1.0)
+	body.slowly_orient_towards_vec(vec, factor)
 
 func start_slash():
 	slash_start_time = OS.get_ticks_msec()
@@ -67,6 +68,8 @@ func execute_quick_slash():
 	var end = start + vec * slash_range
 	
 	slicer.slice_bodies_hitting_line(start, end, [body])
+	
+	body.modules.knives.move_first_knife_to_back()
 
 func execute_thrown_slash():
 	body.modules.knives.throw_first_knife()
@@ -89,3 +92,7 @@ func get_throw_strength():
 
 func change_throw_multiplier(val):
 	strength_multiplier = clamp(strength_multiplier * val, 0.2, 3.0)
+
+func get_curve_strength():
+	var linear_val = clamp(strength_multiplier * BASE_THROW_STRENGTH, THROW_STRENGTH_BOUNDS.min, THROW_STRENGTH_BOUNDS.max)
+	return 0.016*linear_val
