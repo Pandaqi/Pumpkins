@@ -61,6 +61,7 @@ tracks/1/keys = {
 }
 
 [node name="Knife" type="Node2D" groups=[
+"Knives",
 "Throwables",
 ]]
 

@@ -23,15 +23,25 @@ func _ready():
 	build_input_map()
 
 func create_debugging_players():
-	var num_players = 6
+	var num_players = 2
+	var num_bots = 0
+	for i in range(8):
+		GlobalDict.player_data[i].active = false
+		GlobalDict.player_data[i].bot = false
+	
 	for i in range(num_players):
 		GlobalDict.player_data[i].active = true
+		GlobalDict.player_data[i].bot = false
 		
 		if i < 4: 
 			add_new_player('keyboard')
 		else:
 			add_new_player('controller', i)
 		# ('controller', i)
+	
+	for i in range(num_bots):
+		GlobalDict.player_data[num_players + i].active = true
+		GlobalDict.player_data[num_players + i].bot = true
 
 #
 # Auto-fill the input map with all the right controls

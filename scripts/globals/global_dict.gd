@@ -1,18 +1,21 @@
 extends Node
 
 var cfg = {
-	'game_mode': 'bulls_eye',
+	'game_mode': 'collect_em_all',
 	'max_players': 6,
 	'auto_pickup_powerups': false,
-	'num_starting_knives': 1
+	'num_starting_knives': 1,
+	
+	'use_alternate_control_scheme': true,
+	'auto_throw_knives': true,
 }
 
 var modes = {
 	"dicey_slicey": { "win": "survival", "fade_rubble": true },
-	"collect_em_all": { "win": "collection", "eat_player_parts": true, "target_num": 20, "auto_grow": true },
-	"bulls_eye": { "win": "collection", "target_num": 50, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1 },
-	"frightening_feast": { "win": "collection", "target_num": 10, "auto_spawns": "dumplings" },
-	"dwarfing_dumplings": { "win": "survival", "fade_rubble": true },
+	"collect_em_all": { "win": "collection", "eat_player_parts": true, "target_num": 20, "auto_grow": true, "collectible_group": "Parts" },
+	"bulls_eye": { "win": "collection", "target_num": 50, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets" },
+	"frightening_feast": { "win": "collection", "target_num": 10, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
+	"dwarfing_dumplings": { "win": "survival", "fade_rubble": true, "target_group": "Dumplings" },
 	"ropeless_race": { "win": "survival", "forbid_slicing_players": true, "fade_rubble": true }
 }
 
@@ -29,7 +32,7 @@ var player_colors = [
 
 var player_data = [
 	{ "team": 0, "bot": false, "active": true },
-	{ "team": 1, "bot": false, "active": true },
+	{ "team": 1, "bot": true, "active": true },
 	{ "team": 2, "bot": false, "active": false },
 	{ "team": 3, "bot": false, "active": false },
 	{ "team": 4, "bot": false, "active": false },

@@ -135,8 +135,7 @@ func change_range_multiplier(val):
 	determine_slash_range()
 
 func get_throw_strength():
-	var time_held = (OS.get_ticks_msec() - slash_start_time)
-	var strength = strength_multiplier * (time_held / MAX_TIME_HELD) * BASE_THROW_STRENGTH
+	var strength = strength_multiplier * (get_time_held() / MAX_TIME_HELD) * BASE_THROW_STRENGTH
 	return clamp(strength, THROW_STRENGTH_BOUNDS.min, THROW_STRENGTH_BOUNDS.max)
 
 func change_throw_multiplier(val):
@@ -145,3 +144,16 @@ func change_throw_multiplier(val):
 func get_curve_strength():
 	var linear_val = clamp(strength_multiplier * BASE_THROW_STRENGTH, THROW_STRENGTH_BOUNDS.min, THROW_STRENGTH_BOUNDS.max)
 	return 0.016*linear_val
+
+func get_time_held():
+	return (OS.get_ticks_msec() - slash_start_time)
+
+func in_long_throw_mode():
+	return get_time_held() > THROW_TIME_THRESHOLD
+
+func pos_within_range(pos):
+	var dist = (pos - body.get_global_position()).length()
+	return dist <= slash_range
+
+func held_too_long():
+	return get_time_held() > MAX_TIME_HELD

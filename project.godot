@@ -81,6 +81,7 @@ remove_bot={
 
 [physics]
 
+common/physics_fps=120
 common/enable_pause_aware_picking=true
 2d/default_gravity=0
 

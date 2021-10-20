@@ -15,6 +15,7 @@ func set_player_num(num : int):
 	player_num = num
 
 func _physics_process(_dt):
+	if player_num >= GlobalInput.get_player_count(): return
 	determine_move_vec()
 
 func determine_move_vec():
@@ -25,6 +26,9 @@ func determine_move_vec():
 	emit_signal("move_vec", move_vec)
 
 func _input(ev):
+	if not ((ev is InputEventKey) or (ev is InputEventJoypadButton)): return
+	if player_num >= GlobalInput.get_player_count(): return
+	
 	if ev.is_action_pressed(get_key("interact")):
 		emit_signal("button_press")
 	elif ev.is_action_released(get_key("interact")):

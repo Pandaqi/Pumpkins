@@ -69,7 +69,7 @@ func place_powerup():
 	var p = powerup_scene.instance()
 	p.set_position(spawner.get_valid_pos(placement_params))
 	p.set_rotation(randf() * 2 * PI)
-	map.add_child(p)
+	map.knives.add_child(p)
 	
 	var rand_type = get_random_type()
 	p.set_type(rand_type)

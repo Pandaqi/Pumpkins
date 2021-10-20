@@ -1,9 +1,9 @@
 extends Node2D
 
 const MAX_KNIVES : int = 8
+const AUTO_THROW_INTERVAL : float = 5.0
 
 var knives_held = []
-var knives_thrown = []
 
 var knife_scene = preload("res://scenes/knife_bodyless.tscn")
 var pickup_disabled : bool = false
@@ -19,6 +19,17 @@ var use_curve : bool = false
 onready var body = get_parent()
 onready var map = get_node("/root/Main/Map")
 onready var guide = $Guide
+onready var timer = $Timer
+
+func activate():
+	create_starting_knives()
+	
+	if GlobalDict.cfg.auto_throw_knives:
+		timer.wait_time = AUTO_THROW_INTERVAL
+		timer.start()
+
+func _on_Timer_timeout():
+	throw_first_knife()
 
 func create_starting_knives():
 	for _i in range(GlobalDict.cfg.num_starting_knives):
@@ -61,7 +72,6 @@ func grab_knife(knife):
 	if at_max_capacity: return
 	if pickup_disabled: return
 	
-	knives_thrown.erase(knife)
 	knives_held.append(knife)
 	
 	var projectile = knife.get_node("Projectile")
@@ -96,7 +106,7 @@ func throw_first_knife():
 	throw_knife(knives_held[0])
 
 func get_first_knife_vec():
-	if knives_held.size() <= 0: return null
+	if knives_held.size() <= 0: return Vector2.ZERO
 	
 	var ang = knives_held[0].rotation + body.rotation
 	return Vector2(cos(ang), sin(ang))
@@ -112,10 +122,10 @@ func throw_knife(knife):
 	if knife_overlaps_problematic_body(knife): return
 	
 	knives_held.erase(knife)
-	knives_thrown.append(knife)
 	
 	var projectile = knife.get_node("Projectile")
 	projectile.being_held = false
+	projectile.set_owner(body)
 	
 	if use_curve:
 		projectile.make_curving(body.modules.slasher.get_curve_strength())
@@ -221,7 +231,6 @@ func get_radius():
 	return 1.25 * body.modules.shaper.approximate_radius()
 
 func is_mine(other_body):
-	if (other_body in knives_thrown): return true
 	if other_body.get_node("Projectile").has_no_owner(): return true
 	if same_team(other_body.get_node("Projectile").my_owner): return true
 	

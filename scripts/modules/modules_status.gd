@@ -20,7 +20,7 @@ func set_player_num(num):
 	body.modules.input.set_player_num(num)
 	body.modules.bot.set_player_num(num)
 	
-	body.modules.knives.create_starting_knives()
+	body.modules.knives.activate()
 	body.modules.topping.set_frame(player_num)
 
 func is_from_a_player():
@@ -35,12 +35,10 @@ func set_team_num(num):
 	body.modules.particles.update_team_num(team_num)
 
 func turn_into_bot():
-	body.modules.input.queue_free()
-	body.modules.erase("input")
+	get_parent().get_node("Input").queue_free()
 
 func turn_into_player():
-	body.modules.bot.queue_free()
-	body.modules.erase("bot")
+	get_parent().get_node("Bot").queue_free()
 
 func make_powerup_leftover():
 	body.modules.drawer.set_color(powerup_part_color)

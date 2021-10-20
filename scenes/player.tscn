@@ -75,7 +75,7 @@ script = ExtResource( 2 )
 [node name="Input" type="Node" parent="."]
 script = ExtResource( 6 )
 
-[node name="Bot" type="Node" parent="."]
+[node name="Bot" type="Node2D" parent="."]
 script = ExtResource( 19 )
 
 [node name="Mover" type="Node" parent="."]
@@ -113,6 +113,8 @@ script = ExtResource( 8 )
 position = Vector2( 128, 0 )
 rotation = 1.5708
 texture = ExtResource( 17 )
+
+[node name="Timer" type="Timer" parent="Knives"]
 
 [node name="GameOver" type="Node2D" parent="."]
 script = ExtResource( 12 )
@@ -165,17 +167,24 @@ local_coords = false
 process_material = SubResource( 3 )
 texture = ExtResource( 22 )
 
-[connection signal="button_press" from="Input" to="Slasher" method="_on_Input_button_press"]
 [connection signal="button_press" from="Input" to="Mover" method="_on_Input_button_press"]
-[connection signal="button_release" from="Input" to="Slasher" method="_on_Input_button_release"]
+[connection signal="button_press" from="Input" to="Slasher" method="_on_Input_button_press"]
 [connection signal="button_release" from="Input" to="Mover" method="_on_Input_button_release"]
-[connection signal="move_vec" from="Input" to="Slasher" method="_on_Input_move_vec"]
+[connection signal="button_release" from="Input" to="Slasher" method="_on_Input_button_release"]
 [connection signal="move_vec" from="Input" to="Mover" method="_on_Input_move_vec"]
+[connection signal="move_vec" from="Input" to="Slasher" method="_on_Input_move_vec"]
+[connection signal="button_press" from="Bot" to="Mover" method="_on_Input_button_press"]
+[connection signal="button_press" from="Bot" to="Slasher" method="_on_Input_button_press"]
+[connection signal="button_release" from="Bot" to="Mover" method="_on_Input_button_release"]
+[connection signal="button_release" from="Bot" to="Slasher" method="_on_Input_button_release"]
+[connection signal="move_vec" from="Bot" to="Mover" method="_on_Input_move_vec"]
+[connection signal="move_vec" from="Bot" to="Slasher" method="_on_Input_move_vec"]
 [connection signal="movement_started" from="Mover" to="Particles" method="_on_Mover_movement_started"]
 [connection signal="movement_stopped" from="Mover" to="Particles" method="_on_Mover_movement_stopped"]
+[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
 [connection signal="timeout" from="Grower/Timer" to="Grower" method="_on_Timer_timeout"]
+[connection signal="timeout" from="Knives/Timer" to="Knives" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Collector/Area2D" to="Collector" method="_on_Area2D_body_entered"]

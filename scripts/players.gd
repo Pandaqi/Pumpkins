@@ -21,13 +21,23 @@ func activate():
 func create_players():
 	var max_players = GlobalDict.cfg.max_players
 	
-	var params = { 'body_radius': DEFAULT_PLAYER_RADIUS, 'avoid_players': MIN_DIST_BETWEEN_PLAYERS }
+	var params = { 
+		'body_radius': DEFAULT_PLAYER_RADIUS, 
+		'avoid_players': MIN_DIST_BETWEEN_PLAYERS 
+	}
+	
 	var player_data = GlobalDict.player_data
 	
 	for i in range(max_players):
-		if not player_data[i].active: continue
-		
+		if not player_data[i].active: break
+
 		var p = player_scene.instance()
+		
+		if player_data[i].bot:
+			p.get_node("Status").turn_into_bot()
+		else:
+			p.get_node("Status").turn_into_player()
+		
 		map.entities.add_child(p)
 		
 		p.set_position(spawner.get_valid_pos(params))
@@ -36,8 +46,9 @@ func create_players():
 		p.modules.status.set_player_num(i)
 		p.modules.status.set_team_num(player_data[i].team)
 		
-		if player_data[i].bot:
-			p.modules.status.turn_into_bot()
+		print("INPUT MODULE")
+		print(p.modules.input)
+		
 		
 		if not mode.can_slice_players():
 			p.remove_from_group("Sliceables")
@@ -62,7 +73,7 @@ func get_players_in_team(team_num):
 		arr.append(p)
 	return arr
 
-func get_closest_to(pos):
+func get_closest_to(pos, ignore):
 	var players = get_tree().get_nodes_in_group("Players")
 
 	var best_match = null
@@ -70,6 +81,7 @@ func get_closest_to(pos):
 	for p in players:
 		var dist = (p.get_global_position() - pos).length()
 		if dist > best_dist: continue
+		if p == ignore: continue
 		
 		best_dist = dist
 		best_match = p
