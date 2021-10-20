@@ -10,10 +10,22 @@ var reversed : bool = false
 var ice : bool = false
 
 var forward_vec = Vector2.RIGHT
+var state = "stopped"
+
+var last_velocity : Vector2
+
+signal movement_stopped()
+signal movement_started()
 
 func _on_Input_move_vec(vec : Vector2):
-	if not moving_enabled: return
-	if vec.length() <= 0.03: return
+	if not moving_enabled or vec.length() <= 0.03: 
+		state = "stopped"
+		emit_signal("movement_stopped")
+		return
+	
+	if state == "stopped":
+		state = "moving"
+		emit_signal("movement_started")
 	
 	if reversed: vec *= -1
 	
@@ -25,6 +37,8 @@ func _on_Input_move_vec(vec : Vector2):
 	
 	var final_vec = forward_vec*speed_multiplier*MOVE_SPEED
 	body.move_and_slide(final_vec)
+	
+	last_velocity = final_vec
 
 func _on_Input_button_press():
 	moving_enabled = false

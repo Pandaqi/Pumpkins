@@ -98,9 +98,17 @@ func slice_body(b, p1, p2):
 		cur_shapes.append(points)
 	
 	# slice these shapes individually
+	var half_slices_happened = false
 	for shp in cur_shapes:
 		var res = slice_shape(shp, p1, p2)
-		new_shapes += res
+		new_shapes += res.bodies
+		
+		if res.result == "half":
+			half_slices_happened = true
+	
+	# TO DO: show feedback for this in-game
+	if half_slices_happened:
+		print("HALF SLICE")
 	
 	# shape lists are the same? nothing happened, abort mission
 	if cur_shapes.size() == new_shapes.size():
@@ -141,6 +149,8 @@ func slice_body(b, p1, p2):
 			
 			b.modules.shaper.destroy()
 			b.modules.shaper.create_from_shape_list(new_shape_for_this_body)
+			
+			shoot_body_away_from_line(p1, p2, b)
 
 	if player_died:
 		# if we died, the body keeps existing, just in a differnt form
@@ -158,8 +168,6 @@ func slice_body(b, p1, p2):
 			b.modules.status.delete()
 	
 	# create bodies for each set of points left over
-	var vec = (p2 - p1).normalized()
-
 	var new_bodies = []
 	for key in shape_layers:
 		var shp = shape_layers[key]
@@ -169,22 +177,30 @@ func slice_body(b, p1, p2):
 		var body = create_body_from_shape_list(shp, { 'player_num': original_player_num, 'is_powerup': is_powerup })
 		new_bodies.append(body)
 		
-		var side_of_line = point_side_of_line(p1, p2, body.get_global_position())
-		var shoot_vec
-		if side_of_line < 0:
-			shoot_vec = vec.rotated(-0.5*PI)
-		else:
-			shoot_vec = vec.rotated(0.5*PI)
-		
-		# randomize it a bit
-		shoot_vec = shoot_vec.rotated((randf()-0.5)*0.1*PI)
-		
-		body.plan_shoot_away(shoot_vec * SLICE_EXPLODE_FORCE)
+		shoot_body_away_from_line(p1, p2, body)
 	
 	if is_player_body:
 		dramatic_slice.execute()
 	
 	return new_bodies
+
+func shoot_body_away_from_line(p1, p2, body):
+	var vec = (p2 - p1).normalized()
+	
+	var side_of_line = point_side_of_line(p1, p2, body.get_global_position())
+	var shoot_vec
+	if side_of_line < 0:
+		shoot_vec = vec.rotated(-0.5*PI)
+	else:
+		shoot_vec = vec.rotated(0.5*PI)
+	
+	# randomize it a bit
+	shoot_vec = shoot_vec.rotated((randf()-0.5)*0.1*PI)
+	
+	if body is RigidBody2D:
+		body.plan_shoot_away(shoot_vec * SLICE_EXPLODE_FORCE)
+	elif body is KinematicBody2D:
+		body.modules.knockback.apply(shoot_vec * SLICE_EXPLODE_FORCE)
 
 func point_side_of_line(p1, p2, point):
 	return sign((p2.x - p1.x) * (point.y - p1.y) - (p2.y - p1.y)*(point.x - p1.x))
@@ -243,7 +259,7 @@ func determine_shape_layers(new_shapes, p1, p2):
 	
 	return shape_layers
 
-func slice_shape(shp, slice_start : Vector2, slice_end : Vector2) -> Array:
+func slice_shape(shp, slice_start : Vector2, slice_end : Vector2) -> Dictionary:
 	shp = shp + []
 
 	var intersect_indices = []
@@ -268,7 +284,12 @@ func slice_shape(shp, slice_start : Vector2, slice_end : Vector2) -> Array:
 			succesful_slice = true
 			break
 	
-	if not succesful_slice: return [shp]
+	var result = 'none'
+	if intersect_indices.size() == 1:
+		result = 'half'
+	
+	if not succesful_slice: 
+		return { 'bodies': [shp], 'result': result }
 	
 	shape1 = shp.slice(0,intersect_indices[0])
 	shape1.append(intersect_points[0])
@@ -279,7 +300,7 @@ func slice_shape(shp, slice_start : Vector2, slice_end : Vector2) -> Array:
 	shape2.push_front(intersect_points[0])
 	shape2.append(intersect_points[1])
 	
-	return [shape1, shape2]
+	return { 'bodies': [shape1, shape2], 'result': 'full' }
 
 func create_body_from_shape_list(shapes : Array, params = {}) -> RigidBody2D:
 	var body = player_part_scene.instance()

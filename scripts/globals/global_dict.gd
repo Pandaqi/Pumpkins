@@ -1,12 +1,30 @@
 extends Node
 
+var cfg = {
+	'game_mode': 'bulls_eye',
+	'max_players': 6,
+	'auto_pickup_powerups': false,
+	'num_starting_knives': 1
+}
+
+var modes = {
+	"dicey_slicey": { "win": "survival", "fade_rubble": true },
+	"collect_em_all": { "win": "collection", "eat_player_parts": true, "target_num": 20, "auto_grow": true },
+	"bulls_eye": { "win": "collection", "target_num": 50, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1 },
+	"frightening_feast": { "win": "collection", "target_num": 10, "auto_spawns": "dumplings" },
+	"dwarfing_dumplings": { "win": "survival", "fade_rubble": true },
+	"ropeless_race": { "win": "survival", "forbid_slicing_players": true, "fade_rubble": true }
+}
+
 var player_colors = [
 	Color(1.0, 148/255.0, 122/255.0), 
 	Color(177/255.0, 1.0, 140/255.0), 
 	Color(139/255.0, 1.0, 251/255.0),
 	Color(245/255.0, 148/255.0, 1.0),
 	Color(141/255.0, 121/255.0, 25/255.0),
-	Color(184/255.0, 191/255.0, 1.0)
+	Color(184/255.0, 191/255.0, 1.0),
+	Color(198/255.0, 230/255.0, 92/255.0),
+	Color(198/255.0, 151/255.0, 1.0),
 ]
 
 var player_data = [
@@ -16,6 +34,8 @@ var player_data = [
 	{ "team": 3, "bot": false, "active": false },
 	{ "team": 4, "bot": false, "active": false },
 	{ "team": 5, "bot": false, "active": false },
+	{ "team": 6, "bot": false, "active": false },
+	{ "team": 7, "bot": false, "active": false }
 ]
 
 var predefined_shapes = {
@@ -41,15 +61,15 @@ var predefined_shapes = {
 }
 
 var powerups = {
-	"grow": { "frame": 1, "category": "shape" },
-	"shrink": { "frame": 2, "category": "shape" },
+	"grow": { "frame": 1, "category": "shape", "prob": 5 },
+	"shrink": { "frame": 2, "category": "shape", "prob": 5 },
 	"morph": { "frame": 3, "category": "shape" },
 	"ghost": { "frame": 4, "temporary": true, "category": "shape" },
 	"hungry": { "frame": 5, "temporary": true, "category": "shape" },
 	
 	"grow_range": { "frame": 6, "category": "slashing" },
 	"shrink_range": { "frame": 7, "category": "slashing" },
-	"extra_knife": { "frame": 8, "category": "slashing" },
+	"extra_knife": { "frame": 8, "category": "slashing", "prob": 5 },
 	"lose_knife": { "frame": 9, "category": "slashing" },
 	"boomerang": { "frame": 10, "temporary": true, "category": "slashing" },
 	"curved": { "frame": 11, "temporary": true, "category": "slashing" },

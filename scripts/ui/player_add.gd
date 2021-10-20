@@ -58,7 +58,7 @@ func update_team_icon():
 	team.set_frame(cur_team)
 
 func change_team():
-	cur_team = (cur_team + 1) % 6
+	cur_team = (cur_team + 1) % GlobalDict.cfg.max_players
 	update_team_icon()
 
 func disable():

@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://assets/fonts/main_small.tres" type="DynamicFont" id=1]
+
+[node name="TargetLabel" type="Node2D"]
+
+[node name="Label" type="Label" parent="."]
+margin_left = -18.7089
+margin_top = -23.1634
+margin_right = 21.2911
+margin_bottom = 17.8366
+custom_fonts/font = ExtResource( 1 )
+text = "2"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

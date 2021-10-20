@@ -1,13 +1,10 @@
 extends Node
 
-# Game modes = [deathmatch, collector, bullseye, dumplings]
-var game_mode : String = "deathmatch"
-var min_collections_needed_to_win : int = 5
-
 var game_over_state : bool = false
 var interface_available : bool = false
 
 onready var player_manager = get_node("../Players")
+onready var mode = get_node("../ModeManager")
 
 func activate():
 	pass
@@ -23,15 +20,13 @@ func player_progression(num):
 
 func check_win_condition():
 	if game_over_state: return
-	
-	#call("check_win_" + game_mode) => would be fine, but most modes actually do similar things
-	
-	if game_mode == "deathmatch":
-		check_win_deathmatch()
-	else:
+
+	if mode.win_type_is("survival"):
+		check_win_by_survival()
+	elif mode.win_type_is("collection"):
 		check_win_by_collection()
 
-func check_win_deathmatch():
+func check_win_by_survival():
 	var players = get_tree().get_nodes_in_group("Players")
 	
 	var players_alive = 0
@@ -58,15 +53,18 @@ func check_win_deathmatch():
 func check_win_by_collection():
 	var players = get_tree().get_nodes_in_group("Players")
 	var count_per_team = {}
-	count_per_team.resize(players.size())
-	
+
 	for p in players:
 		var team_num = p.modules.status.team_num
+		
+		if not count_per_team.has(team_num):
+			count_per_team[team_num] = 0
+		
 		count_per_team[team_num] += p.modules.collector.count()
 	
 	for team_num in count_per_team:
 		var val = count_per_team[team_num]
-		if val < min_collections_needed_to_win: continue
+		if val < mode.get_target_number(): continue
 		
 		game_over(int(team_num))
 		break

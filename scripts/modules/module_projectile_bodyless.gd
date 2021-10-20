@@ -2,22 +2,31 @@ extends Node2D
 
 const LINEAR_DAMPING : float = 0.995
 
+const GHOST_RAND_ROTATION : float = 0.05
+const GHOST_SLOWDOWN : float = 0.995
+
 const CURVE_SPEED : float = 0.016
 const CURVE_DAMPING : float = 0.98
 
 const VELOCITY_LEFT_AFTER_DEFLECTION : float = 0.9
+const MIN_TIME_BETWEEN_DEFLECTIONS : float = 50.0 # milliseconds
 
 const BOOMERANG_PRECISION : float = 3.0 # higher is better
+
+const STICKING_TIGHTNESS : float = INF # higher means less chance of tunneling, BUT we might react "too early" to a stuckable body coming up
 
 onready var body = get_parent()
 onready var timer = $Timer
 onready var sprite = get_node("../Sprite")
 
+onready var particles = get_node("/root/Main/Particles")
 onready var slicer = get_node("/root/Main/Slicer")
+onready var mode = get_node("/root/Main/ModeManager")
 
 var knife_half_size = 0.5 * (0.25*256)
 
 var ignore_deflections : bool = false
+var last_deflection_time : float
 var collision_exceptions = []
 
 var being_held : bool = false
@@ -38,12 +47,21 @@ func set_owner(o):
 func has_no_owner():
 	return (my_owner == null)
 
+func remove_owner():
+	my_owner = null
+
 func get_owner_rotation():
 	if has_no_owner(): return 0
 	return my_owner.rotation
 
 func set_velocity(vel):
 	velocity = vel
+
+func set_random_velocity():
+	is_stuck = false
+	
+	var rand_rot = 2*PI*randf()
+	velocity = Vector2(cos(rand_rot), sin(rand_rot))*150
 
 func make_boomerang():
 	is_boomerang = true
@@ -158,9 +176,24 @@ func shoot_raycast():
 	if grabbing_disabled:
 		exclude += [my_owner]
 	
-	var collision_layer = 1 + 4 + 8 # layer 1 (all; 2^0), 3 (loose parts; 2^2) and 4 (powerups; 2^3)
+	var collision_layer = 1 + 4 + 8 + 16 # layer 1 (all; 2^0), 3 (loose parts; 2^2) and 4 (powerups; 2^3) and 5 (ghosts; 2^4)
 	
-	var result = space_state.intersect_ray(start, end, exclude, collision_layer)
+	var result 
+	var hit_a_ghost = true
+	while hit_a_ghost:
+		hit_a_ghost = false
+		
+		result = space_state.intersect_ray(start, end, exclude, collision_layer)
+		
+		if not result: break
+		if not result.collider.is_in_group("Players"): break
+		if not result.collider.modules.status.is_ghost: break
+		
+		hit_a_ghost = true
+		exclude += [result.collider]
+		
+		apply_ghost_effect()
+	
 	if not result: return
 
 	var hit_body = result.collider
@@ -174,6 +207,12 @@ func shoot_raycast():
 		slice_through_body(result.collider)
 	elif hit_body.is_in_group("Stuckables"):
 		get_stuck(result)
+		
+		var custom_behavior = (hit_body.script and hit_body.has_method("on_knife_entered"))
+		if custom_behavior:
+			hit_body.on_knife_entered(body)
+		else:
+			remove_owner()
 	else:
 		deflect(result)
 	
@@ -182,19 +221,25 @@ func shoot_raycast():
 
 func get_stuck(result):
 	var dist_to_hit = (result.position - self.get_global_position()).length()
-	if dist_to_hit > 10: return
+	if dist_to_hit > STICKING_TIGHTNESS: return
 	if is_boomerang: return # boomerangs never get stuck; they just return
 	
-	my_owner = null
 	velocity = Vector2.ZERO
 	body.set_position(result.position)
 	is_stuck = true
+
+func get_knife_bottom_pos():
+	var rot = body.rotation
+	var offset_vec = Vector2(cos(rot), sin(rot))
+	return body.get_global_position() - offset_vec*knife_half_size
 
 func slice_through_body(obj):
 	var normal = velocity.normalized()
 	var center = body.get_global_position()
 	var start = center - normal * 500
 	var end = center + normal * 500
+	
+	particles.create_slash(get_knife_bottom_pos(), normal)
 
 	var result = slicer.slice_bodies_hitting_line(start, end, [], [obj])
 	if result.size() <= 0: return false
@@ -203,18 +248,31 @@ func slice_through_body(obj):
 	
 	for sliced_body in result:
 		collision_exceptions.append(sliced_body)
+	
+	var penalty = mode.get_player_slicing_penalty()
+	my_owner.modules.collector.collect(penalty)
 
 	return true
 
 func deflect(res):
-	if velocity.length() <= 0.1: return
+	var going_too_slow = (velocity.length() <= 0.1)
+	if going_too_slow: return
+	
+	var too_soon = (OS.get_ticks_msec() - last_deflection_time) < MIN_TIME_BETWEEN_DEFLECTIONS
+	if too_soon: return
 
 	# now MIRROR the velocity
 	var norm = res.normal
 	var new_vel = -(2 * norm.dot(velocity) * norm - velocity)
 
 	velocity = VELOCITY_LEFT_AFTER_DEFLECTION*new_vel
+	last_deflection_time = OS.get_ticks_msec()
 	reset_collision_exceptions()
+
+# Ghosts slow down moving knifes
+func apply_ghost_effect():
+	velocity *= GHOST_SLOWDOWN
+	velocity = velocity.rotated((randf()-0.5)*GHOST_RAND_ROTATION)
 
 func reset_collision_exceptions():
 	collision_exceptions = []

@@ -1,6 +1,20 @@
 extends Node
 
+const AUTO_GROW_INTERVAL : float = 10.0
+
+onready var timer = $Timer
+
 onready var body = get_parent()
+onready var mode = get_node("/root/Main/ModeManager")
+
+func _ready():
+	if not mode.auto_grow_players(): return
+	
+	timer.wait_time = AUTO_GROW_INTERVAL
+	timer.start()
+
+func _on_Timer_timeout():
+	grow(0.1)
 
 func grow(val):
 	if body.modules.shaper.at_max_size(): return

@@ -24,7 +24,25 @@ func activate():
 		"avoid_powerups": MIN_DIST_TO_OTHER_POWERUP
 	}
 	
+	precalculate_powerup_probabilities()
 	_on_Timer_timeout()
+
+func precalculate_powerup_probabilities():
+	var ps = GlobalDict.powerups
+	var sum : float = 0.0
+	for key in available_powerups:
+		var weight = 1.0
+		if ps[key].has('prob'):
+			weight = ps[key].prob
+		else:
+			ps[key].prob = 1.0
+		
+		sum += weight
+	
+	var running_sum : float = 0.0
+	for key in available_powerups:
+		running_sum += (ps[key].prob / sum)
+		ps[key].weight = running_sum
 
 func get_random_time():
 	return rand_range(SPAWN_TIMES.min, SPAWN_TIMES.max)
@@ -42,7 +60,10 @@ func check_powerup_placement():
 	place_powerup()
 
 func get_random_type():
-	return available_powerups[randi() % available_powerups.size()]
+	var target = randf()
+	for key in available_powerups:
+		if GlobalDict.powerups[key].weight >= target:
+			return key
 
 func place_powerup():
 	var p = powerup_scene.instance()

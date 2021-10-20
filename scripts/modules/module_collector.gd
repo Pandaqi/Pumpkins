@@ -6,6 +6,8 @@ var is_hungry : bool = false
 onready var body = get_parent()
 onready var magnet_area = $MagnetArea
 onready var main_node = get_node("/root/Main")
+onready var mode = get_node("/root/Main/ModeManager")
+onready var collectors = get_node("/root/Main/Collectors")
 
 var num_collected : int = 0
 
@@ -13,10 +15,14 @@ var multiplier : int = 1
 var collection_disabled : bool = false
 var magnet_enabled : bool = false
 
+func count():
+	return num_collected
+
 func collect(dc):
 	num_collected += dc
 	
 	main_node.player_progression(body.modules.status.player_num)
+	collectors.update_team_count(body.modules.status.team_num)
 
 func disable_collection():
 	collection_disabled = true
@@ -53,17 +59,28 @@ func check_magnet(dt):
 	
 
 func _on_Area2D_body_entered(other_body):
-	print("SOMETHING ENTERED")
-	
 	if collection_disabled: return
 	
 	if not other_body.is_in_group("Parts"): return
-	if not is_hungry: return
 	
-	other_body.queue_free()
-	body.modules.grower.grow(0.1)
+	var success = false
 	
-	collect(1 * multiplier)
+	# NOTE: being hungry means you GROW _and_ you eat non-player parts
+	# that's the difference with regular eating, and that's why it still executes
+	if is_hungry:
+		success = true
+		body.modules.grower.grow(0.1)
+	
+	if mode.can_eat_player_parts(): 
+		var status = other_body.modules.status
+		var body_is_player_part = status.is_from_a_player()
+		var body_is_mine = status.is_from_specific_player(body.modules.status.player_num)
+		if body_is_player_part and not body_is_mine:
+			success = true
+	
+	if success:
+		other_body.queue_free()
+		collect(1 * multiplier)
 
 func _physics_process(dt):
 	check_magnet(dt)

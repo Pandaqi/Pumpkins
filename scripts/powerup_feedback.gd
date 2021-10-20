@@ -2,6 +2,12 @@ extends Node2D
 
 var my_player = null
 
+func _ready():
+	$Sprite/RemovalIcon.set_visible(false)
+
+func make_removal():
+	$Sprite/RemovalIcon.set_visible(true)
+
 func set_type(type):
 	$Sprite.set_frame(GlobalDict.powerups[type].frame)
 

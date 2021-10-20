@@ -1,6 +1,6 @@
 extends Node
 
-const PREDEFINED_SHAPE_SCALE : float = 1.34
+const PREDEFINED_SHAPE_SCALE : float = 1.7
 const STARTING_PLAYER_MAX_SIZE : float = 100.0
 
 var predefined_shape_scene = preload("res://scenes/predefined_shape_list.tscn")

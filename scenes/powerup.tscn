@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/predefined_shapes.png" type="Texture" id=1]
 [ext_resource path="res://scripts/revealed_powerup.gd" type="Script" id=2]
@@ -6,8 +6,40 @@
 [ext_resource path="res://assets/powerups.png" type="Texture" id=4]
 [ext_resource path="res://scripts/modules/module_shadow_location.gd" type="Script" id=5]
 
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 32, 32 )
+[sub_resource type="CircleShape2D" id=1]
+radius = 28.041
+
+[sub_resource type="Animation" id=2]
+resource_name = "PowerupFlicker"
+length = 1.5
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.1, 1.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 3, 2, 2, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
 
 [node name="Powerup" type="StaticBody2D" groups=[
 "Powerups",
@@ -18,12 +50,6 @@ position = Vector2( 1020.85, 410.357 )
 collision_layer = 8
 collision_mask = 8
 script = ExtResource( 3 )
-
-[node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 1 )
-hframes = 8
-vframes = 3
 
 [node name="RevealedPowerup" type="Node2D" parent="." groups=[
 "Powerups",
@@ -41,14 +67,24 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RevealedPowerup/Area2D"]
-shape = SubResource( 3 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.6, 0.6 )
+texture = ExtResource( 1 )
+hframes = 8
+vframes = 3
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
-polygon = PoolVector2Array( -32.5293, -32.1207, 32.0609, -31.898, 32.2836, 32.024, -31.8611, 32.024 )
 
 [node name="ShadowLocation" type="Node2D" parent="." groups=[
 "ShadowMakers",
 ]]
 script = ExtResource( 5 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "PowerupFlicker"
+anims/PowerupFlicker = SubResource( 2 )
+anims/RESET = SubResource( 3 )
 
 [connection signal="body_entered" from="RevealedPowerup/Area2D" to="RevealedPowerup" method="_on_Area2D_body_entered"]

@@ -1,6 +1,6 @@
 extends Node2D
 
-const NUM_STARTING_KNIVES : int = 3
+const MAX_KNIVES : int = 8
 
 var knives_held = []
 var knives_thrown = []
@@ -8,7 +8,7 @@ var knives_thrown = []
 var knife_scene = preload("res://scenes/knife_bodyless.tscn")
 var pickup_disabled : bool = false
 
-var num_snap_angles : int = 24
+var num_snap_angles : int = 8
 var snap_angles_taken = []
 
 var loading_done : bool = false
@@ -21,7 +21,7 @@ onready var map = get_node("/root/Main/Map")
 onready var guide = $Guide
 
 func create_starting_knives():
-	for _i in range(NUM_STARTING_KNIVES):
+	for _i in range(GlobalDict.cfg.num_starting_knives):
 		create_new_knife()
 	
 	loading_done = true
@@ -45,14 +45,20 @@ func create_new_knife():
 	add_child(knife)
 	grab_knife(knife)
 
-func destroy_random_knife():
+func lose_random_knife():
 	if knives_held.size() <= 0: return
 	
 	var rand_knife = knives_held[randi() % knives_held.size()]
+	unsnap_knife_angle(rand_knife.rotation)
 	knives_held.erase(rand_knife)
 	rand_knife.queue_free()
 
+func count():
+	return knives_held.size()
+
 func grab_knife(knife):
+	var at_max_capacity = (knives_held.size() >= MAX_KNIVES)
+	if at_max_capacity: return
 	if pickup_disabled: return
 	
 	knives_thrown.erase(knife)
@@ -68,6 +74,8 @@ func grab_knife(knife):
 	if knife.get_parent(): knife.get_parent().remove_child(knife)
 	add_child(knife)
 	
+	knife.show_behind_parent = false
+	
 	var snap_vec = income_vec.rotated(-body.rotation)
 	if loading_done:
 		snap_vec = snap_vec_to_knife_angles(snap_vec)
@@ -77,6 +85,8 @@ func grab_knife(knife):
 
 	knife.set_position(new_position)
 	knife.set_rotation(new_rotation)
+	
+	knife.modulate.a = 0.5
 	
 	highlight_first_knife()
 
@@ -124,6 +134,8 @@ func throw_knife(knife):
 	knife.set_rotation(original_rotation)
 	knife.set_position(original_position)
 	
+	knife.modulate.a = 1.0
+	
 	var dir = Vector2(cos(original_rotation), sin(original_rotation))
 	knife.get_node("Projectile").throw(dir * body.modules.slasher.get_throw_strength())
 	
@@ -131,15 +143,19 @@ func throw_knife(knife):
 	highlight_first_knife()
 
 func unhighlight_knife(knife):
-	knife.modulate = Color(1,1,1)
+	knife.get_node("AnimationPlayer").stop(true)
+	knife.get_node("Sprite").modulate = Color(1,1,1,1)
+	
+	guide.set_visible(false)
 
 func highlight_first_knife():
 	if knives_held.size() <= 0: return
 	
 	var first_knife = knives_held[0]
 	
-	first_knife.modulate = Color(1,0,0)
-	
+	first_knife.get_node("AnimationPlayer").play("Highlight")
+
+	guide.set_visible(true)
 	guide.set_position(first_knife.get_position())
 	guide.set_rotation(first_knife.get_rotation())
 

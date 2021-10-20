@@ -288,4 +288,30 @@ wait_time = 15.0
 [node name="CanvasLayer" type="CanvasModulate" parent="Map/Overlay"]
 color = Color( 0.109804, 0.247059, 0.337255, 1 )
 
+[node name="Collectors" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="Collectors"]
+position = Vector2( 220.867, 334.132 )
+
+[node name="Node2D2" type="Node2D" parent="Collectors"]
+position = Vector2( 1271.08, 337.277 )
+
+[node name="Node2D3" type="Node2D" parent="Collectors"]
+position = Vector2( 1272.34, 749.436 )
+
+[node name="Node2D4" type="Node2D" parent="Collectors"]
+position = Vector2( 218.972, 747.548 )
+
+[node name="Node2D5" type="Node2D" parent="Collectors"]
+position = Vector2( 668.269, 173.673 )
+
+[node name="Node2D6" type="Node2D" parent="Collectors"]
+position = Vector2( 1421.47, 171.785 )
+
+[node name="Node2D7" type="Node2D" parent="Collectors"]
+position = Vector2( 1736.74, 916.499 )
+
+[node name="Node2D8" type="Node2D" parent="Collectors"]
+position = Vector2( 665.435, 918.393 )
+
 [connection signal="timeout" from="Map/Overlay/Light2D/Timer" to="Map/Overlay/Light2D" method="_on_Timer_timeout"]

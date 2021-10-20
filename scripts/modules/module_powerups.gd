@@ -10,7 +10,14 @@ onready var map = get_node("/root/Main/Map")
 
 var powerup_fb_scene = preload("res://scenes/powerup_feedback.tscn")
 
+var disabled : bool = false
+
+func disable():
+	disabled = true
+
 func grab(type):
+	if disabled: return
+	
 	show_feedback(type)
 	activate_effect(type)
 	
@@ -24,13 +31,18 @@ func remove_powerup_if_already_exists(type : String):
 		temporary.erase(obj)
 		return
 
-func show_feedback(type):
+func show_feedback(type, removal = false):
 	var fb = powerup_fb_scene.instance()
 	fb.set_type(type)
 	fb.set_player(body)
 	map.overlay.add_child(fb)
+	
+	if removal:
+		fb.make_removal()
 
 func _physics_process(_dt):
+	if disabled: return
+	
 	handle_temporary_effects()
 
 func handle_temporary_effects():
@@ -141,3 +153,5 @@ func deactivate_effect(type):
 		
 		"clueless":
 			body.modules.collector.enable_collection()
+	
+	show_feedback(type, true)

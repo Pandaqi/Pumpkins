@@ -23,8 +23,16 @@ func set_player_num(num):
 	body.modules.knives.create_starting_knives()
 	body.modules.topping.set_frame(player_num)
 
+func is_from_a_player():
+	return player_num >= 0
+
+func is_from_specific_player(num):
+	return (player_num == num)
+
 func set_team_num(num):
 	team_num = num
+	
+	body.modules.particles.update_team_num(team_num)
 
 func turn_into_bot():
 	body.modules.input.queue_free()
@@ -45,14 +53,16 @@ func die():
 	make_ghost()
 	
 	body.modules.knives.destroy_knives()
+	body.modules.collector.disable_collection()
+	body.modules.powerups.disable()
 
 func make_ghost():
 	body.modulate.a = 0.6
 	
 	is_ghost = true
 	
-	body.collision_layer = 0
-	body.collision_mask = 0
+	body.collision_layer = 16 # (layer 5; 2^4)
+	body.collision_mask = 16
 	
 	body.modules.topping.make_ghost()
 

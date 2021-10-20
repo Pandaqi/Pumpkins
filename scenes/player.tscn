@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=2]
@@ -19,12 +19,41 @@
 [ext_resource path="res://assets/ui/ui_throw_guide.png" type="Texture" id=17]
 [ext_resource path="res://scripts/modules/module_shadow_location.gd" type="Script" id=18]
 [ext_resource path="res://scripts/modules/module_bot.gd" type="Script" id=19]
+[ext_resource path="res://scripts/modules/module_knockback.gd" type="Script" id=20]
+[ext_resource path="res://scripts/modules/module_particles.gd" type="Script" id=21]
+[ext_resource path="res://assets/ui/TeamIcon-1.png" type="Texture" id=22]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 16.0
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 175.49
+
+[sub_resource type="Gradient" id=6]
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
+
+[sub_resource type="Curve" id=4]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.048913, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -2.04444, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=5]
+curve = SubResource( 4 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+angular_velocity = 300.0
+angular_velocity_random = 0.5
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 360.0
+angle_random = 1.0
+scale = 0.2
+scale_random = 0.3
+scale_curve = SubResource( 5 )
+color_ramp = SubResource( 7 )
 
 [node name="Player" type="KinematicBody2D" groups=[
 "Grabbers",
@@ -37,6 +66,8 @@ script = ExtResource( 5 )
 
 [node name="Col" type="CollisionPolygon2D" parent="."]
 polygon = PoolVector2Array( -0.173355, -15.0607, -14.3155, -3.39339, -15.0226, 7.56676, -4.06244, 26.3051, 12.9081, 11.4558, 19.6256, -4.80761 )
+
+[node name="Tween" type="Tween" parent="."]
 
 [node name="Status" type="Node" parent="."]
 script = ExtResource( 2 )
@@ -65,6 +96,8 @@ script = ExtResource( 13 )
 
 [node name="Grower" type="Node" parent="."]
 script = ExtResource( 14 )
+
+[node name="Timer" type="Timer" parent="Grower"]
 
 [node name="Drawer" type="Node2D" parent="."]
 light_mask = 3
@@ -120,14 +153,29 @@ shape = SubResource( 2 )
 script = ExtResource( 18 )
 extents = Vector2( 100, 20 )
 
-[connection signal="button_press" from="Input" to="Mover" method="_on_Input_button_press"]
+[node name="Knockback" type="Node" parent="."]
+script = ExtResource( 20 )
+
+[node name="Particles" type="Node2D" parent="."]
+show_behind_parent = true
+script = ExtResource( 21 )
+
+[node name="Particles2D" type="Particles2D" parent="Particles"]
+local_coords = false
+process_material = SubResource( 3 )
+texture = ExtResource( 22 )
+
 [connection signal="button_press" from="Input" to="Slasher" method="_on_Input_button_press"]
-[connection signal="button_release" from="Input" to="Mover" method="_on_Input_button_release"]
+[connection signal="button_press" from="Input" to="Mover" method="_on_Input_button_press"]
 [connection signal="button_release" from="Input" to="Slasher" method="_on_Input_button_release"]
-[connection signal="move_vec" from="Input" to="Mover" method="_on_Input_move_vec"]
+[connection signal="button_release" from="Input" to="Mover" method="_on_Input_button_release"]
 [connection signal="move_vec" from="Input" to="Slasher" method="_on_Input_move_vec"]
-[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
+[connection signal="move_vec" from="Input" to="Mover" method="_on_Input_move_vec"]
+[connection signal="movement_started" from="Mover" to="Particles" method="_on_Mover_movement_started"]
+[connection signal="movement_stopped" from="Mover" to="Particles" method="_on_Mover_movement_stopped"]
 [connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
+[connection signal="timeout" from="Grower/Timer" to="Grower" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Collector/Area2D" to="Collector" method="_on_Area2D_body_entered"]

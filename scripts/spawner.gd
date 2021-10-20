@@ -13,10 +13,14 @@ func get_valid_pos(params):
 			if num_tries < 300 and inside_physics_body(pos, params.body_radius): continue
 		
 		if params.has('avoid_players'):
-			if num_tries < 100 and too_close_to_player(pos, params.avoid_players): continue
+			if num_tries < 100 and too_close_to_group(pos, params.avoid_players, "Players"): continue
 		
 		if params.has('avoid_powerups'):
-			if num_tries < 200 and too_close_to_powerup(pos, params.avoid_powerups): continue
+			if num_tries < 200 and too_close_to_group(pos, params.avoid_powerups, "Powerups"): continue
+		
+		if params.has('avoid_targets'):
+			if num_tries < 300 and too_close_to_group(pos, params.avoid_targets, "Targets"): continue
+		
 		
 		bad_choice = false
 	
@@ -48,18 +52,10 @@ func inside_physics_body(pos, radius : float = 20.0):
 	
 	return false
 
-func too_close_to_powerup(pos, min_separation_dist : float = 50.0):
-	var powerups = get_tree().get_nodes_in_group("Powerups")
-	for p in powerups:
-		var dist = (p.get_global_position() - pos).length()
-		if dist >= min_separation_dist: continue
-		return true
-	return false
-
-func too_close_to_player(pos, min_separation_dist : float = 50.0):
-	var players = get_tree().get_nodes_in_group("Players")
-	for p in players:
-		var dist = (p.get_global_position() - pos).length()
+func too_close_to_group(pos, min_separation_dist : float = 50.0, group : String = "Players"):
+	var all = get_tree().get_nodes_in_group(group)
+	for obj in all:
+		var dist = (obj.get_global_position() - pos).length()
 		if dist >= min_separation_dist: continue
 		return true
 	return false

@@ -6,7 +6,7 @@ onready var settings = $Settings
 onready var tween = $Tween
 
 var player_add_scene = preload("res://scenes/gui/player_add.tscn")
-var max_players = 6
+var max_players = GlobalDict.cfg.max_players
 var interfaces = []
 
 var num_bots = 0
@@ -20,7 +20,10 @@ func save_configuration():
 		GlobalDict.player_data[i] = interface.get_data()
 
 func change_team(player_num : int):
-	interfaces[player_num].change_team()
+	var interface = interfaces[player_num]
+	
+	interface.change_team()
+	play_team_changed_tween(interface)
 
 func fill_container():
 	var num_cols = 3
@@ -64,6 +67,21 @@ func play_appearance_tween(p):
 	p.set_scale(Vector2.ZERO)
 	tween.interpolate_property(p, "scale", 
 		Vector2.ZERO, Vector2(1,1), 2*duration,
+		Tween.TRANS_ELASTIC, Tween.EASE_OUT)
+	
+	tween.interpolate_property(p, "rotation", 
+		0, 2*PI, duration,
+		Tween.TRANS_ELASTIC, Tween.EASE_OUT)
+	
+	tween.start()
+
+func play_team_changed_tween(interface):
+	var duration = 0.3
+	var p = interface.get_node("Team")
+	
+	p.set_scale(Vector2.ZERO)
+	tween.interpolate_property(p, "scale", 
+		Vector2(1,1)*1.3, Vector2(1,1), duration,
 		Tween.TRANS_ELASTIC, Tween.EASE_OUT)
 	
 	tween.interpolate_property(p, "rotation", 

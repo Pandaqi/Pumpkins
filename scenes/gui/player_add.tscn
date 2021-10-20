@@ -13,13 +13,13 @@ script = ExtResource( 4 )
 [node name="BG" type="Sprite" parent="."]
 position = Vector2( -0.256104, 6.78021 )
 texture = ExtResource( 2 )
-hframes = 8
+hframes = 10
 frame = 2
 
 [node name="Team" type="Sprite" parent="."]
 position = Vector2( 82.2197, 2.51593 )
 texture = ExtResource( 3 )
-hframes = 6
+hframes = 8
 
 [node name="Bot" type="Sprite" parent="."]
 position = Vector2( -2.0769, 114.939 )

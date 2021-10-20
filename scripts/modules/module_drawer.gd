@@ -22,8 +22,8 @@ func _draw():
 		
 		bottom_layer.append(points)
 		middle_layer.append(shape_manager.scale_shape(points, 0.9))
-		middle_layer_2.append(shape_manager.scale_shape(points, 0.7))
-		top_layer.append(shape_manager.scale_shape(points, 0.4))
+		middle_layer_2.append(shape_manager.scale_shape(points, 0.75))
+		top_layer.append(shape_manager.scale_shape(points, 0.33))
 	
 	for i in range(num_shapes):
 		draw_polygon(bottom_layer[i], [color.darkened(0.7)])
