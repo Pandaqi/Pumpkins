@@ -2,6 +2,8 @@ extends Node2D
 
 const LINEAR_DAMPING : float = 0.995
 
+const MIN_SIGNIFICANT_VELOCITY : float = 20.0
+
 const GHOST_RAND_ROTATION : float = 0.05
 const GHOST_SLOWDOWN : float = 0.995
 
@@ -43,12 +45,14 @@ var boomerang_state : String = "flying"
 
 func set_owner(o):
 	my_owner = o
+	get_node("../Sprite").set_frame(my_owner.modules.status.player_num)
 
 func has_no_owner():
 	return (my_owner == null)
 
 func remove_owner():
 	my_owner = null
+	get_node("../Sprite").set_frame(8)
 
 func get_owner_rotation():
 	if has_no_owner(): return 0
@@ -105,7 +109,7 @@ func apply_boomerang(dt):
 	velocity = cur_vel_norm.slerp(target_vel_norm, BOOMERANG_PRECISION*dt) * velocity.length()
 
 func move(dt):
-	if velocity.length() <= 0.05:
+	if velocity.length() <= MIN_SIGNIFICANT_VELOCITY:
 		velocity = Vector2.ZERO
 		return
 	

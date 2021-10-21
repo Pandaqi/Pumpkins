@@ -55,10 +55,6 @@ func scale_shape_absolutely(points, new_max_size : float):
 	var cur_max_size = max(abs(b.x.max) + abs(b.x.min), abs(b.y.max) + abs(b.y.min))
 
 	var ratio = new_max_size / cur_max_size
-	
-	print(cur_max_size)
-	print(new_max_size)
-	
 	return scale_shape(points, ratio)
 
 func get_bounding_box(points):
@@ -73,6 +69,22 @@ func get_bounding_box(points):
 		
 		b.y.min = min(b.y.min, p.y)
 		b.y.max = max(b.y.max, p.y)
+	
+	return b
+
+func get_bounding_box_shape_list(shape_list):
+	var b = {
+		'x': {'min': INF, 'max': -INF },
+		'y': {'min': INF, 'max': -INF }
+	}
+	
+	for shape in shape_list:
+		var b2 = get_bounding_box(shape)
+		
+		b.x.min = min(b.x.min, b2.x.min)
+		b.x.max = max(b.x.max, b2.x.max)
+		b.y.min = min(b.y.min, b2.y.min)
+		b.y.max = max(b.y.max, b2.y.max)
 	
 	return b
 

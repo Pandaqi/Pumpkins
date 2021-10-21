@@ -1,22 +1,50 @@
 extends Node
 
-var cfg = {
+var base_cfg = {
 	'game_mode': 'collect_em_all',
+	'arena': 'spooky_forest',
+	'powerups': [],
+	
 	'max_players': 6,
 	'auto_pickup_powerups': false,
 	'num_starting_knives': 1,
 	
-	'use_alternate_control_scheme': true,
-	'auto_throw_knives': true,
+	'use_alternate_control_scheme': false,
+	'use_slidy_throwing': true,
+	'auto_throw_knives': false,
+	
+	'navigate_settings_with_joystick': true,
+	'add_default_settings_buttons': true,
 }
 
+var cfg = {}
+
 var modes = {
-	"dicey_slicey": { "win": "survival", "fade_rubble": true },
-	"collect_em_all": { "win": "collection", "eat_player_parts": true, "target_num": 20, "auto_grow": true, "collectible_group": "Parts" },
-	"bulls_eye": { "win": "collection", "target_num": 50, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets" },
-	"frightening_feast": { "win": "collection", "target_num": 10, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
-	"dwarfing_dumplings": { "win": "survival", "fade_rubble": true, "target_group": "Dumplings" },
-	"ropeless_race": { "win": "survival", "forbid_slicing_players": true, "fade_rubble": true }
+	"dicey_slicey": { "frame": 0, "win": "survival", "fade_rubble": true, "players_can_die": true },
+	
+	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 20, "auto_grow": true, "collectible_group": "PlayerParts" },
+	
+	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 50, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets" },
+	
+	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 10, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
+	
+	"dwarfing_dumplings": { "frame": 4,"win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true },
+	
+	"ropeless_race": { "frame": 5, "win": "survival", "forbid_slicing_players": true, "fade_rubble": true, "players_can_die": true }
+}
+
+var arenas = {
+	"spooky_forest": {},
+	"graveyard": {}
+}
+
+var configurable_settings = {
+	"tutorial": { "def": false },
+	"aim_helper": { "def": false },
+	"knife_always_in_front": { "def": false },
+	"disable_flashing_effects": { "def": false },
+	"shrink_area": { "def": false },
+	"show_guides": { "def": false }
 }
 
 var player_colors = [
@@ -88,3 +116,45 @@ var powerups = {
 	"duplicator": { "frame": 19, "temporary": true, "category": "collecting" },
 	"clueless": { "frame": 20, "temporary": true, "category": "collecting" },
 }
+
+func update_from_current_config():
+	cfg = {}
+	
+	# make a DEEP copy of the original config
+	for key in base_cfg:
+		var new_prop = base_cfg[key]
+
+		if new_prop is Array or new_prop is Dictionary:
+			new_prop = str2var( var2str(new_prop) )
+
+		cfg[key] = new_prop
+	
+	# Now override with new settings where needed
+	
+	# ARENA
+	for key in arenas:
+		if GlobalConfig.read_game_config("arenas", key):
+			cfg.arena = key
+			break
+	
+	# MODE
+	for key in modes:
+		if GlobalConfig.read_game_config("modes", key):
+			cfg.game_mode = key
+			break
+	
+	# POWERUPS
+	var powerups_included = []
+	for key in powerups:
+		if GlobalConfig.read_game_config("powerups", key):
+			powerups_included.append(key)
+	
+	cfg.powerups = powerups_included
+	
+	# RULES
+	for key in configurable_settings:
+		var val = GlobalConfig.read_game_config("settings", key)
+		cfg[key] = val
+
+func is_mobile():
+	return (OS.get_name() == "Android" or OS.get_name() == "iOS")

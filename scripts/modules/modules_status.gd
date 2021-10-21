@@ -41,6 +41,7 @@ func turn_into_player():
 	get_parent().get_node("Bot").queue_free()
 
 func make_powerup_leftover():
+	player_num = -1
 	body.modules.drawer.set_color(powerup_part_color)
 
 func delete():
@@ -70,6 +71,6 @@ func undo_ghost():
 	is_ghost = false
 	
 	body.collision_layer = 1 + 2
-	body.collision_mask = 1 + 2
+	body.collision_mask = 0
 	
 	body.modules.topping.set_frame(player_num)

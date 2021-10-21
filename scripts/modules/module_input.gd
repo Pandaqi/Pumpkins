@@ -28,6 +28,7 @@ func determine_move_vec():
 func _input(ev):
 	if not ((ev is InputEventKey) or (ev is InputEventJoypadButton)): return
 	if player_num >= GlobalInput.get_player_count(): return
+	if GlobalDict.cfg.auto_throw_knives: return
 	
 	if ev.is_action_pressed(get_key("interact")):
 		emit_signal("button_press")

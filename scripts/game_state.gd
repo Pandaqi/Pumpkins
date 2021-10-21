@@ -70,8 +70,6 @@ func check_win_by_collection():
 		break
 
 func game_over(team_num):
-	print(team_num)
-	
 	var team = player_manager.get_players_in_team(team_num)
 	
 	print("GAME OVER")

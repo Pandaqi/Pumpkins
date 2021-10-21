@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/ui/game_config_bg.png" type="Texture" id=1]
 [ext_resource path="res://assets/ui/game_config_settings_visualizer.png" type="Texture" id=2]
 [ext_resource path="res://scripts/ui/input_listener.gd" type="Script" id=3]
+[ext_resource path="res://scripts/settings_overview.gd" type="Script" id=4]
 [ext_resource path="res://scripts/game_config.gd" type="Script" id=6]
+[ext_resource path="res://assets/ui/settings/modes.png" type="Texture" id=7]
+[ext_resource path="res://assets/ui/settings/arenas.png" type="Texture" id=8]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 6 )
@@ -14,9 +17,30 @@ centered = false
 
 [node name="Settings" type="Node2D" parent="."]
 position = Vector2( 1573.59, 515.781 )
+script = ExtResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Settings"]
 texture = ExtResource( 2 )
+
+[node name="Modes" type="Sprite" parent="Settings"]
+position = Vector2( 214.96, -234.76 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 7 )
+hframes = 4
+vframes = 4
+
+[node name="Arenas" type="Sprite" parent="Settings"]
+position = Vector2( 214.96, -96.1665 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 8 )
+hframes = 4
+vframes = 4
+
+[node name="PowerupContainer" type="Node2D" parent="Settings"]
+position = Vector2( -223.446, 114.551 )
+
+[node name="SettingContainer" type="Node2D" parent="Settings"]
+position = Vector2( 9.89954, 233.345 )
 
 [node name="Container" type="Node2D" parent="."]
 position = Vector2( 612.173, 495 )

@@ -17,7 +17,7 @@ var available_powerups = []
 var placement_params
 
 func activate():
-	available_powerups = GlobalDict.powerups.keys()
+	available_powerups = GlobalDict.cfg.powerups
 	placement_params = { 
 		"body_radius": 0.5*POWERUP_SIZE, 
 		"avoid_players": MIN_DIST_TO_PLAYER,

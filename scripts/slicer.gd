@@ -9,9 +9,10 @@ const PLAYER_MIN_AREA_FOR_SHAPE : float = 600.0
 var player_part_scene = preload("res://scenes/player_part.tscn")
 
 onready var main_node = get_parent()
-onready var dramatic_slice = get_node("/root/Main/DramaticSlice")
-onready var map = get_node("/root/Main/Map")
-onready var shape_manager = get_node("/root/Main/ShapeManager")
+onready var dramatic_slice = get_node("../DramaticSlice")
+onready var map = get_node("../Map")
+onready var shape_manager = get_node("../ShapeManager")
+onready var mode = get_node("../ModeManager")
 
 var start_point
 var end_point
@@ -139,8 +140,9 @@ func slice_body(b, p1, p2):
 		
 		# But if the biggest shape is still too small,
 		# the player is officially dead
-		print(biggest_area)
-		if biggest_area < PLAYER_MIN_AREA_FOR_SHAPE:
+		var player_too_small = biggest_area < PLAYER_MIN_AREA_FOR_SHAPE
+		var players_can_die = mode.players_can_die()
+		if player_too_small and players_can_die:
 			player_died = true
 		
 		else:
@@ -319,6 +321,9 @@ func create_body_from_shape_list(shapes : Array, params = {}) -> RigidBody2D:
 	body.modules.status.set_player_num(params.player_num)
 	if params.has('is_powerup') and params.is_powerup:
 		body.modules.status.make_powerup_leftover()
+	
+	if params.player_num >= 0:
+		body.add_to_group("PlayerParts")
 	
 	return body
 

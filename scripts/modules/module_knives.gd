@@ -12,6 +12,7 @@ var num_snap_angles : int = 8
 var snap_angles_taken = []
 
 var loading_done : bool = false
+var cur_autothrow_time : float = 0.0
 
 var are_boomerang : bool = false
 var use_curve : bool = false
@@ -22,14 +23,36 @@ onready var guide = $Guide
 onready var timer = $Timer
 
 func activate():
-	create_starting_knives()
-	
 	if GlobalDict.cfg.auto_throw_knives:
-		timer.wait_time = AUTO_THROW_INTERVAL
-		timer.start()
+		_on_Timer_timeout()
+	else:
+		$AutoThrow.set_visible(false)
+	
+	create_starting_knives()
 
 func _on_Timer_timeout():
-	throw_first_knife()
+	# mostly to prevent throwing knife immediately on game start
+	if knives_held.size() > 0:
+		throw_first_knife()
+	
+	timer.wait_time = get_random_throw_interval()
+	cur_autothrow_time = timer.wait_time
+	timer.start()
+
+func _on_Slasher_slash_range_changed(s):
+	$AutoThrow.set_scale(s)
+
+func scale_autothrow_indicator():
+	if not GlobalDict.cfg.auto_throw_knives: return
+	
+	var ratio = 1.0 - (timer.time_left / cur_autothrow_time)
+	$AutoThrow/Sprite.set_scale(Vector2(1,1)*ratio)
+
+func _physics_process(dt):
+	scale_autothrow_indicator()
+
+func get_random_throw_interval():
+	return AUTO_THROW_INTERVAL * (0.8 + randf()*0.4)
 
 func create_starting_knives():
 	for _i in range(GlobalDict.cfg.num_starting_knives):
@@ -146,8 +169,9 @@ func throw_knife(knife):
 	
 	knife.modulate.a = 1.0
 	
+	var use_full_strength = GlobalDict.cfg.auto_throw_knives
 	var dir = Vector2(cos(original_rotation), sin(original_rotation))
-	knife.get_node("Projectile").throw(dir * body.modules.slasher.get_throw_strength())
+	knife.get_node("Projectile").throw(dir * body.modules.slasher.get_throw_strength(use_full_strength))
 	
 	unhighlight_knife(knife)
 	highlight_first_knife()

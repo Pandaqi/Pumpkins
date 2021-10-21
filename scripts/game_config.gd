@@ -6,7 +6,7 @@ onready var settings = $Settings
 onready var tween = $Tween
 
 var player_add_scene = preload("res://scenes/gui/player_add.tscn")
-var max_players = GlobalDict.cfg.max_players
+var max_players = GlobalDict.base_cfg.max_players
 var interfaces = []
 
 var num_bots = 0
@@ -18,6 +18,13 @@ func save_configuration():
 	for i in range(max_players):
 		var interface = interfaces[i]
 		GlobalDict.player_data[i] = interface.get_data()
+
+func count_total_players():
+	var sum = 0
+	for i in range(max_players):
+		if not GlobalDict.player_data[i].active: break
+		sum += 1
+	return sum
 
 func change_team(player_num : int):
 	var interface = interfaces[player_num]

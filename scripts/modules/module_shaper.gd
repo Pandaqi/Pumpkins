@@ -4,6 +4,8 @@ const MAX_AREA : float = 5000.0
 const MIN_AREA : float = 400.0
 
 var area : float = 0.0
+var bounding_box : Dictionary = {}
+var shape_list : Array = []
 
 onready var body = get_parent()
 onready var slicer = get_node("/root/Main/Slicer")
@@ -50,9 +52,10 @@ func morph_to_random_shape():
 	create_from_shape(points)
 
 func on_shape_updated():
+	recalculate_shape_list()
 	recalculate_area()
+	recalculate_bounding_box()
 	emit_signal("shape_updated")
-
 
 # Area calculation
 func at_max_size():
@@ -61,13 +64,18 @@ func at_max_size():
 func at_min_size():
 	return area <= MIN_AREA
 
-func recalculate_area():
-	var shape_list = []
+func recalculate_shape_list():
+	shape_list = []
+	
 	var num_shapes = body.shape_owner_get_shape_count(0)
 	for i in range(num_shapes):
 		var shape = body.shape_owner_get_shape(0, i)
 		shape_list.append(shape.points)
-	
+
+func recalculate_bounding_box():
+	bounding_box = shape_manager.get_bounding_box_shape_list(shape_list)
+
+func recalculate_area():
 	area = shape_manager.calculate_area(shape_list)
 
 func approximate_radius():

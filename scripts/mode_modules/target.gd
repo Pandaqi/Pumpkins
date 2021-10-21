@@ -81,8 +81,6 @@ func place_labels():
 		label.set_rotation(-rotation)
 
 func on_knife_entered(body):
-	print("KNIFE ENTERED")
-	
 	var vec = (body.get_global_position() - get_global_position()).normalized()
 	var angle = vec.angle()
 	
@@ -131,8 +129,6 @@ func check_for_destroy():
 	self.queue_free()
 
 func get_division_from_angle(ang):
-	print("CHECKING ANGLE: " + str(ang))
-	
 	var num_angles : int = division_angles.size()
 	
 	for i in range(num_angles):

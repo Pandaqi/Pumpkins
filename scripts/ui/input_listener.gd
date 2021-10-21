@@ -16,14 +16,28 @@ func _input(ev):
 
 func check_navigation(ev):
 	if ev.is_action_released("continue"):
-		main.save_configuration()
-		get_tree().change_scene("res://Main.tscn")
+		start_game()
 	
 	elif ev.is_action_released("open_settings"):
-		pass
+		open_settings()
 	
 	elif ev.is_action_released("exit"):
-		get_tree().quit()
+		exit()
+
+func start_game():
+	main.save_configuration()
+	
+	if main.count_total_players() <= 1:
+		print("Can't play solo!")
+		return
+	
+	Global.start_game()
+
+func open_settings():
+	Global.load_settings()
+
+func exit():
+	get_tree().quit()
 
 func check_team_change(ev):
 	# keyboard players

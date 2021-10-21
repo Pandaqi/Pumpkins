@@ -16,6 +16,7 @@ func _ready():
 
 func register_modules():
 	for child in get_children():
+		if not is_instance_valid(child): continue
 		var key = child.name.to_lower()
 		modules[key] = child
 

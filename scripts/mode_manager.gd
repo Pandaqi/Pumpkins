@@ -39,6 +39,9 @@ func get_player_slicing_penalty():
 	if not mode_data.has('player_slicing_penalty'): return 0
 	return mode_data.player_slicing_penalty
 
+func players_can_die():
+	return mode_data.has("players_can_die")
+
 func get_targets():
 	var target_group = "Players"
 	if mode_data.has('target_group'): target_group = mode_data.target_group

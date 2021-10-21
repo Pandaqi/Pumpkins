@@ -19,6 +19,10 @@ signal movement_stopped()
 signal movement_started()
 
 func _on_Input_move_vec(vec : Vector2):
+	if not moving_enabled and GlobalDict.cfg.use_slidy_throwing:
+		continue_on_last_velocity()
+		return
+	
 	if not moving_enabled or vec.length() <= 0.03: 
 		state = "stopped"
 		emit_signal("movement_stopped")
@@ -34,6 +38,9 @@ func _on_Input_move_vec(vec : Vector2):
 		move_alternate(vec)
 	else:
 		move_regular(vec)
+
+func continue_on_last_velocity():
+	body.move_and_slide(last_velocity)
 
 func move_alternate(vec):
 	if abs(vec.x) > 0.5:

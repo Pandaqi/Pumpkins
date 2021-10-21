@@ -10,6 +10,7 @@ var player_num : int = -1
 
 var vel : Vector2
 var is_throwing : bool
+var unstuck_mode : bool = false
 
 var num_knives : int
 var active_knife_vec : Vector2
@@ -34,6 +35,8 @@ var avg_distance_to_players : float
 
 var params = {}
 
+var debug_raycasts = []
+
 signal move_vec()
 
 signal button_press()
@@ -49,10 +52,14 @@ func determine_personality():
 	pass
 
 func _physics_process(dt):
+	debug_raycasts = []
+	
 	read_situation()
 	assemble_movement_vector()
 	go_around_obstacles(dt)
 	apply_chosen_input()
+	
+	
 
 func read_situation():
 	var pos = body.get_global_position()
@@ -280,26 +287,64 @@ func attack(params):
 		if final_target.dot >= 0.6 or final_target.dist <= 40:
 			params.press_button = true
 	
-	params.aim_vec = final_target.vec_to
+	var active_knife_rotation = body.modules.knives.knives_held[0].rotation
+	params.aim_vec = final_target.vec_to.rotated(-active_knife_rotation)
 
 func target_sort(a,b):
 	return a.dot < b.dot
 
 func shoot_raycast(start, end, exclude = [], col_layer = 1 + 2 + 4 + 8):
 	var space_state = get_world_2d().direct_space_state 
+	
+	debug_raycasts.append({ 'from': start, 'to': end })
+	update()
+	
 	return space_state.intersect_ray(start, end, exclude, col_layer)
 
 func shoot_triple_raycast(start, vec, exclude, col_layer = 1):
 	var offset = 0.25*PI
-	var ortho_vec = vec.rotated(PI)
+	var ortho_vec = vec.rotated(0.5*PI)
 	
 	var rc1 = shoot_raycast(start, start + vec, exclude, col_layer)
-	var rc2 = shoot_raycast(start, start + 0.5*ortho_vec + vec, exclude, col_layer)
-	var rc3 = shoot_raycast(start, start - 0.5*ortho_vec + vec, exclude, col_layer)
-	
 	if rc1: return rc1
+	
+	var rc2 = shoot_raycast(start, start + 0.5*ortho_vec + vec, exclude, col_layer)
 	if rc2: return rc2
+	
+	var rc3 = shoot_raycast(start, start - 0.5*ortho_vec + vec, exclude, col_layer)
 	if rc3: return rc3
+	
+	return null
+
+func test_move(start, vec):
+	var shaper = body.modules.shaper
+	
+	var extra_look_ahead = 15
+	var ray_length = abs(shaper.bounding_box.y.max) + extra_look_ahead
+	var ortho_vec = vec.rotated(0.5*PI)
+	
+	var body_shrink_factor = 0.8
+	
+	var exclude = [body]
+	var col_layer = 1
+	
+	# try straight ahead
+	var rc1 = shoot_raycast(start, start + vec*ray_length, exclude, col_layer)
+	if rc1: return rc1
+	
+	# try right edge of our body
+	var offset_length = body_shrink_factor*abs(shaper.bounding_box.x.max)
+	var new_start = start + ortho_vec*offset_length
+	var rc2 = shoot_raycast(new_start, new_start + vec*ray_length, exclude, col_layer)
+	if rc2: return rc2
+	
+	# try left edge of our body
+	offset_length = body_shrink_factor*abs(shaper.bounding_box.x.min)
+	new_start = start - ortho_vec*offset_length
+	
+	var rc3 = shoot_raycast(new_start, new_start + vec*ray_length, exclude, col_layer)
+	if rc3: return rc3
+	
 	return null
 
 func go_around_obstacles(dt):
@@ -309,22 +354,20 @@ func go_around_obstacles(dt):
 		'right': final_vec
 	}
 	
+	var original_vec = final_vec
 	params.final_vec = final_vec
 	
+	if unstuck_mode: 
+		params.final_vec = body.modules.mover.last_velocity
+		return
 	if is_throwing: return
 	
 	var start = body.get_global_position()
-	var mover = body.modules.mover
-	var shaper = body.modules.shaper
-	
-	var rel_speed = mover.get_speed_with_delta(dt) + shaper.approximate_radius()
-	var rel_vec = (final_vec*rel_speed)
-	var exclude = [body]
 
-	if not shoot_triple_raycast(start, rel_vec, exclude): return
+	if not test_move(start, final_vec): return
 	
 	var cur_dir = 'right'
-	var rot_step = 0.25*PI
+	var rot_step = 0.05*PI
 	var num_tries = 0
 	var max_num_tries = (2*PI)/rot_step
 	
@@ -332,10 +375,10 @@ func go_around_obstacles(dt):
 		var rot_dir = 1 if cur_dir == 'right' else -1
 		tries[cur_dir] = tries[cur_dir].rotated(rot_dir * rot_step)
 		
-		rel_vec = (tries[cur_dir]*rel_speed)
+		var try_vec = tries[cur_dir]
 		
-		if not shoot_triple_raycast(start, rel_vec, exclude): 
-			final_vec = tries[cur_dir]
+		if not test_move(start, try_vec): 
+			final_vec = try_vec
 			break
 		
 		if cur_dir == 'right':
@@ -345,10 +388,9 @@ func go_around_obstacles(dt):
 		
 		num_tries += 1
 	
-	var is_mostly_surrounded = (num_tries > 0.5*max_num_tries)
+	var is_mostly_surrounded = (original_vec.dot(final_vec) < 0.8)
 	if is_mostly_surrounded:
-		print("MOSTLY SURROUNDED")
-		pass
+		enable_unstuck_mode()
 	
 	params.final_vec = final_vec
 
@@ -384,3 +426,18 @@ func get_all_knives_within_range(radius):
 		arr.append(knife)
 	
 	return arr
+
+func enable_unstuck_mode():
+	$UnstuckTimer.start()
+	unstuck_mode = true
+
+func disable_unstuck_mode():
+	unstuck_mode = false
+
+func _on_UnstuckTimer_timeout():
+	disable_unstuck_mode()
+
+func _draw():
+	for rc in debug_raycasts:
+		draw_line(to_local(rc.from), to_local(rc.to), Color(1,0,0), 5)
+

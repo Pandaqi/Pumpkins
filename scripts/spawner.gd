@@ -47,7 +47,6 @@ func inside_physics_body(pos, radius : float = 20.0):
 	
 	for res in result:
 		if not (res.collider is PhysicsBody2D): continue
-		print(res)
 		return true
 	
 	return false
