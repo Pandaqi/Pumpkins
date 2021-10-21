@@ -1,0 +1,373 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/arenas/spooky_forest/bg.png" type="Texture" id=1]
+[ext_resource path="res://assets/arenas/spooky_forest/entities.png" type="Texture" id=2]
+[ext_resource path="res://assets/arenas/spooky_forest/entities_border.png" type="Texture" id=3]
+[ext_resource path="res://assets/arenas/spooky_forest/overlay.png" type="Texture" id=4]
+[ext_resource path="res://arenas/forest_lantern.tscn" type="PackedScene" id=5]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 68.6242
+
+[node name="SpookyForest" type="Node2D"]
+
+[node name="Map" type="Node2D" parent="."]
+
+[node name="BG" type="Node2D" parent="Map"]
+
+[node name="Sprite" type="Sprite" parent="Map/BG"]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Entities" type="Node2D" parent="Map"]
+
+[node name="Sprite" type="Sprite" parent="Map/Entities"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Sprite2" type="Sprite" parent="Map/Entities"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="EdgeTrees" type="StaticBody2D" parent="Map/Entities" groups=[
+"Deflectables",
+]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 30.2723, 21.8633 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 3.36359, 287.587 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( -3.36359, 507.901 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( -18.4997, 600.4 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( -8.98605, 826.349 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 10.0412, 1064.19 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 447.669, 1109.38 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 538.049, 1095.11 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 840.108, 1104.62 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1032.76, 1109.38 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1294.38, 1116.52 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D12" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1410.93, 1099.87 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D13" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1667.8, 1097.49 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D14" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1905.64, 1090.35 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D15" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1929.42, 938.135 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D16" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1934.18, 866.783 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D17" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1936.56, 659.861 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D18" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1938.93, 548.075 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D19" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1938.93, 338.775 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D20" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1931.8, 50.9867 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D21" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1777.2, 1.03998 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D22" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1603.58, -6.09521 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D23" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1370.49, -1.33844 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D24" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1287.25, -13.2305 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D25" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1030.38, -13.2305 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D26" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 944.758, 10.5536 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D27" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 640.321, -27.501 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D28" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 466.697, -8.47363 )
+shape = SubResource( 1 )
+
+[node name="Light2D" parent="Map/Entities" instance=ExtResource( 5 )]
+
+[node name="Light2D2" parent="Map/Entities" instance=ExtResource( 5 )]
+position = Vector2( 760.847, 503.46 )
+
+[node name="Light2D3" parent="Map/Entities" instance=ExtResource( 5 )]
+position = Vector2( 1425.53, 418.607 )
+
+[node name="Light2D4" parent="Map/Entities" instance=ExtResource( 5 )]
+position = Vector2( 1697.06, 953.18 )
+
+[node name="CanvasModulate" type="CanvasModulate" parent="Map/Entities"]
+color = Color( 0.25098, 0.121569, 0.403922, 1 )
+
+[node name="Overlay" type="Node2D" parent="Map"]
+
+[node name="Overlay" type="Sprite" parent="Map/Overlay"]
+texture = ExtResource( 4 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 458.723, 139.693 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D"]
+polygon = PoolVector2Array( -36.2556, -10.932, -2.21713, -28.9523, 33.1561, -21.6107, 34.491, 22.439, -25.5768, 31.7829 )
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 574.187, 121.673 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D2"]
+polygon = PoolVector2Array( -20.2374, -10.2646, 13.801, -14.9365, 21.8101, 7.75574, 2.45483, 19.1019, -19.57, 15.0974 )
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 504.775, 340.587 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D3"]
+polygon = PoolVector2Array( -62.0529, 26.1455, -50.2749, 40.4132, -3.53268, 57.7653, 55.4595, 41.7195, 64.4263, 1.13284, 26.9751, -40.3368, -13.0249, -41.3368, -52.5249, -7.83682 )
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 172.775, 412.587 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D4"]
+polygon = PoolVector2Array( -3.2795, -32.6988, 10.8626, -31.2845, 33.4901, -3.00027, 27.8332, 15.3845, -18.1287, 28.8195, -34.3922, 9.72763, -30.8567, -5.12161 )
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 126.106, 523.603 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D5"]
+polygon = PoolVector2Array( -1.15819, -20.678, -24.4927, -6.53589, -15.3003, 13.2631, 3.79156, 23.8697, 21.4692, 5.48492 )
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 167.118, 743.513 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D6"]
+polygon = PoolVector2Array( -10.3506, -35.5272, -41.4633, -6.53589, -4.69374, 36.5977, 34.1971, 14.6774, 22.8834, -19.2638 )
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 391.978, 842.508 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D7"]
+polygon = PoolVector2Array( -17.9781, -41.5077, 35.0219, -35.5077, 49.0219, 13.4923, 0.0219421, 41.4923, -35.9781, 45.4923, -62.9781, 3.49231 )
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 256.978, 922.508 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D8"]
+polygon = PoolVector2Array( -0.978058, -22.5077, 19.0219, -8.00769, -0.478058, 23.9923, -21.4781, 12.4923, -17.9781, -9.50769 )
+
+[node name="StaticBody2D9" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 592.147, 713.204 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D9"]
+polygon = PoolVector2Array( -16.7934, -16.9727, -4.77258, -17.6798, 15.0264, -8.48743, 14.3193, 9.19025, 3.71271, 23.3324, -23.8645, 14.8471, -28.1071, 2.82629 )
+
+[node name="StaticBody2D10" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 908.147, 365.204 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D10"]
+polygon = PoolVector2Array( -16.1467, -45.204, 34.8533, -37.204, 45.8533, 1.79602, -3.14673, 58.796, -59.1467, 3.79602 )
+
+[node name="StaticBody2D11" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 930.147, 670.204 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D11"]
+polygon = PoolVector2Array( -32.1467, -23.204, 5.85327, -23.204, 43.8533, -9.20398, 36.8533, 22.796, -25.1467, 34.796, -43.1467, 15.796 )
+
+[node name="StaticBody2D12" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 1138.15, 889.204 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D12"]
+polygon = PoolVector2Array( -25.1467, -40.204, 5.85327, -45.204, 50.8533, -30.204, 64.8533, 17.796, 45.8533, 51.796, 6.85327, 53.796, -51.1467, 35.796, -61.1467, 0.796021 )
+
+[node name="StaticBody2D13" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 1390.15, 926.204 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D13"]
+polygon = PoolVector2Array( -2.14673, -27.204, 38.8533, -10.204, 39.8533, 24.796, 23.8533, 42.796, -13.1467, 34.796, -32.1467, 19.796, -23.1467, -19.204 )
+
+[node name="StaticBody2D14" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 1438.15, 630.204 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D14"]
+polygon = PoolVector2Array( -20.1467, -53.204, 34.8533, -42.204, 50.8533, -20.204, 54.8533, 21.796, 48.8533, 39.796, 18.8533, 68.796, -13.1467, 63.796, -37.1467, 25.796, -51.1467, -28.204 )
+
+[node name="StaticBody2D15" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 1163.79, 734.856 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D15"]
+polygon = PoolVector2Array( -10.3147, -9.71997, 10.8984, -13.9626, 20.798, -3.35602, 21.5051, 17.1501, -3.24365, 28.4638, -16.6787, 21.3928, -19.5071, 0.179565 )
+
+[node name="StaticBody2D16" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 1209.04, 143.715 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D16"]
+polygon = PoolVector2Array( -15.0442, -29.2145, 20.4558, -28.7145, 42.9558, -7.21454, 40.4558, 21.2855, -9.54419, 38.7855, -43.0442, 8.28546 )
+
+[node name="StaticBody2D17" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 1334.91, 231.396 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D17"]
+polygon = PoolVector2Array( 0.814941, -19.731, 13.543, -18.3168, 24.8567, 2.18929, 19.9069, 13.503, -5.54895, 22.6954, -21.1052, 7.13902, -19.691, -9.12444 )
+
+[node name="StaticBody2D18" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 1584.52, 228.567 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D18"]
+polygon = PoolVector2Array( 3.64368, -44.4798, -38.0757, -18.3168, -24.6406, 34.7162, -7.67004, 60.172, 49.6056, 50.2726, 44.6559, -16.9026 )
+
+[node name="StaticBody2D19" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 1733.72, 358.675 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D19"]
+polygon = PoolVector2Array( -20.3982, -20.4381, 26.2709, -8.41733, 31.9277, 7.84613, 10.0074, 39.6659, -2.72046, 40.373, -29.5906, 18.4527, -35.2473, -4.17468 )
+
+[node name="StaticBody2D20" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 1736.55, 248.366 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D20"]
+polygon = PoolVector2Array( 4.95361, -12.3664, 13.9536, -2.86636, 14.4536, 7.63364, -0.546387, 17.6336, -10.0464, 16.1336, -17.5464, 2.63364, -13.5464, -6.86636 )
+
+[node name="StaticBody2D21" type="StaticBody2D" parent="Map/Overlay"]
+position = Vector2( 1771.82, 614.547 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D21"]
+polygon = PoolVector2Array( -7.52271, -36.871, 52.7985, -20.9969, 40.8929, 34.5621, 21.8442, 49.6423, -17.0471, 56.7856, -52.7637, 32.181, -35.3022, -6.71033 )
+
+[node name="Lantern" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 1681.34, 930.44 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern"]
+polygon = PoolVector2Array( -5.93579, -73.778, -36.0964, -10.2819, -55.1451, 51.6267, -23.3972, 70.6755, 44.8611, 30.9905, 59.1477, -13.4567, 27.3997, -53.1417 )
+
+[node name="Lantern2" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 1417.83, 425.647 )
+rotation = 2.00724
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern2"]
+polygon = PoolVector2Array( -5.93579, -73.778, -36.0964, -10.2819, -55.1451, 51.6267, -23.3972, 70.6755, 44.8611, 30.9905, 59.1477, -13.4567, 27.3997, -53.1417 )
+
+[node name="Lantern3" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 735.246, 511.366 )
+rotation = 4.14521
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern3"]
+polygon = PoolVector2Array( -5.93579, -73.778, -36.0964, -10.2819, -55.1451, 51.6267, -23.3972, 70.6755, 44.8611, 30.9905, 59.1477, -13.4567, 27.3997, -53.1417 )
+
+[node name="Lantern4" type="StaticBody2D" parent="Map/Overlay" groups=[
+"Stuckables",
+]]
+position = Vector2( 205.054, 146.264 )
+rotation = 2.9008
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern4"]
+polygon = PoolVector2Array( -5.93579, -73.778, -36.0964, -10.2819, -55.1451, 51.6267, -23.3972, 70.6755, 44.8611, 30.9905, 59.1477, -13.4567, 27.3997, -53.1417 )
+
+[node name="Collectors" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="Collectors"]
+position = Vector2( 500.632, 345.068 )
+
+[node name="Node2D2" type="Node2D" parent="Collectors"]
+position = Vector2( 1445.33, 627.911 )
+
+[node name="Node2D3" type="Node2D" parent="Collectors"]
+position = Vector2( 1139.86, 893.783 )
+
+[node name="Node2D4" type="Node2D" parent="Collectors"]
+position = Vector2( 905.097, 356.382 )
+
+[node name="Node2D5" type="Node2D" parent="Collectors"]
+position = Vector2( 376.181, 842.871 )
+
+[node name="Node2D6" type="Node2D" parent="Collectors"]
+position = Vector2( 1595.23, 237.588 )
+
+[node name="Node2D7" type="Node2D" parent="Collectors"]
+position = Vector2( 1773.42, 608.112 )
+
+[node name="Node2D8" type="Node2D" parent="Collectors"]
+position = Vector2( 1207.74, 144.25 )

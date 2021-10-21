@@ -4,6 +4,7 @@ var collector_scene = preload("res://scenes/gui/collector.tscn")
 
 onready var map = get_node("../Map")
 onready var players = get_node("../Players")
+onready var mode = get_node("../ModeManager")
 
 var collectors = {}
 
@@ -28,6 +29,9 @@ func place_collector(child, team_num : int):
 	
 	c.update_team(team_num)
 	c.update_label(0)
+	
+	if not mode.win_type_is("collection"):
+		c.set_visible(false)
 
 func show_player_icons():
 	for key in collectors:

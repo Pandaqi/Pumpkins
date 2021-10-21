@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/arenas/graveyard/graveyard_bg.png" type="Texture" id=1]
 [ext_resource path="res://assets/arenas/graveyard/graveyard_objects.png" type="Texture" id=2]
@@ -6,8 +6,13 @@
 [ext_resource path="res://assets/arenas/graveyard/light_texture.png" type="Texture" id=4]
 [ext_resource path="res://arenas/tombstone.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scripts/arenas/graveyard/light_mover.gd" type="Script" id=6]
+[ext_resource path="res://scripts/arenas/graveyard/tombstone_mover.gd" type="Script" id=7]
+[ext_resource path="res://assets/arenas/graveyard/dynamic_tombstone.png" type="Texture" id=8]
 
-[sub_resource type="CircleShape2D" id=6]
+[sub_resource type="OccluderPolygon2D" id=6]
+polygon = PoolVector2Array( 190.794, 366.36, 250.01, 366.99, 247.49, 296.435, 262.609, 297.065, 261.979, 273.756, 175.045, 274.386, 173.155, 297.695, 187.644, 297.695 )
+
+[sub_resource type="CircleShape2D" id=8]
 radius = 116.131
 
 [sub_resource type="CircleShape2D" id=7]
@@ -92,62 +97,93 @@ texture = ExtResource( 2 )
 [node name="StaticBody2D" parent="Map/Entities" groups=[
 "Stuckables",
 ] instance=ExtResource( 5 )]
+position = Vector2( -14.2705, 2.37839 )
 collision_layer = 13
 collision_mask = 13
 
-[node name="StaticBody2D2" parent="Map/Entities" groups=[
+[node name="StaticBody2D2" type="StaticBody2D" parent="Map/Entities" groups=[
+"Dynamics",
 "Stuckables",
-] instance=ExtResource( 5 )]
-position = Vector2( 448.985, 5.6123 )
+]]
+position = Vector2( 651.806, 333.59 )
 collision_layer = 13
 collision_mask = 13
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/StaticBody2D2"]
+position = Vector2( -217.091, -324.693 )
+polygon = PoolVector2Array( 190.794, 367.62, 248.75, 367.62, 246.86, 296.435, 262.609, 295.805, 260.719, 273.756, 174.415, 274.386, 172.525, 297.065, 187.644, 297.695 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Map/Entities/StaticBody2D2"]
+light_mask = 2
+position = Vector2( -217.091, -324.693 )
+occluder = SubResource( 6 )
+light_mask = 2
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/StaticBody2D2"]
+position = Vector2( -0.723206, -4.46335 )
+texture = ExtResource( 8 )
 
 [node name="StaticBody2D3" parent="Map/Entities" groups=[
 "Stuckables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 448.985, -162.757 )
+position = Vector2( 432.336, -162.757 )
 collision_layer = 13
 collision_mask = 13
 
 [node name="StaticBody2D4" parent="Map/Entities" groups=[
 "Deflectables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 281.738, -162.757 )
+position = Vector2( 265.089, -162.757 )
 collision_layer = 13
 collision_mask = 13
 
 [node name="StaticBody2D5" parent="Map/Entities" groups=[
 "Stuckables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 1054.82, 0 )
+position = Vector2( 1038.17, 4.75677 )
 collision_layer = 13
 collision_mask = 13
 
-[node name="StaticBody2D6" parent="Map/Entities" groups=[
+[node name="StaticBody2D6" type="StaticBody2D" parent="Map/Entities" groups=[
+"Dynamics",
 "Stuckables",
-] instance=ExtResource( 5 )]
-position = Vector2( 1518.06, 2.04871 )
+]]
+position = Vector2( 1709.97, 327.232 )
 collision_layer = 13
 collision_mask = 13
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/StaticBody2D6"]
+position = Vector2( -213.316, -322.805 )
+polygon = PoolVector2Array( 190.794, 367.62, 248.75, 367.62, 246.86, 296.435, 262.609, 295.805, 260.719, 273.756, 174.415, 274.386, 172.525, 297.065, 187.644, 297.695 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Map/Entities/StaticBody2D6"]
+light_mask = 2
+position = Vector2( -217.091, -322.805 )
+occluder = SubResource( 6 )
+light_mask = 2
+
+[node name="Sprite2" type="Sprite" parent="Map/Entities/StaticBody2D6"]
+position = Vector2( 4.69702, -3.76883 )
+texture = ExtResource( 8 )
 
 [node name="StaticBody2D7" parent="Map/Entities" groups=[
 "Stuckables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 1204.47, -164.539 )
+position = Vector2( 1187.82, -162.161 )
 collision_layer = 13
 collision_mask = 13
 
 [node name="StaticBody2D8" parent="Map/Entities" groups=[
 "Deflectables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 1350.82, -0.61348 )
+position = Vector2( 1338.93, 1.76494 )
 collision_layer = 13
 collision_mask = 13
 
 [node name="StaticBody2D9" parent="Map/Entities" groups=[
 "Stuckables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 435.578, 1091.77 )
+position = Vector2( 426.064, 1079.88 )
 rotation = 3.14159
 collision_layer = 13
 collision_mask = 13
@@ -155,23 +191,38 @@ collision_mask = 13
 [node name="StaticBody2D10" parent="Map/Entities" groups=[
 "Stuckables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 884.563, 1258.61 )
+position = Vector2( 872.671, 1246.72 )
 rotation = 3.14159
 collision_layer = 13
 collision_mask = 13
 
-[node name="StaticBody2D11" parent="Map/Entities" groups=[
+[node name="StaticBody2D11" type="StaticBody2D" parent="Map/Entities" groups=[
+"Dynamics",
 "Stuckables",
-] instance=ExtResource( 5 )]
-position = Vector2( 607.377, 1087.41 )
+]]
+position = Vector2( 374.292, 752.054 )
 rotation = 3.14159
 collision_layer = 13
 collision_mask = 13
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/StaticBody2D11"]
+position = Vector2( -214.056, -328.222 )
+polygon = PoolVector2Array( 190.794, 367.62, 248.75, 367.62, 246.86, 296.435, 262.609, 295.805, 260.719, 273.756, 174.415, 274.386, 172.525, 297.065, 187.644, 297.695 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Map/Entities/StaticBody2D11"]
+light_mask = 2
+position = Vector2( -214.056, -328.222 )
+occluder = SubResource( 6 )
+light_mask = 2
+
+[node name="Sprite3" type="Sprite" parent="Map/Entities/StaticBody2D11"]
+position = Vector2( 3.88316, -8.48779 )
+texture = ExtResource( 8 )
 
 [node name="StaticBody2D12" parent="Map/Entities" groups=[
 "Deflectables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 607.007, 1259.94 )
+position = Vector2( 590.358, 1248.05 )
 rotation = 3.14159
 collision_layer = 13
 collision_mask = 13
@@ -179,7 +230,7 @@ collision_mask = 13
 [node name="StaticBody2D13" parent="Map/Entities" groups=[
 "Stuckables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 1487.57, 1097.43 )
+position = Vector2( 1470.92, 1087.92 )
 rotation = 3.14159
 collision_layer = 13
 collision_mask = 13
@@ -187,23 +238,38 @@ collision_mask = 13
 [node name="StaticBody2D14" parent="Map/Entities" groups=[
 "Stuckables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 1956.47, 1255.04 )
+position = Vector2( 1942.2, 1243.15 )
 rotation = 3.14159
 collision_layer = 13
 collision_mask = 13
 
-[node name="StaticBody2D15" parent="Map/Entities" groups=[
+[node name="StaticBody2D15" type="StaticBody2D" parent="Map/Entities" groups=[
+"Dynamics",
 "Stuckables",
-] instance=ExtResource( 5 )]
-position = Vector2( 1787.12, 1096.94 )
+]]
+position = Vector2( 1570.68, 773.476 )
 rotation = 3.14159
 collision_layer = 13
 collision_mask = 13
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/StaticBody2D15"]
+position = Vector2( -211.678, -313.951 )
+polygon = PoolVector2Array( 190.794, 367.62, 248.75, 367.62, 246.86, 296.435, 262.609, 295.805, 260.719, 273.756, 174.415, 274.386, 172.525, 297.065, 187.644, 297.695 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Map/Entities/StaticBody2D15"]
+light_mask = 2
+position = Vector2( -211.678, -313.951 )
+occluder = SubResource( 6 )
+light_mask = 2
+
+[node name="Sprite4" type="Sprite" parent="Map/Entities/StaticBody2D15"]
+position = Vector2( 5.25488, 5.38324 )
+texture = ExtResource( 8 )
 
 [node name="StaticBody2D16" parent="Map/Entities" groups=[
 "Deflectables",
 ] instance=ExtResource( 5 )]
-position = Vector2( 1489.41, 1255.21 )
+position = Vector2( 1475.14, 1248.07 )
 rotation = 3.14159
 collision_layer = 13
 collision_mask = 13
@@ -216,7 +282,7 @@ collision_layer = 13
 collision_mask = 13
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D17"]
-shape = SubResource( 6 )
+shape = SubResource( 8 )
 
 [node name="StaticBody2D18" type="StaticBody2D" parent="Map/Entities" groups=[
 "Deflectables",
@@ -237,6 +303,23 @@ collision_mask = 13
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D19"]
 shape = SubResource( 7 )
+
+[node name="Gate" type="StaticBody2D" parent="Map/Entities" groups=[
+"Deflectables",
+]]
+position = Vector2( 960, 20 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Gate"]
+polygon = PoolVector2Array( -168.858, 25.9555, 7.73022, 31.0009, 164.137, 31.0009, 201.136, -22.8165, -202.494, -21.1347 )
+
+[node name="Gate2" type="StaticBody2D" parent="Map/Entities" groups=[
+"Deflectables",
+]]
+position = Vector2( 944.864, 1057.67 )
+rotation = 3.14159
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Gate2"]
+polygon = PoolVector2Array( -168.858, 25.9555, 7.73022, 31.0009, 164.137, 31.0009, 201.136, -22.8165, -202.494, -21.1347 )
 
 [node name="Overlay" type="Node2D" parent="Map"]
 
@@ -291,27 +374,37 @@ color = Color( 0.109804, 0.247059, 0.337255, 1 )
 [node name="Collectors" type="Node2D" parent="."]
 
 [node name="Node2D" type="Node2D" parent="Collectors"]
-position = Vector2( 220.867, 334.132 )
+position = Vector2( 204.218, 334.132 )
 
 [node name="Node2D2" type="Node2D" parent="Collectors"]
-position = Vector2( 1271.08, 337.277 )
+position = Vector2( 1254.43, 337.277 )
 
 [node name="Node2D3" type="Node2D" parent="Collectors"]
-position = Vector2( 1272.34, 749.436 )
+position = Vector2( 1253.31, 749.436 )
 
 [node name="Node2D4" type="Node2D" parent="Collectors"]
-position = Vector2( 218.972, 747.548 )
+position = Vector2( 204.701, 747.548 )
 
 [node name="Node2D5" type="Node2D" parent="Collectors"]
-position = Vector2( 668.269, 173.673 )
+position = Vector2( 651.62, 173.673 )
 
 [node name="Node2D6" type="Node2D" parent="Collectors"]
-position = Vector2( 1421.47, 171.785 )
+position = Vector2( 1407.2, 171.785 )
 
 [node name="Node2D7" type="Node2D" parent="Collectors"]
-position = Vector2( 1736.74, 916.499 )
+position = Vector2( 1724.85, 916.499 )
 
 [node name="Node2D8" type="Node2D" parent="Collectors"]
-position = Vector2( 665.435, 918.393 )
+position = Vector2( 653.543, 918.393 )
+
+[node name="CustomLogic" type="Node2D" parent="."]
+script = ExtResource( 7 )
+
+[node name="Tween" type="Tween" parent="CustomLogic"]
+
+[node name="TombstoneTimer" type="Timer" parent="CustomLogic"]
+wait_time = 5.0
+one_shot = true
 
 [connection signal="timeout" from="Map/Overlay/Light2D/Timer" to="Map/Overlay/Light2D" method="_on_Timer_timeout"]
+[connection signal="timeout" from="CustomLogic/TombstoneTimer" to="CustomLogic" method="_on_TombstoneTimer_timeout"]

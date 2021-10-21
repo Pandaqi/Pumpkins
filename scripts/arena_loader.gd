@@ -2,6 +2,7 @@ extends Node
 
 var arena : String = "graveyard"
 
+onready var main_node = get_node("/root/Main")
 onready var map = get_node("/root/Main/Map")
 onready var collectors = get_node("/root/Main/Collectors")
 
@@ -12,6 +13,7 @@ func load_arena():
 	arena = GlobalDict.cfg.arena
 	
 	var scene = load("res://arenas/" + arena + ".tscn").instance()
+	var custom_logic = null
 	
 	for child in scene.get_children():
 		if child.name == "Map":
@@ -21,4 +23,12 @@ func load_arena():
 		
 		elif child.name == "Collectors":
 			collectors.place(child)
+		
+		elif child.name == "CustomLogic":
+			custom_logic = child
+			child.get_parent().remove_child(child)
+			main_node.add_child(child)
+	
+	if custom_logic:
+		custom_logic.activate()
 	

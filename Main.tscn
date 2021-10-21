@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://scripts/main.gd" type="Script" id=1]
 [ext_resource path="res://scripts/players.gd" type="Script" id=2]
@@ -16,6 +16,8 @@
 [ext_resource path="res://scripts/mode_manager.gd" type="Script" id=14]
 [ext_resource path="res://scripts/particles.gd" type="Script" id=15]
 [ext_resource path="res://scripts/collectors.gd" type="Script" id=16]
+[ext_resource path="res://assets/ui/settings/pause_menu.png" type="Texture" id=17]
+[ext_resource path="res://scripts/ui/pause_menu.gd" type="Script" id=18]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -115,10 +117,48 @@ __meta__ = {
 }
 
 [node name="GUI" type="CanvasLayer" parent="."]
+layer = 2
 script = ExtResource( 11 )
 
 [node name="Tween" type="Tween" parent="GUI"]
 
+[node name="PauseMenu" type="CanvasLayer" parent="."]
+pause_mode = 2
+layer = 3
+script = ExtResource( 18 )
+
+[node name="ColorRect" type="ColorRect" parent="PauseMenu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Buttons" type="Node2D" parent="PauseMenu"]
+
+[node name="Restart" type="Sprite" parent="PauseMenu/Buttons"]
+position = Vector2( 501.138, 502.466 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 17 )
+hframes = 3
+
+[node name="Continue" type="Sprite" parent="PauseMenu/Buttons"]
+position = Vector2( 958.754, 502.466 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 17 )
+hframes = 3
+frame = 1
+
+[node name="Exit" type="Sprite" parent="PauseMenu/Buttons"]
+position = Vector2( 1415.94, 502.466 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 17 )
+hframes = 3
+frame = 2
+
+[node name="Tween" type="Tween" parent="PauseMenu"]
+
 [connection signal="timeout" from="Powerups/Timer" to="Powerups" method="_on_Timer_timeout"]
 [connection signal="timeout" from="DramaticSlice/Timer" to="DramaticSlice" method="_on_Timer_timeout"]
 [connection signal="tween_all_completed" from="GUI/Tween" to="GUI" method="_on_Tween_tween_all_completed"]
+[connection signal="tween_all_completed" from="PauseMenu/Tween" to="PauseMenu" method="_on_Tween_tween_all_completed"]

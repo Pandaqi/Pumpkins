@@ -3,7 +3,7 @@ extends Node2D
 onready var gui = get_node("/root/Main/GUI")
 onready var my_gui = get_node("Container")
 onready var instruc_gui = get_node("Container2")
-var gui_size = 256*0.5
+var gui_size = 256*0.35
 
 onready var body = get_parent()
 
@@ -67,7 +67,7 @@ func position_gui(obj, offset_vec):
 	if not obj: return
 	
 	var pos = body.get_global_transform_with_canvas().origin
-	var offset = (gui_size + 30)
+	var offset = (gui_size + 18)
 	
 	obj.set_position(pos + offset_vec*offset)
 	
@@ -75,4 +75,4 @@ func position_gui(obj, offset_vec):
 	obj.get_node("BG").flip_v = (offset_vec.y > 0)
 	obj.get_node("Sprite").position.y = 0
 	if obj.get_node("BG").flip_v:
-		obj.get_node("Sprite").position.y = 67
+		obj.get_node("Sprite").position.y = 47

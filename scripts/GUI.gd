@@ -8,7 +8,7 @@ func tween_appearance(obj):
 	var target_scale = Vector2(1,1)
 	
 	var duration = 0.3 + randf()*0.4
-	var delay = randf()*2.0
+	var delay = randf()*1.25
 	
 	tween.interpolate_property(obj, "scale", 
 		old_scale, target_scale, duration,

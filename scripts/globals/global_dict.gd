@@ -1,8 +1,8 @@
 extends Node
 
 var base_cfg = {
-	'game_mode': 'collect_em_all',
-	'arena': 'spooky_forest',
+	'game_mode': 'slicey_dicey',
+	'arena': 'graveyard',
 	'powerups': [],
 	
 	'max_players': 6,
@@ -20,7 +20,7 @@ var base_cfg = {
 var cfg = {}
 
 var modes = {
-	"dicey_slicey": { "frame": 0, "win": "survival", "fade_rubble": true, "players_can_die": true },
+	"dicey_slicey": { "frame": 0, "win": "survival", "fade_rubble": true, "players_can_die": true, "def": true },
 	
 	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 20, "auto_grow": true, "collectible_group": "PlayerParts" },
 	
@@ -34,8 +34,8 @@ var modes = {
 }
 
 var arenas = {
-	"spooky_forest": {},
-	"graveyard": {}
+	"spooky_forest": { "def": true },
+	"graveyard": { }
 }
 
 var configurable_settings = {
@@ -92,16 +92,16 @@ var predefined_shapes = {
 }
 
 var powerups = {
-	"grow": { "frame": 1, "category": "shape", "prob": 5 },
-	"shrink": { "frame": 2, "category": "shape", "prob": 5 },
-	"morph": { "frame": 3, "category": "shape" },
+	"grow": { "frame": 1, "category": "shape", "prob": 5, "def": true },
+	"shrink": { "frame": 2, "category": "shape", "prob": 5, "def": true },
+	"morph": { "frame": 3, "category": "shape", "def": true },
 	"ghost": { "frame": 4, "temporary": true, "category": "shape" },
 	"hungry": { "frame": 5, "temporary": true, "category": "shape" },
 	
 	"grow_range": { "frame": 6, "category": "slashing" },
 	"shrink_range": { "frame": 7, "category": "slashing" },
-	"extra_knife": { "frame": 8, "category": "slashing", "prob": 5 },
-	"lose_knife": { "frame": 9, "category": "slashing" },
+	"extra_knife": { "frame": 8, "category": "slashing", "prob": 5, "def": true },
+	"lose_knife": { "frame": 9, "category": "slashing", "def": true },
 	"boomerang": { "frame": 10, "temporary": true, "category": "slashing" },
 	"curved": { "frame": 11, "temporary": true, "category": "slashing" },
 	"faster_throw": { "frame": 12, "category": "slashing" },

@@ -8,6 +8,8 @@ onready var arena = $ArenaLoader
 onready var mode = $ModeManager
 
 func _ready():
+	randomize()
+	
 	if GlobalInput.get_player_count() <= 0:
 		GlobalInput.create_debugging_players()
 	
