@@ -43,6 +43,7 @@ tracks/0/keys = {
 
 [node name="Powerup" type="StaticBody2D" groups=[
 "Powerups",
+"PowerupsUnrevealed",
 "Pullables",
 "Sliceables",
 ]]
@@ -53,6 +54,7 @@ script = ExtResource( 3 )
 
 [node name="RevealedPowerup" type="Node2D" parent="." groups=[
 "Powerups",
+"PowerupsRevealed",
 ]]
 script = ExtResource( 2 )
 

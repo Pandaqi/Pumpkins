@@ -125,3 +125,6 @@ func calculate_centroid(shp):
 		avg += point
 	
 	return avg / float(shp.size())
+
+func _on_StatTimer_timeout():
+	body.modules.statistics.record("accumulated_size", area)

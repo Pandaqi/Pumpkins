@@ -12,6 +12,9 @@ var powerup_fb_scene = preload("res://scenes/powerup_feedback.tscn")
 
 var disabled : bool = false
 
+var repel_knives : bool = false
+var auto_unwrap : bool = false
+
 func disable():
 	disabled = true
 
@@ -124,6 +127,12 @@ func activate_effect(type):
 		
 		"clueless":
 			body.modules.collector.disable_collection()
+		
+		"repel_knives":
+			repel_knives = true
+		
+		"auto_unwrap":
+			auto_unwrap = true
 
 func deactivate_effect(type):
 	match type:
@@ -153,5 +162,11 @@ func deactivate_effect(type):
 		
 		"clueless":
 			body.modules.collector.enable_collection()
+		
+		"repel_knives":
+			repel_knives = false
+		
+		"auto_unwrap":
+			auto_unwrap = false
 	
 	show_feedback(type, true)

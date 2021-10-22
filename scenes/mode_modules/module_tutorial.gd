@@ -20,6 +20,12 @@ func activate(num):
 	player_num = num
 	load_next_slide()
 
+func self_destruct():
+	if my_gui: my_gui.queue_free()
+	self.queue_free()
+	if body and body.modules:
+		body.modules.erase('tutorial')
+
 func get_frame_offset():
 	var id = GlobalInput.get_device_id(player_num)
 	if id < 0:
@@ -30,8 +36,7 @@ func get_frame_offset():
 func load_next_slide():
 	cur_slide += 1
 	if cur_slide >= MAX_SLIDES:
-		self.queue_free()
-		body.modules.erase('tutorial')
+		self_destruct()
 		return
 	
 	my_gui.set_scale(Vector2.ZERO)

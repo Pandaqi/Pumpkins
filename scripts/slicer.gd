@@ -40,7 +40,7 @@ func _draw():
 	draw_line(a, b, Color(0,0,0), 2)
 
 # Actual slicing functionality
-func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include = []):
+func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include = [], attacker = null):
 	# debug draw (for me)
 	start_point = p1
 	end_point = p2
@@ -78,11 +78,11 @@ func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include
 	# finally, slice whatever is left
 	var final_bodies = []
 	for b in bodies:
-		final_bodies += slice_body(b, p1, p2)
+		final_bodies += slice_body(b, p1, p2, attacker)
 	
 	return final_bodies
 
-func slice_body(b, p1, p2):
+func slice_body(b, p1, p2, attacker):
 	var original_player_num = -1
 	if b.modules.has("status"):
 		original_player_num = b.modules.status.player_num
@@ -163,8 +163,8 @@ func slice_body(b, p1, p2):
 	
 	elif (not is_player_body):
 		if is_powerup:
-			b.reveal_powerup()
-		
+			b.reveal_powerup(attacker)
+
 		else:
 			# destroy the old body completely; we'll create new ones
 			b.modules.status.delete()

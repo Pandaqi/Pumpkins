@@ -56,7 +56,11 @@ func move_regular(vec):
 	last_velocity = final_vec
 	
 	var new_pos = body.get_global_position()
-	emit_signal("moved", (new_pos - old_pos))
+	var dist_moved = (new_pos - old_pos)
+	
+	body.modules.statistics.record("total_distance", dist_moved.length())
+	
+	emit_signal("moved", dist_moved)
 
 func _on_Input_button_press():
 	moving_enabled = false

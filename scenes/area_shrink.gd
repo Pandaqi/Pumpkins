@@ -24,7 +24,7 @@ func check_players_inside():
 	
 	var center = 0.5*Vector2(1920, 1080)
 	for p in players:
-		if p.is_dead: continue
+		if p.modules.status.is_dead: continue
 		
 		var dist_to_center = (p.get_global_position() - center).length()
 		if dist_to_center >= radius: continue

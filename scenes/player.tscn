@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=2]
@@ -27,6 +27,7 @@
 [ext_resource path="res://assets/ui/tutorial.png" type="Texture" id=25]
 [ext_resource path="res://scenes/mode_modules/module_tutorial.gd" type="Script" id=26]
 [ext_resource path="res://assets/gameover.png" type="Texture" id=27]
+[ext_resource path="res://scripts/module_statistics.gd" type="Script" id=28]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 16.0
@@ -108,6 +109,9 @@ polygon = PoolVector2Array( -0.173355, -15.0607, -14.3155, -3.39339, -15.0226, 7
 [node name="Status" type="Node" parent="."]
 script = ExtResource( 2 )
 
+[node name="Statistics" type="Node" parent="."]
+script = ExtResource( 28 )
+
 [node name="Input" type="Node" parent="."]
 script = ExtResource( 6 )
 
@@ -152,6 +156,9 @@ vframes = 2
 
 [node name="Shaper" type="Node" parent="."]
 script = ExtResource( 3 )
+
+[node name="StatTimer" type="Timer" parent="Shaper"]
+autostart = true
 
 [node name="Powerups" type="Node" parent="."]
 script = ExtResource( 13 )
@@ -265,9 +272,10 @@ anims/RESET = SubResource( 9 )
 [connection signal="quick_slash" from="Slasher" to="Tutorial" method="_on_Slasher_quick_slash"]
 [connection signal="slash_range_changed" from="Slasher" to="Knives" method="_on_Slasher_slash_range_changed"]
 [connection signal="thrown_slash" from="Slasher" to="Tutorial" method="_on_Slasher_thrown_slash"]
-[connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
+[connection signal="timeout" from="Shaper/StatTimer" to="Shaper" method="_on_StatTimer_timeout"]
 [connection signal="timeout" from="Grower/Timer" to="Grower" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Collector/Area2D" to="Collector" method="_on_Area2D_body_entered"]

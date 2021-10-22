@@ -6,6 +6,18 @@ var interface_available : bool = false
 onready var player_manager = get_node("../Players")
 onready var mode = get_node("../ModeManager")
 
+var awards = {
+	"players_sliced": "Players Sliced",
+	"knives_used": "Knives Used",
+	"succesful_attacks": "Succesful Attacks (%)",
+	"powerups_opened": "Powerups Opened",
+	"powerups_grabbed": "Powerups Grabbed",
+	"distance_traveled": "Distance Traveled (km)",
+	"average_size": "Average Size (m)",
+	"quick_stabs": "Quick Stabs",
+	"long_throws": "Long Throws"
+}
+
 func activate():
 	pass
 
@@ -73,13 +85,72 @@ func check_win_by_collection():
 		break
 
 func game_over(team_num):
-	var team = player_manager.get_players_in_team(team_num)
-	
-	print("GAME OVER")
-	print("Winning team: " + str(team))
-	
 	game_over_state = true
 	
+	handout_awards()
+	show_gameover_gui(team_num)
+
+func handout_awards():
+	# Step 1: create list of each statistic (val, player) and sort them
+	var players = get_tree().get_nodes_in_group("Players")
+	var final_results = {}
+	
+	for stat in awards:
+		final_results[stat] = []
+		
+		for p in players:
+			# some things can only be calculated once the game is completely done; do so now
+			p.modules.statistics.finalize_awards()
+			
+			var obj = { 
+				'val': p.modules.statistics.read(stat), 
+				'num': p.modules.status.player_num 
+			}
+			
+			final_results[stat].append(obj)
+		
+		final_results[stat].sort_custom(self, "award_sort")
+	
+	# Step 2: for each player, find lists where they are either FIRST or LAST
+	for p in players:
+		var wins = []
+		var num = p.modules.status.player_num
+		
+		for stat in final_results:
+			var list = final_results[stat]
+			if list[0].num == num:
+				var obj = { 
+					'stat': stat, 
+					'type': 'high', 
+					'val': list[0].val 
+				}
+				
+				wins.append(obj)
+			elif list[list.size() - 1].num == num:
+				var obj = { 
+					'stat': stat, 
+					'type': 'low', 
+					'val': list[list.size() - 1].val
+				}
+				wins.append(obj)
+		
+		var no_award_possible = (wins.size() <= 0)
+		if no_award_possible:
+			wins = [{ 'stat': 'passive', 'type': 'high', 'val': INF }]
+			continue
+	
+		# Step 3: pick a random one and assign it to the my_award variable on the player
+		var random_choice = wins[randi() % wins.size()]
+		
+		var award_val = random_choice.val
+		var award_name = awards[random_choice.stat]
+		var type = random_choice.type # low or high
+		
+		p.modules.statistics.set_award(award_name, award_val, type)
+
+func show_gameover_gui(team_num):
+	var team = player_manager.get_players_in_team(team_num)
+
 	var players = get_tree().get_nodes_in_group("Players")
 	var instructions_handed_out = false
 	for p in players:

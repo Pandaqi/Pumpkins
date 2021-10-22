@@ -10,7 +10,7 @@ onready var body = get_parent()
 onready var slicer = get_node("/root/Main/Slicer")
 onready var particles = get_node("/root/Main/Particles")
 onready var map = get_node("/root/Main/Map")
-onready var mode = get_node("/root/Main/Mode")
+onready var mode = get_node("/root/Main/ModeManager")
 
 var player_num : int = -1
 var slashing_enabled : bool = false
@@ -140,6 +140,9 @@ func execute_quick_slash():
 	var start = body.get_global_position()
 	var vec = body.modules.knives.get_first_knife_vec()
 	
+	body.modules.statistics.record("quick_stabs", 1)
+	body.modules.statistics.record("knives_used", 1)
+	
 	if not vec:
 		# print the "NO KNIVES" feedback
 		return
@@ -197,6 +200,9 @@ func shoot_raycast(start, end):
 	return space_state.intersect_ray(start, end, exclude, collision_layer)
 
 func execute_thrown_slash():
+	body.modules.statistics.record("long_throws", 1)
+	body.modules.statistics.record("knives_used", 1)
+	
 	body.modules.knives.throw_first_knife()
 	emit_signal("thrown_slash")
 

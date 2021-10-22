@@ -6,7 +6,10 @@ onready var players = get_node("/root/Main/Players")
 onready var mode = get_node("/root/Main/ModeManager")
 onready var body = get_parent()
 
+onready var nav = get_node("/root/Main/Navigation/Navigation2D")
+
 var player_num : int = -1
+var use_navigation : bool = true
 
 var vel : Vector2
 var is_throwing : bool
@@ -165,16 +168,28 @@ func stock_resources(params):
 	# (move towards the closest of them)
 	# (if we're out of knives, increase the priority for this)
 	var vec_to_knife : Vector2 = Vector2.ZERO
+	var closest_knife = null
 	var closest_dist : float = INF
 	for knife in knives_close_friendly:
 		var vec = (knife.get_global_position() - our_pos)
 		if vec.length() >= closest_dist: continue
 		
 		closest_dist = vec.length()
+		closest_knife = knife
 		vec_to_knife = vec
 	
 	var my_weight = 5
 	if num_knives <= 0: my_weight = 12
+	
+	if use_navigation and closest_knife:
+		var path = get_path_to_target(closest_knife.get_global_position())
+		if path.size() >= 2:
+			vec_to_knife = (path[1] - path[0]).normalized()
+		
+		# TO DO: do something more meaningful
+		# Like, go wander, pick a _different_ knife, go for powerups, etc.
+		if path.size() < 2:
+			my_weight = 0
 	
 	params.vec += vec_to_knife * my_weight
 	params.weight += my_weight
@@ -184,6 +199,7 @@ func stock_resources(params):
 	if mode.has_collectibles():
 		var vec_to_collectible : Vector2 = Vector2.ZERO
 		var found_something = false
+		var closest_collectible = null
 		
 		closest_dist = INF
 		for c in collectibles_close:
@@ -194,11 +210,22 @@ func stock_resources(params):
 			if vec.length() >= closest_dist: continue
 			
 			closest_dist = vec.length()
+			closest_collectible = c
 			vec_to_collectible = vec.normalized()
 			
 			found_something = true
 		
 		my_weight = 12
+		
+		if use_navigation and closest_collectible:
+			var path = get_path_to_target(closest_collectible.get_global_position())
+			if path.size() >= 2:
+				vec_to_collectible = (path[1] - path[0]).normalized()
+			
+			if path.size() < 2:
+				my_weight = 0
+				found_something = false
+		
 		params.vec += vec_to_collectible * my_weight
 		params.weight += my_weight
 		
@@ -256,6 +283,8 @@ func attack(params):
 		
 		final_target = t
 		break
+	
+	if not closest_target: return
 	
 	# in any case, move towards a target if possible
 	var move_towards_target = final_target
@@ -357,6 +386,9 @@ func go_around_obstacles(dt):
 	var original_vec = final_vec
 	params.final_vec = final_vec
 	
+	# DEBUGGING
+	return
+	
 	if unstuck_mode: 
 		params.final_vec = body.modules.mover.last_velocity
 		return
@@ -441,3 +473,33 @@ func _draw():
 	for rc in debug_raycasts:
 		draw_line(to_local(rc.from), to_local(rc.to), Color(1,0,0), 5)
 
+# Navigation pathing
+func get_path_to_target(target_pos):
+	# NOTE: third parameter is optimize => has issues
+	var our_pos = body.get_global_position()
+	var new_path = nav.get_simple_path(our_pos, target_pos)
+	
+	var max_tries = 10
+	var num_tries = 0
+	while path_contains_bounds(new_path) and num_tries < max_tries:
+		target_pos = 0.5*(our_pos + target_pos)
+		new_path = nav.get_simple_path(our_pos, target_pos)
+		num_tries += 1
+	
+	# if there's simply no path, return that
+	if num_tries >= max_tries:
+		print("NO PATH POSSIBLE; simply not possible")
+		return []
+	
+	# if we're going to end too far away from our wanted path, it's considered an invalid path
+	if (new_path[new_path.size()-1] - target_pos).length() > (nav.get_parent().BODY_SAFE_MARGIN + 10):
+		print("NO PATH POSSIBLE; too far away")
+		return []
+	
+	return new_path
+	
+func path_contains_bounds(arr):
+	for point in arr:
+		if point.x <= 0 or point.x >= 1919 or point.y <= 0 or point.y >= 1079: return true
+	
+	return false

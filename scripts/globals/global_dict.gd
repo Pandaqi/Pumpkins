@@ -48,6 +48,11 @@ var configurable_settings = {
 	"stuck_reset": { "frame": 7, "def": true }
 }
 
+var throwables = {
+	"knife": { "body": false, "needs_owner": true },
+	"dumpling": { "body": true, "needs_owner": false } 
+}
+
 var player_colors = [
 	Color(1.0, 148/255.0, 122/255.0), 
 	Color(177/255.0, 1.0, 140/255.0), 
@@ -116,6 +121,11 @@ var powerups = {
 	"magnet": { "frame": 18, "temporary": true, "category": "collecting" },
 	"duplicator": { "frame": 19, "temporary": true, "category": "collecting" },
 	"clueless": { "frame": 20, "temporary": true, "category": "collecting" },
+	
+	"repel_knives": { "frame": 21, "temporary": true, "category": "slashing", "def": true, "prob": 3 },
+	"auto_unwrap": { "frame": 22, "temporary": true, "category": "collecting" },
+	
+	"dumpling": { "frame": 23, "category": "throwables", "def": true, "prob": 5 }
 }
 
 func update_from_current_config():

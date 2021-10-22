@@ -21,9 +21,11 @@ func set_type(tp):
 	sprite.set_frame(frame)
 
 func _on_Area2D_body_entered(body):
-	if not GlobalDict.cfg.auto_pickup_powerups and still_inside:
-		return
+	if still_inside:
+		if not GlobalDict.cfg.auto_pickup_powerups and not body.modules.powerups.auto_unwrap:
+			return
 	
+	body.modules.statistics.record("powerups_grabbed", 1)
 	body.modules.powerups.grab(type)
 	self.queue_free()
 	

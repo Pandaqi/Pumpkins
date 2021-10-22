@@ -76,3 +76,9 @@ func place_powerup():
 	
 	var rand_shape = shape_manager.get_random_shape()
 	p.set_shape(rand_shape)
+
+func _on_AutoRevealTimer_timeout():
+	var ps = get_tree().get_nodes_in_group("PowerupsUnrevealed")
+	if ps.size() <= 0: return
+	var rand_powerup = ps[randi() % ps.size()]
+	rand_powerup.auto_slice()

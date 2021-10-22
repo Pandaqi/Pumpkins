@@ -51,7 +51,7 @@ func turn_into_bot():
 	
 	var tutorial = get_node("../Tutorial")
 	tutorial.get_parent().remove_child(tutorial)
-	tutorial.queue_free()
+	tutorial.self_destruct()
 
 func turn_into_player():
 	var bot = get_node("../Bot")
@@ -59,7 +59,9 @@ func turn_into_player():
 	bot.queue_free()
 	
 	if (not GlobalDict.cfg.tutorial) or Global.is_restart: 
-		get_parent().get_node("Tutorial").queue_free()
+		var tutorial = get_node("../Tutorial")
+		tutorial.get_parent().remove_child(tutorial)
+		tutorial.self_destruct()
 
 func rotate_incrementally():
 	if is_bot: return false

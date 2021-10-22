@@ -31,12 +31,14 @@ func make_reset_button():
 	reset_btn = true
 	$Sprite.set_frame(1)
 	$Hover.set_frame(1)
+	$Glow.set_visible(false)
 
 func make_random_button():
 	set_sprite_to_default_buttons()
 	random_btn = true
 	$Sprite.set_frame(0)
 	$Hover.set_frame(0)
+	$Glow.set_visible(false)
 
 func set_sprite_to_default_buttons():
 	var sprite = get_node("Sprite")
@@ -105,15 +107,29 @@ func update_selection_ui():
 	if reset_btn or random_btn:
 		modulate.a = 1.0
 		$Sprite.material = null
+		$Glow.set_visible(false)
 		return
 	
 	if not val:
 		modulate.a = 0.5
 		$Sprite.material = grayscale_shader
+		$Hover.material = grayscale_shader
+	
+	var small_size = false
+	if section == "powerups" or section == "settings":
+		small_size = true
+	
+	if small_size:
+		$Glow.set_scale(Vector2(1,1)*0.5)
+	
+	$Glow.set_visible(false)
+	if in_focus and val:
+		$Glow.set_visible(true)
 	
 	if in_focus or val:
 		modulate.a = 1.0
 		$Sprite.material = null
+		$Hover.material = null
 
 func focus():
 	in_focus = true

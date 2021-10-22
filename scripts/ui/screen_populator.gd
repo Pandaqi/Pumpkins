@@ -65,11 +65,11 @@ func _ready():
 		
 	elif type == "powerups":
 		frames = Vector2(8,8)
-		cols = 6
+		cols = 7
 		
 	elif type == "settings":
 		frames = Vector2(4,4)
-		cols = 5
+		cols = 4
 	
 	if large_tiles:
 		item_size *= 2

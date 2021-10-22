@@ -38,19 +38,19 @@ position = Vector2( 30.2723, 21.8633 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 3.36359, 287.587 )
+position = Vector2( 8.70295, 287.587 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( -3.36359, 507.901 )
+position = Vector2( 12.6726, 457.901 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( -18.4997, 600.4 )
+position = Vector2( 10.8668, 600.4 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D5" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( -8.98605, 826.349 )
+position = Vector2( 4.36234, 826.349 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D6" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
@@ -58,91 +58,87 @@ position = Vector2( 10.0412, 1064.19 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D7" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 447.669, 1109.38 )
+position = Vector2( 396.757, 1069.33 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D8" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 538.049, 1095.11 )
+position = Vector2( 543.388, 1065.74 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D9" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 840.108, 1104.62 )
+position = Vector2( 840.108, 1067.24 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D10" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1032.76, 1109.38 )
+position = Vector2( 1032.76, 1072 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D11" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1294.38, 1116.52 )
+position = Vector2( 1266.25, 1068.15 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D12" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1410.93, 1099.87 )
+position = Vector2( 1408.26, 1059.82 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D13" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1667.8, 1097.49 )
+position = Vector2( 1667.8, 1068.12 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D14" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1905.64, 1090.35 )
+position = Vector2( 1900.3, 1066.32 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D15" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1929.42, 938.135 )
-shape = SubResource( 1 )
-
-[node name="CollisionShape2D16" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1934.18, 866.783 )
+position = Vector2( 1913.4, 938.135 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D17" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1936.56, 659.861 )
+position = Vector2( 1913.33, 792.956 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D18" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1938.93, 548.075 )
+position = Vector2( 1909.4, 522.46 )
 shape = SubResource( 1 )
 
-[node name="CollisionShape2D19" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1938.93, 338.775 )
+[node name="WRONG" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1918.23, 336.656 )
 shape = SubResource( 1 )
 
-[node name="CollisionShape2D20" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1931.8, 50.9867 )
+[node name="WRONG2" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
+position = Vector2( 1916.24, 56.6436 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D21" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1777.2, 1.03998 )
+position = Vector2( 1777.2, 9.04901 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D22" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1603.58, -6.09521 )
+position = Vector2( 1603.58, 1.91382 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D23" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1370.49, -1.33844 )
+position = Vector2( 1370.49, 12.0099 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D24" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1287.25, -13.2305 )
+position = Vector2( 1225.02, 5.45727 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D25" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 1030.38, -13.2305 )
+position = Vector2( 1027.71, 5.45724 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D26" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 944.758, 10.5536 )
+position = Vector2( 893.846, 4.89674 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D27" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 640.321, -27.501 )
+position = Vector2( 640.321, 1.86546 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D28" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
-position = Vector2( 466.697, -8.47363 )
+position = Vector2( 466.697, 4.87476 )
 shape = SubResource( 1 )
 
 [node name="Light2D" parent="Map/Entities" instance=ExtResource( 5 )]

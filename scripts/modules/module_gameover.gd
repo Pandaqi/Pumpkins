@@ -26,6 +26,9 @@ func enable(winner : bool = false):
 	my_gui.set_scale(Vector2.ZERO)
 	my_gui.set_visible(true)
 	
+	if winner:
+		my_gui.get_node("Labels").set_visible(false)
+	
 	var target_frame = 3
 	if winner: target_frame = 2
 	
@@ -73,6 +76,10 @@ func position_gui(obj, offset_vec):
 	
 	obj.get_node("BG").flip_h = (offset_vec.x < 0)
 	obj.get_node("BG").flip_v = (offset_vec.y > 0)
+	
 	obj.get_node("Sprite").position.y = 0
+	if obj.has_node("Labels"): obj.get_node("Labels").position.y = 0
+	
 	if obj.get_node("BG").flip_v:
 		obj.get_node("Sprite").position.y = 47
+		if obj.has_node("Labels"): obj.get_node("Labels").position.y = 47

@@ -30,6 +30,8 @@ var ignore_deflections : bool = false
 var last_deflection_time : float
 var collision_exceptions = []
 
+var num_succesful_actions : int = 0
+
 var being_held : bool = false
 var my_owner = null # NOTE "owner" is a registered word with Godot, so use something else
 var is_stuck : bool = false
@@ -90,6 +92,7 @@ func reset():
 	sprite.set_rotation(0.5*PI)
 
 func throw(vel):
+	num_succesful_actions = 0
 	velocity = vel
 	disable_grabbing()
 
@@ -115,8 +118,7 @@ func apply_boomerang(dt):
 func move(dt):
 	if is_stuck: return
 	if velocity.length() <= MIN_SIGNIFICANT_VELOCITY:
-		velocity = Vector2.ZERO
-		remove_owner()
+		stop()
 		return
 	
 	apply_curve()
@@ -158,9 +160,10 @@ func shoot_back_raycast():
 
 	var space_state = get_world_2d().direct_space_state 
 
+	# This one extends considerably, so that bots (or weirder shapes) can also pick it up
 	var normal = Vector2(cos(body.rotation), sin(body.rotation))
 	var start = body.get_global_position() + normal*knife_half_size
-	var end = body.get_global_position() - normal * knife_half_size * 2
+	var end = body.get_global_position() - normal * knife_half_size * 4
 	
 	var exclude = []
 	if grabbing_disabled and not has_no_owner():
@@ -225,6 +228,7 @@ func shoot_raycast():
 	
 	if hit_body.is_in_group("Sliceables"):
 		slice_through_body(result.collider)
+		num_succesful_actions += 1
 	elif hit_body.is_in_group("Stuckables"):
 		get_stuck(result)
 		
@@ -240,6 +244,17 @@ func shoot_raycast():
 	if is_boomerang:
 		boomerang_state = "returning"
 
+func stop():
+	record_succesful_actions()
+	
+	velocity = Vector2.ZERO
+	remove_owner()
+
+func record_succesful_actions():
+	if num_succesful_actions <= 0: return
+	if has_no_owner(): return
+	my_owner.modules.statistics.record("knives_succesful", 1)
+
 func get_stuck(result):
 	velocity = Vector2.ZERO
 	body.set_position(result.position)
@@ -247,6 +262,8 @@ func get_stuck(result):
 	var wanted_normal = -result.normal
 	body.set_rotation(wanted_normal.angle())
 	is_stuck = true
+	
+	record_succesful_actions()
 
 func get_knife_top_pos():
 	var rot = body.rotation
@@ -259,6 +276,13 @@ func get_knife_bottom_pos():
 	return body.get_global_position() - offset_vec*knife_half_size
 
 func slice_through_body(obj):
+	if obj.is_in_group("Players"):
+		if obj.modules.powerups.repel_knives:
+			var normal = (obj.get_global_position() - body.get_global_position()).normalized()
+			var rand_normal = normal.rotated((randf() - 0.5)*0.25*PI)
+			deflect({ 'normal': rand_normal })
+			return
+	
 	var normal = velocity.normalized()
 	var center = body.get_global_position()
 	var start = center - normal * 500
@@ -266,7 +290,7 @@ func slice_through_body(obj):
 	
 	particles.create_slash(get_knife_bottom_pos(), normal)
 
-	var result = slicer.slice_bodies_hitting_line(start, end, [], [obj])
+	var result = slicer.slice_bodies_hitting_line(start, end, [], [obj], my_owner)
 	if result.size() <= 0: return false
 
 	collision_exceptions.append(obj)
@@ -276,6 +300,8 @@ func slice_through_body(obj):
 	
 	var penalty = mode.get_player_slicing_penalty()
 	my_owner.modules.collector.collect(penalty)
+	
+	my_owner.modules.statistics.record("players_sliced", 1)
 
 	return true
 

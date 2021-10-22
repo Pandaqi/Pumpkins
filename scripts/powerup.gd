@@ -7,6 +7,7 @@ var modules = {}
 
 onready var main_node = get_node("/root/Main")
 onready var shape_manager = get_node("/root/Main/ShapeManager")
+onready var slicer = get_node("/root/Main/Slicer")
 
 onready var sprite = $Sprite
 onready var revealed_powerup = $RevealedPowerup
@@ -32,7 +33,17 @@ func set_type(tp):
 func get_type():
 	return revealed_powerup.type
 
-func reveal_powerup():
+func auto_slice():
+	var rot = 2*PI*randf()
+	var vec = Vector2(cos(rot), sin(rot))
+	var bottom_left = get_global_position() - vec*100
+	var top_right = get_global_position() + vec*100
+	slicer.slice_bodies_hitting_line(bottom_left, top_right, [], [self])
+
+func reveal_powerup(attacker):
+	if attacker:
+		attacker.modules.statistics.record("powerups_opened", 1)
+	
 	var original_pos = revealed_powerup.get_global_position()
 	
 	self.call_deferred("remove_child", revealed_powerup)

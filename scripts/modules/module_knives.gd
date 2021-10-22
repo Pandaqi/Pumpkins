@@ -216,7 +216,7 @@ func highlight_first_knife():
 		guide.set_position(first_knife.get_position())
 		guide.set_rotation(first_knife.get_rotation())
 	
-	if GlobalDict.cfg.knives_always_in_front:
+	if GlobalDict.cfg.knife_always_in_front:
 		move_knife(first_knife, 0)
 
 #
