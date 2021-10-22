@@ -15,7 +15,7 @@ func _input(ev):
 	else:
 		if ev.is_action_released("pause_restart"):
 			get_tree().paused = false
-			get_tree().reload_current_scene()
+			Global.restart()
 		
 		elif ev.is_action_released("pause_continue"):
 			hide()

@@ -317,7 +317,7 @@ polygon = PoolVector2Array( -7.52271, -36.871, 52.7985, -20.9969, 40.8929, 34.56
 position = Vector2( 1681.34, 930.44 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern"]
-polygon = PoolVector2Array( -5.93579, -73.778, -36.0964, -10.2819, -55.1451, 51.6267, -23.3972, 70.6755, 44.8611, 30.9905, 59.1477, -13.4567, 27.3997, -53.1417 )
+polygon = PoolVector2Array( -5.93579, -73.778, -35.0038, -36.3623, -63.577, 46.9763, -25.4794, 83.4865, 60.2402, 18.403, 58.6528, -20.4883, 27.3997, -53.1417 )
 
 [node name="Lantern2" type="StaticBody2D" parent="Map/Overlay" groups=[
 "Stuckables",
@@ -326,7 +326,7 @@ position = Vector2( 1417.83, 425.647 )
 rotation = 2.00724
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern2"]
-polygon = PoolVector2Array( -5.93579, -73.778, -36.0964, -10.2819, -55.1451, 51.6267, -23.3972, 70.6755, 44.8611, 30.9905, 59.1477, -13.4567, 27.3997, -53.1417 )
+polygon = PoolVector2Array( -5.93579, -73.778, -49.9858, -9.87695, -62.4601, 30.9734, -55.1451, 51.6267, -28.5202, 75.5724, 37.3199, 43.986, 69.7896, -0.936523, 50.0428, -45.1493, 17.8263, -74.7878 )
 
 [node name="Lantern3" type="StaticBody2D" parent="Map/Overlay" groups=[
 "Stuckables",
@@ -335,7 +335,7 @@ position = Vector2( 735.246, 511.366 )
 rotation = 4.14521
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern3"]
-polygon = PoolVector2Array( -5.93579, -73.778, -36.0964, -10.2819, -55.1451, 51.6267, -23.3972, 70.6755, 44.8611, 30.9905, 59.1477, -13.4567, 27.3997, -53.1417 )
+polygon = PoolVector2Array( 11.3941, -72.8238, -21.2429, -54.0893, -51.8212, -10.5172, -67.9749, 38.4791, -41.7529, 71.1803, 10.1185, 56.2286, 44.8611, 30.9905, 66.4515, 1.77173, 42.3067, -47.4863 )
 
 [node name="Lantern4" type="StaticBody2D" parent="Map/Overlay" groups=[
 "Stuckables",
@@ -344,7 +344,7 @@ position = Vector2( 205.054, 146.264 )
 rotation = 2.9008
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern4"]
-polygon = PoolVector2Array( -5.93579, -73.778, -36.0964, -10.2819, -55.1451, 51.6267, -23.3972, 70.6755, 44.8611, 30.9905, 59.1477, -13.4567, 27.3997, -53.1417 )
+polygon = PoolVector2Array( -7.12758, -73.8231, -41.7975, -32.4824, -58.4288, -4.69249, -67.0944, 40.5818, -43.8608, 72.4399, -11.7312, 68.0704, 44.8611, 30.9905, 64.2357, 4.99666, 59.1477, -13.4567, 28.5596, -56.0697 )
 
 [node name="Collectors" type="Node2D" parent="."]
 

@@ -21,7 +21,7 @@ func check_navigation(ev):
 	elif ev.is_action_released("open_settings"):
 		open_settings()
 	
-	elif ev.is_action_released("exit"):
+	elif ev.is_action_released("game_quit"):
 		exit()
 
 func start_game():
@@ -49,11 +49,12 @@ func check_team_change(ev):
 	
 	# controllers
 	if ev is InputEventJoypadButton:
-		if ev.button_index == 3:
+		if ev.button_index == 2 and not ev.pressed:
 			main.change_team(GlobalInput.get_player_num_from_device_id(ev.device))
 
 func check_new_controller(ev):
 	if not (ev is InputEventJoypadButton): return
+	if ev.pressed: return
 	if GlobalInput.device_already_registered(ev.device): return
 	
 	if ev.is_action_released("add_bot"):
@@ -64,6 +65,9 @@ func check_new_controller(ev):
 	main.update_interface()
 
 func check_remove_controller(ev):
+	if not (ev is InputEventJoypadButton): return
+	if ev.pressed: return
+	
 	if not GlobalInput.device_already_registered(ev.device): return
 	if ev.button_index != 1: return
 	

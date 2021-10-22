@@ -10,6 +10,7 @@ var pickup_disabled : bool = false
 
 var num_snap_angles : int = 8
 var snap_angles_taken = []
+var knives_by_snap_angle = {}
 
 var loading_done : bool = false
 var cur_autothrow_time : float = 0.0
@@ -27,6 +28,10 @@ func activate():
 		_on_Timer_timeout()
 	else:
 		$AutoThrow.set_visible(false)
+	
+	if not GlobalDict.cfg.show_guides:
+		guide.queue_free()
+		guide = null
 	
 	create_starting_knives()
 
@@ -79,6 +84,23 @@ func create_new_knife():
 	add_child(knife)
 	grab_knife(knife)
 
+func move_knife(knife, new_ang):
+	unsnap_knife_angle(knife.rotation)
+	
+	# if taken, SWITCH the knives first
+	# NOTE: for that, we need to unsnap first, otherwise the new one won't move (as the old location is already taken)
+	var ang_index = snap_ang_to_index(new_ang)
+	if (ang_index in snap_angles_taken):
+		var other_knife = knives_by_snap_angle[ang_index]
+		move_knife(other_knife, knife.rotation)
+		
+	# then move to the new location
+	var vec = Vector2(cos(new_ang), sin(new_ang))
+	var new_position = vec * get_radius()
+
+	knife.set_position(new_position)
+	knife.set_rotation(new_ang)
+
 func lose_random_knife():
 	if knives_held.size() <= 0: return
 	
@@ -111,7 +133,7 @@ func grab_knife(knife):
 	
 	var snap_vec = income_vec.rotated(-body.rotation)
 	if loading_done:
-		snap_vec = snap_vec_to_knife_angles(snap_vec)
+		snap_vec = snap_vec_to_knife_angles(knife, snap_vec)
 
 	var new_position = snap_vec * get_radius()
 	var new_rotation = snap_vec.angle()
@@ -180,18 +202,22 @@ func unhighlight_knife(knife):
 	knife.get_node("AnimationPlayer").stop(true)
 	knife.get_node("Sprite").modulate = Color(1,1,1,1)
 	
-	guide.set_visible(false)
+	if guide:
+		guide.set_visible(false)
 
 func highlight_first_knife():
 	if knives_held.size() <= 0: return
 	
 	var first_knife = knives_held[0]
-	
 	first_knife.get_node("AnimationPlayer").play("Highlight")
 
-	guide.set_visible(true)
-	guide.set_position(first_knife.get_position())
-	guide.set_rotation(first_knife.get_rotation())
+	if guide:
+		guide.set_visible(true)
+		guide.set_position(first_knife.get_position())
+		guide.set_rotation(first_knife.get_rotation())
+	
+	if GlobalDict.cfg.knives_always_in_front:
+		move_knife(first_knife, 0)
 
 #
 # Positioning the knives
@@ -199,15 +225,24 @@ func highlight_first_knife():
 func unsnap_knife_angle(rot):
 	var epsilon = 0.03
 	var ang_index : int = floor((rot + epsilon) / (2*PI) * num_snap_angles)
+	knives_by_snap_angle.erase(ang_index)
 	snap_angles_taken.erase(ang_index)
 
-func snap_vec_to_knife_angles(vec):
+func snap_ang_to_index(ang):
 	var epsilon = 0.03
-	var ang_index : int = floor((vec.angle() + epsilon) / (2*PI) * num_snap_angles)
+	return floor((ang + epsilon) / (2*PI) * num_snap_angles)
+
+func snap_ang(ang):
+	var ang_index = snap_ang_to_index(ang)
+	return ang_index / float(num_snap_angles) * (2*PI)
+
+func snap_vec_to_knife_angles(knife, vec):
+	var ang_index : int = snap_ang_to_index(vec.angle())
 	while (ang_index in snap_angles_taken):
 		ang_index = (ang_index + 1) % int(num_snap_angles)
 	
 	snap_angles_taken.append(ang_index)
+	knives_by_snap_angle[ang_index] = knife
 	var ang = ang_index / float(num_snap_angles) * (2*PI)
 	
 	return Vector2(cos(ang), sin(ang))
@@ -219,7 +254,7 @@ func randomly_position_knives():
 	var ang : float = 0.0
 	var num_knives : int = knives_held.size()
 	for knife in knives_held:
-		var vec = snap_vec_to_knife_angles(Vector2(cos(ang), sin(ang)))
+		var vec = snap_vec_to_knife_angles(knife, Vector2(cos(ang), sin(ang)))
 		knife.set_position(center + vec*radius)
 		knife.set_rotation(vec.angle())
 		
@@ -256,7 +291,7 @@ func get_radius():
 
 func is_mine(other_body):
 	if other_body.get_node("Projectile").has_no_owner(): return true
-	if same_team(other_body.get_node("Projectile").my_owner): return true
+	if same_team(other_body.get_node("Projectile").get_owner()): return true
 	
 	return false
 

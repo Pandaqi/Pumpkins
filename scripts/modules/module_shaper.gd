@@ -64,6 +64,9 @@ func at_max_size():
 func at_min_size():
 	return area <= MIN_AREA
 
+func get_size_as_ratio():
+	return (area - MIN_AREA)/float(MAX_AREA - MIN_AREA)
+
 func recalculate_shape_list():
 	shape_list = []
 	

@@ -2,8 +2,8 @@ extends Node
 
 var inputs = [
 	[KEY_RIGHT, KEY_DOWN, KEY_LEFT, KEY_UP, KEY_SPACE],
-	[KEY_D, KEY_S, KEY_A, KEY_W, KEY_R],
-	[KEY_K, KEY_J, KEY_H, KEY_U, KEY_O],
+	[KEY_D, KEY_S, KEY_A, KEY_W, KEY_T],
+	[KEY_K, KEY_J, KEY_H, KEY_U, KEY_P],
 	[KEY_B, KEY_V, KEY_C, KEY_F, KEY_Z]
 ]
 

@@ -53,18 +53,21 @@ func check_win_by_survival():
 func check_win_by_collection():
 	var players = get_tree().get_nodes_in_group("Players")
 	var count_per_team = {}
+	var required_count_per_team = {}
 
 	for p in players:
 		var team_num = p.modules.status.team_num
 		
 		if not count_per_team.has(team_num):
 			count_per_team[team_num] = 0
+			required_count_per_team[team_num] = 0
 		
 		count_per_team[team_num] += p.modules.collector.count()
+		required_count_per_team[team_num] += mode.get_target_number()
 	
 	for team_num in count_per_team:
 		var val = count_per_team[team_num]
-		if val < mode.get_target_number(): continue
+		if val < required_count_per_team[team_num]: continue
 		
 		game_over(int(team_num))
 		break
@@ -94,7 +97,7 @@ func _input(ev):
 	if not interface_available: return
 	
 	if ev.is_action_released("restart"):
-		get_tree().reload_current_scene()
+		Global.restart()
 	
 	elif ev.is_action_released("exit"):
-		pass
+		Global.load_menu()

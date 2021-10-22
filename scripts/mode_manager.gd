@@ -12,6 +12,9 @@ func activate():
 		var module = load("res://scenes/mode_modules/" + mode_data.auto_spawns + ".tscn").instance()
 		add_child(module)
 		module.activate()
+	
+	if mode_data.has('num_starting_knives'):
+		GlobalDict.cfg.num_starting_knives = mode_data.num_starting_knives
 
 func has_collectibles():
 	return mode_data.has("collectible_group")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://scripts/main.gd" type="Script" id=1]
 [ext_resource path="res://scripts/players.gd" type="Script" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://scripts/collectors.gd" type="Script" id=16]
 [ext_resource path="res://assets/ui/settings/pause_menu.png" type="Texture" id=17]
 [ext_resource path="res://scripts/ui/pause_menu.gd" type="Script" id=18]
+[ext_resource path="res://scenes/area_shrink.gd" type="Script" id=19]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -32,6 +33,25 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
+
+[sub_resource type="Shader" id=3]
+code = "shader_type canvas_item;
+
+uniform float radius = 3000.0;
+
+void fragment() {
+	vec2 real_uv = UV * vec2(1920.0, 1080.0);
+	float dist = length(real_uv - 0.5*vec2(1920.0, 1080.0));
+	if(dist > radius) {
+		COLOR = vec4(0,0,0,1.0);
+	} else {
+		COLOR = vec4(0,0,0,0.0);
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+shader_param/radius = 3000.0
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -110,6 +130,17 @@ one_shot = true
 
 [node name="ColorRect" type="ColorRect" parent="DramaticSlice"]
 material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AreaShrink" type="CanvasLayer" parent="."]
+script = ExtResource( 19 )
+
+[node name="ColorRect" type="ColorRect" parent="AreaShrink"]
+material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {

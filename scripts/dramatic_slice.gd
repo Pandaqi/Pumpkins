@@ -9,6 +9,8 @@ func _ready():
 	overlay_shader.set_visible(false)
 
 func execute():
+	if GlobalDict.cfg.disable_flashing_effects: return
+	
 	get_tree().paused = true
 	
 	timer.wait_time = DURATION

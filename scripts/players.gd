@@ -42,14 +42,14 @@ func create_players():
 		
 		p.set_position(spawner.get_valid_pos(params))
 		
-		p.modules.shaper.create_from_shape(shape_manager.select_random_pumpkin_shape())
+		var new_shape = shape_manager.select_random_predefined_shape()
+		if GlobalDict.cfg.everyone_starts_pumpkin:
+			new_shape = shape_manager.select_random_pumpkin_shape()
+		
+		p.modules.shaper.create_from_shape(new_shape)
 		p.modules.status.set_player_num(i)
 		p.modules.status.set_team_num(player_data[i].team)
-		
-		print("INPUT MODULE")
-		print(p.modules.input)
-		
-		
+
 		if not mode.can_slice_players():
 			p.remove_from_group("Sliceables")
 		

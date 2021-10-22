@@ -88,7 +88,7 @@ func on_knife_entered(body):
 	if angle >= 2*PI: angle -= 2*PI
 	
 	var division = get_division_from_angle(angle)
-	var player = body.get_node("Projectile").my_owner
+	var player = body.get_node("Projectile").get_owner()
 	
 	player.modules.collector.collect(division_points[division])
 	

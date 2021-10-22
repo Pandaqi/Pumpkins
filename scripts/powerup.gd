@@ -1,9 +1,12 @@
 extends StaticBody2D
 
+const POWERUP_SCALE : float = 0.66
+
 var type : String
 var modules = {}
 
 onready var main_node = get_node("/root/Main")
+onready var shape_manager = get_node("/root/Main/ShapeManager")
 
 onready var sprite = $Sprite
 onready var revealed_powerup = $RevealedPowerup
@@ -15,7 +18,7 @@ func _ready():
 
 func set_shape(shape_name):
 	var data = GlobalDict.predefined_shapes[shape_name]
-	var points = data.points
+	var points = shape_manager.scale_shape(data.points, POWERUP_SCALE)
 	var frame = data.frame
 	
 	sprite.set_frame(frame)

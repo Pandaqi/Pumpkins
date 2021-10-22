@@ -3,6 +3,7 @@ extends Node
 var player_num : int = -1
 var team_num : int = -1
 var is_dead : bool = false
+var is_bot : bool = false
 
 var is_ghost : bool = false
 
@@ -17,11 +18,18 @@ func set_player_num(num):
 	
 	if not body.is_in_group("Players"): return
 	
-	body.modules.input.set_player_num(num)
-	body.modules.bot.set_player_num(num)
+	if body.modules.has('input'):
+		body.modules.input.set_player_num(num)
 	
+	if body.modules.has('bot'):
+		body.modules.bot.set_player_num(num)
+	
+	body.modules.slasher.set_player_num(player_num)
 	body.modules.knives.activate()
 	body.modules.topping.set_frame(player_num)
+	
+	if body.modules.has('tutorial'):
+		body.modules.tutorial.activate(player_num)
 
 func is_from_a_player():
 	return player_num >= 0
@@ -35,10 +43,27 @@ func set_team_num(num):
 	body.modules.particles.update_team_num(team_num)
 
 func turn_into_bot():
-	get_parent().get_node("Input").queue_free()
+	is_bot = true
+	
+	var input = get_node("../Input")
+	input.get_parent().remove_child(input)
+	input.queue_free()
+	
+	var tutorial = get_node("../Tutorial")
+	tutorial.get_parent().remove_child(tutorial)
+	tutorial.queue_free()
 
 func turn_into_player():
-	get_parent().get_node("Bot").queue_free()
+	var bot = get_node("../Bot")
+	bot.get_parent().remove_child(bot)
+	bot.queue_free()
+	
+	if (not GlobalDict.cfg.tutorial) or Global.is_restart: 
+		get_parent().get_node("Tutorial").queue_free()
+
+func rotate_incrementally():
+	if is_bot: return false
+	return GlobalInput.is_keyboard_player(player_num)
 
 func make_powerup_leftover():
 	player_num = -1

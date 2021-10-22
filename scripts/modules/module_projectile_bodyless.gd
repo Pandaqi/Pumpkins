@@ -15,11 +15,10 @@ const MIN_TIME_BETWEEN_DEFLECTIONS : float = 50.0 # milliseconds
 
 const BOOMERANG_PRECISION : float = 3.0 # higher is better
 
-const STICKING_TIGHTNESS : float = INF # higher means less chance of tunneling, BUT we might react "too early" to a stuckable body coming up
-
 onready var body = get_parent()
 onready var timer = $Timer
 onready var sprite = get_node("../Sprite")
+onready var anim_player = get_node("../AnimationPlayer")
 
 onready var particles = get_node("/root/Main/Particles")
 onready var slicer = get_node("/root/Main/Slicer")
@@ -45,14 +44,19 @@ var boomerang_state : String = "flying"
 
 func set_owner(o):
 	my_owner = o
-	get_node("../Sprite").set_frame(my_owner.modules.status.player_num)
+	sprite.set_frame(my_owner.modules.status.player_num)
+	anim_player.stop()
+
+func get_owner():
+	return my_owner
 
 func has_no_owner():
 	return (my_owner == null)
 
 func remove_owner():
 	my_owner = null
-	get_node("../Sprite").set_frame(8)
+	sprite.set_frame(8)
+	anim_player.play("Highlight")
 
 func get_owner_rotation():
 	if has_no_owner(): return 0
@@ -80,6 +84,8 @@ func make_curving(strength):
 
 func reset():
 	is_boomerang = false
+	is_stuck = false
+	use_curve = false
 	boomerang_state = "flying"
 	sprite.set_rotation(0.5*PI)
 
@@ -93,9 +99,7 @@ func _physics_process(dt):
 	apply_boomerang(dt)
 	move(dt)
 	shoot_raycast()
-	
-	if is_stuck:
-		shoot_back_raycast()
+	shoot_back_raycast()
 
 func apply_boomerang(dt):
 	if not is_boomerang: return
@@ -109,8 +113,10 @@ func apply_boomerang(dt):
 	velocity = cur_vel_norm.slerp(target_vel_norm, BOOMERANG_PRECISION*dt) * velocity.length()
 
 func move(dt):
+	if is_stuck: return
 	if velocity.length() <= MIN_SIGNIFICANT_VELOCITY:
 		velocity = Vector2.ZERO
+		remove_owner()
 		return
 	
 	apply_curve()
@@ -148,6 +154,8 @@ func calculate_next_curve_step(vel : Vector2, curve : Vector3):
 	}
 
 func shoot_back_raycast():
+	if not (is_stuck or has_no_owner()): return
+
 	var space_state = get_world_2d().direct_space_state 
 
 	var normal = Vector2(cos(body.rotation), sin(body.rotation))
@@ -155,6 +163,8 @@ func shoot_back_raycast():
 	var end = body.get_global_position() - normal * knife_half_size * 2
 	
 	var exclude = []
+	if grabbing_disabled and not has_no_owner():
+		exclude += [my_owner]
 	var collision_layer = 2
 	
 	var result = space_state.intersect_ray(start, end, exclude, collision_layer)
@@ -165,19 +175,25 @@ func shoot_back_raycast():
 		check_knife_grab(hit_body)
 
 func shoot_raycast():
+	if is_stuck: return
+	
 	var space_state = get_world_2d().direct_space_state
 	
 	var margin = 6
 	var raycast_length = 2*knife_half_size + velocity.length() * 0.016 + margin
 
 	var normal = velocity.normalized()
+	if velocity.length() <= 0.1:
+		var rot = body.rotation
+		normal = Vector2(cos(rot), sin(rot))
+	
 	var start = body.get_global_position() - normal*knife_half_size
 	var end = start + normal * raycast_length
 	
 	clean_up_collision_exceptions()
 	
 	var exclude = collision_exceptions
-	if grabbing_disabled:
+	if grabbing_disabled and not has_no_owner():
 		exclude += [my_owner]
 	
 	var collision_layer = 1 + 4 + 8 + 16 # layer 1 (all; 2^0), 3 (loose parts; 2^2) and 4 (powerups; 2^3) and 5 (ghosts; 2^4)
@@ -216,7 +232,8 @@ func shoot_raycast():
 		if custom_behavior:
 			hit_body.on_knife_entered(body)
 		else:
-			remove_owner()
+			if GlobalDict.cfg.stuck_reset:
+				remove_owner()
 	else:
 		deflect(result)
 	
@@ -224,13 +241,17 @@ func shoot_raycast():
 		boomerang_state = "returning"
 
 func get_stuck(result):
-	var dist_to_hit = (result.position - self.get_global_position()).length()
-	if dist_to_hit > STICKING_TIGHTNESS: return
-	if is_boomerang: return # boomerangs never get stuck; they just return
-	
 	velocity = Vector2.ZERO
 	body.set_position(result.position)
+	
+	var wanted_normal = -result.normal
+	body.set_rotation(wanted_normal.angle())
 	is_stuck = true
+
+func get_knife_top_pos():
+	var rot = body.rotation
+	var offset_vec = Vector2(cos(rot), sin(rot))
+	return body.get_global_position() + offset_vec*knife_half_size
 
 func get_knife_bottom_pos():
 	var rot = body.rotation
@@ -301,5 +322,4 @@ func check_knife_grab(other_body):
 	if not other_body.modules.knives.is_mine(body): return false
 
 	other_body.modules.knives.grab_knife(body)
-	is_stuck = false
 	return true

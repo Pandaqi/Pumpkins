@@ -8,9 +8,8 @@ var base_cfg = {
 	'max_players': 6,
 	'auto_pickup_powerups': false,
 	'num_starting_knives': 1,
-	
-	'use_alternate_control_scheme': false,
-	'use_slidy_throwing': true,
+
+	'use_slidy_throwing': false,
 	'auto_throw_knives': false,
 	
 	'navigate_settings_with_joystick': true,
@@ -22,9 +21,9 @@ var cfg = {}
 var modes = {
 	"dicey_slicey": { "frame": 0, "win": "survival", "fade_rubble": true, "players_can_die": true, "def": true },
 	
-	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 20, "auto_grow": true, "collectible_group": "PlayerParts" },
+	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 10, "auto_grow": true, "collectible_group": "PlayerParts" },
 	
-	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 50, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets" },
+	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 20, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3 },
 	
 	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 10, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
 	
@@ -34,17 +33,19 @@ var modes = {
 }
 
 var arenas = {
-	"spooky_forest": { "def": true },
-	"graveyard": { }
+	"spooky_forest": { "frame": 0, "def": true },
+	"graveyard": { "frame": 1 }
 }
 
 var configurable_settings = {
-	"tutorial": { "def": false },
-	"aim_helper": { "def": false },
-	"knife_always_in_front": { "def": false },
-	"disable_flashing_effects": { "def": false },
-	"shrink_area": { "def": false },
-	"show_guides": { "def": false }
+	"tutorial": { "frame": 0, "def": true },
+	"aim_helper": { "frame": 1, "def": false },
+	"knife_always_in_front": { "frame": 2, "def": false },
+	"disable_flashing_effects": { "frame": 3, "def": false },
+	"shrink_area": { "frame": 4, "def": false },
+	"show_guides": { "frame": 5, "def": true },
+	"everyone_starts_pumpkin": { "frame": 6, "def": false },
+	"stuck_reset": { "frame": 7, "def": true }
 }
 
 var player_colors = [

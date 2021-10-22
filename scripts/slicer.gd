@@ -140,7 +140,7 @@ func slice_body(b, p1, p2):
 		
 		# But if the biggest shape is still too small,
 		# the player is officially dead
-		var player_too_small = biggest_area < PLAYER_MIN_AREA_FOR_SHAPE
+		var player_too_small = (biggest_area < PLAYER_MIN_AREA_FOR_SHAPE)
 		var players_can_die = mode.players_can_die()
 		if player_too_small and players_can_die:
 			player_died = true

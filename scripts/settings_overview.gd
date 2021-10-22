@@ -6,7 +6,7 @@ const MAX_SETTINGS_TO_SHOW : int = 8
 const DIST_BETWEEN_SPRITES : float = 64.0
 
 var powerup_sprite = preload("res://scenes/gui/powerup_sprite.tscn")
-var setting_sprite = preload("res://scenes/gui/powerup_sprite.tscn")
+var setting_sprite = preload("res://scenes/gui/setting_sprite.tscn")
 
 func _ready():
 	read_mode()
@@ -68,3 +68,6 @@ func read_settings():
 		
 		$SettingContainer.add_child(s)
 		s.set_position(Vector2.RIGHT*0.5*DIST_BETWEEN_SPRITES*i)
+		
+		var dir = 1 if (i % 2 == 0) else -1
+		s.set_rotation(dir*0.04*PI)

@@ -1,6 +1,6 @@
 extends Node
 
-const PREDEFINED_SHAPE_SCALE : float = 1.7
+const PREDEFINED_SHAPE_SIZE : float = 100.0
 const STARTING_PLAYER_MAX_SIZE : float = 100.0
 
 var predefined_shape_scene = preload("res://scenes/predefined_shape_list.tscn")
@@ -28,6 +28,9 @@ func load_pumpkin_shapes():
 func select_random_pumpkin_shape():
 	return pumpkin_shapes[randi() % pumpkin_shapes.size()]
 
+func select_random_predefined_shape():
+	return GlobalDict.predefined_shapes[get_random_shape()].points
+
 func get_random_shape():
 	return available_shapes[randi() % available_shapes.size()]
 
@@ -38,13 +41,13 @@ func load_predefined_shapes():
 		if not (child is CollisionPolygon2D): continue
 		
 		var key = child.name.to_lower()
-		var val = scale_shape( Array(child.polygon) )
+		var val = scale_shape_absolutely( Array(child.polygon), PREDEFINED_SHAPE_SIZE )
 
 		GlobalDict.predefined_shapes[key].points = val
 
 # Shape scaling
 # NOTE: Points are already around centroid, and shaper node will do that again anyway, so just scale only
-func scale_shape(points, val : float = PREDEFINED_SHAPE_SCALE):
+func scale_shape(points, val : float = 1.0):
 	var new_points = []
 	for p in points:
 		new_points.append(p * val)
