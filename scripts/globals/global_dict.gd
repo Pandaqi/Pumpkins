@@ -33,8 +33,9 @@ var modes = {
 }
 
 var arenas = {
-	"spooky_forest": { "frame": 0, "def": true },
-	"graveyard": { "frame": 1 }
+	"spooky_forest": { "frame": 0 },
+	"graveyard": { "frame": 1 },
+	"ghost_town": { "frame": 2, "def": true }
 }
 
 var configurable_settings = {

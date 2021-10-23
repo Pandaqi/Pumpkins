@@ -50,6 +50,9 @@ func create_circle_polygon(radius):
 	
 	return arr
 
+func create_rect_polygon(extents):
+	return [-extents, Vector2(extents.x, -extents.y), extents, Vector2(-extents.x, extents.y)]
+
 func convert_all_children(node):
 	for N in node.get_children():
 		if N.get_child_count() > 0:
@@ -74,6 +77,9 @@ func convert_body_into_nav_mesh(node):
 		var col_shape = node.shape
 		if col_shape is CircleShape2D:
 			polygon = make_global(scale_shape(create_circle_polygon(col_shape.radius), BODY_SAFE_MARGIN), trans)
+		
+		elif col_shape is RectangleShape2D:
+			polygon = make_global(scale_shape(create_rect_polygon(col_shape.extents), BODY_SAFE_MARGIN), trans)
 			
 	elif is_col_poly:
 		polygon = make_global(scale_shape(node.polygon, BODY_SAFE_MARGIN), trans)

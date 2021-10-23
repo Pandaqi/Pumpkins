@@ -83,9 +83,9 @@ func undo_boomerang():
 
 func create_new_knife():
 	var knife = knife_scene.instance()
-	knife.get_node("Sprite").set_frame(body.modules.status.player_num)
+	#knife.get_node("Sprite").set_frame(body.modules.status.player_num)
 	add_child(knife)
-	grab_knife(knife)
+	knife.modules.grabber.force_grab(body)
 
 func move_knife(knife, new_ang):
 	unsnap_knife_angle(knife.rotation)
@@ -121,11 +121,6 @@ func grab_knife(knife):
 	if pickup_disabled: return
 	
 	knives_held.append(knife)
-	
-	var projectile = knife.get_node("Projectile")
-	projectile.set_owner(body)
-	projectile.being_held = true
-	projectile.reset()
 	
 	var income_vec = (knife.get_global_position() - body.get_global_position()).normalized()
 	
@@ -171,17 +166,6 @@ func throw_knife(knife):
 	if knife_overlaps_problematic_body(knife): return
 
 	knives_held.erase(knife)
-	
-	var projectile = knife.get_node("Projectile")
-	projectile.being_held = false
-	projectile.set_owner(body)
-	
-	if use_curve:
-		projectile.make_curving(body.modules.slasher.get_curve_strength())
-	
-	if are_boomerang:
-		projectile.make_boomerang()
-	
 	unsnap_knife_angle(knife.rotation)
 	
 	var original_position = knife.get_global_position()
@@ -197,7 +181,11 @@ func throw_knife(knife):
 	
 	var use_full_strength = GlobalDict.cfg.auto_throw_knives
 	var dir = Vector2(cos(original_rotation), sin(original_rotation))
-	knife.get_node("Projectile").throw(dir * body.modules.slasher.get_throw_strength(use_full_strength))
+
+	var throw_strength = body.modules.slasher.get_throw_strength(use_full_strength)
+	var final_throw_vec = dir * throw_strength
+	
+	knife.modules.thrower.throw(body, final_throw_vec)
 	
 	unhighlight_knife(knife)
 	highlight_first_knife()
@@ -294,9 +282,11 @@ func get_radius():
 	return 1.25 * body.modules.shaper.approximate_radius()
 
 func is_mine(other_body):
-	if other_body.get_node("Projectile").has_no_owner(): return true
-	if same_team(other_body.get_node("Projectile").get_owner()): return true
+	if other_body.modules.owner.has_none(): return true
 	
+	var cur_owner = other_body.modules.owner.get_owner()
+	if same_team(cur_owner): return true
+
 	return false
 
 func same_team(other_body):
@@ -318,7 +308,7 @@ func disable_pickup():
 
 func knife_overlaps_problematic_body(knife):
 	var space_state = get_world_2d().direct_space_state
-	var half_size = knife.get_node("Projectile").knife_half_size
+	var half_size = knife.modules.fakebody.knife_half_size
 	
 	var shp = RectangleShape2D.new()
 	shp.extents = Vector2(half_size, 0.25*half_size)

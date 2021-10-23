@@ -174,7 +174,8 @@ func execute_quick_slash():
 	var first_knife = body.modules.knives.knives_held[0]
 	
 	animate_quick_slash(first_knife, vec*slash_range)
-	particles.create_slash(first_knife.get_node("Projectile").get_knife_bottom_pos(), vec)
+	var pos = first_knife.modules.fakebody.get_bottom_pos()
+	particles.create_slash(pos, vec)
 	body.modules.knives.move_first_knife_to_back()
 	
 	var end = start + vec * slash_range

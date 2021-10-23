@@ -4,13 +4,24 @@ onready var body = get_parent()
 
 var color : Color = Color(1.0, 1.0, 0.0)
 var pumpkin_orange = Color(1.0, 93/255.0, 32/255.0)
+var disabled : bool = false
 
 onready var shape_manager = get_node("/root/Main/ShapeManager")
 
 func set_color(col):
 	color = col
 
+func disable():
+	disabled = true
+	update()
+
+func enable():
+	disabled = false
+	update()
+
 func _draw():
+	if disabled: return
+	
 	var num_shapes = body.shape_owner_get_shape_count(0)
 	var outline_layer = []
 	var bottom_layer = []

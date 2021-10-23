@@ -88,7 +88,7 @@ func on_knife_entered(body):
 	if angle >= 2*PI: angle -= 2*PI
 	
 	var division = get_division_from_angle(angle)
-	var player = body.get_node("Projectile").get_owner()
+	var player = body.modules.owner.get_owner()
 	
 	player.modules.collector.collect(division_points[division])
 	
@@ -121,7 +121,7 @@ func check_for_destroy():
 		remove_child(knife)
 		map.knives.add_child(knife)
 		
-		knife.get_node("Projectile").set_random_velocity()
+		knife.modules.mover.set_random_velocity()
 		
 		knife.set_position(old_pos)
 	

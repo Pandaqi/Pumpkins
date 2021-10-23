@@ -135,7 +135,7 @@ func check_immediate_danger(params):
 	for knife in knives_close_hostile:
 		var pos = knife.get_global_position()
 		var dist_to_knife = (our_pos - pos).length()
-		var vec_to_travel = knife.get_node("Projectile").velocity.normalized()*dist_to_knife
+		var vec_to_travel = knife.modules.mover.velocity.normalized()*dist_to_knife
 		var projected_pos = pos + vec_to_travel
 		
 		vec_away_from_knives += (our_pos - projected_pos).normalized()
@@ -452,7 +452,7 @@ func get_all_knives_within_range(radius):
 	for knife in knives:
 		var their_pos = knife.get_global_position()
 		var dist = (their_pos - our_pos).length()
-		if knife.get_node("Projectile").being_held: continue
+		if knife.modules.status.being_held: continue
 		if dist > radius: continue
 		
 		arr.append(knife)

@@ -1,0 +1,288 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://assets/arenas/ghost_town/bg.png" type="Texture" id=1]
+[ext_resource path="res://assets/arenas/ghost_town/entities.png" type="Texture" id=2]
+[ext_resource path="res://scripts/arenas/ghost_town/custom_logic.gd" type="Script" id=3]
+[ext_resource path="res://assets/arenas/graveyard/light_texture.png" type="Texture" id=4]
+[ext_resource path="res://assets/arenas/ghost_town/overlay.png" type="Texture" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 129.504, 12.0208 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 171, 12.3353 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 131.04, 14.8026 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 87.1714, 14.8026 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 76.9028, 14.7894 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 48.3728, 12.5762 )
+
+[sub_resource type="OccluderPolygon2D" id=7]
+polygon = PoolVector2Array( 364.879, 354.765, 364.879, 260.472, 625.507, 257.294, 625.507, 288.018, 391.365, 286.959, 389.246, 356.884 )
+
+[sub_resource type="OccluderPolygon2D" id=8]
+polygon = PoolVector2Array( 480.36, 488.257, 717.68, 493.554, 718.739, 411.976, 745.226, 411.976, 744.167, 515.803, 478.241, 512.625 )
+
+[sub_resource type="OccluderPolygon2D" id=9]
+polygon = PoolVector2Array( 766.415, 404.559, 621.269, 403.5, 622.328, 428.927, 737.81, 427.868, 738.869, 555.003, 765.356, 553.944 )
+
+[sub_resource type="OccluderPolygon2D" id=10]
+polygon = PoolVector2Array( 832.03, 465.409, 832.03, 441.598, 654.241, 435.248, 659.003, 465.409 )
+
+[sub_resource type="OccluderPolygon2D" id=11]
+polygon = PoolVector2Array( 892.459, 463.078, 629.644, 465.751, 628.753, 439.024, 748.134, 439.024, 746.352, 174.427, 773.079, 176.209, 773.079, 436.351, 894.241, 439.915 )
+
+[sub_resource type="OccluderPolygon2D" id=12]
+polygon = PoolVector2Array( 1115.18, 525.441, 1286.24, 527.223, 1289.8, 796.274, 1259.51, 796.274, 1254.16, 553.95, 1113.4, 559.295 )
+
+[sub_resource type="OccluderPolygon2D" id=13]
+polygon = PoolVector2Array( 735.661, 901.4, 395.338, 897.837, 397.119, 1049.29, 422.065, 1047.51, 422.065, 924.564, 737.443, 929.909 )
+
+[sub_resource type="OccluderPolygon2D" id=14]
+polygon = PoolVector2Array( 974.422, 1070.67, 630.535, 1070.67, 630.535, 1099.18, 981.549, 1100.96 )
+
+[sub_resource type="OccluderPolygon2D" id=15]
+polygon = PoolVector2Array( 393.556, 1147.29, 422.065, 1149.07, 423.846, 1300.52, 391.774, 1302.3 )
+
+[node name="GhostTown" type="Node2D"]
+
+[node name="Map" type="Node2D" parent="."]
+
+[node name="BG" type="Node2D" parent="Map"]
+
+[node name="Bg" type="Sprite" parent="Map/BG"]
+light_mask = 3
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Entities" type="Node2D" parent="Map"]
+
+[node name="Entities" type="Sprite" parent="Map/Entities"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Walls" type="StaticBody2D" parent="Map/Entities" groups=[
+"Stuckables",
+]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 498.513, 271.163 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 614.478, 500.266 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 1248.48, 248.266 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 1051.77, 712.58 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 1287.77, 881.58 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 1245.77, 87.5802 )
+rotation = 1.5708
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 1757.3, 457.54 )
+rotation = 1.5708
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 1687.17, 339.54 )
+shape = SubResource( 4 )
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 43.1714, 821.54 )
+shape = SubResource( 4 )
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 338.966, 822.234 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 894.752, 1021.64 )
+rotation = 1.5708
+shape = SubResource( 5 )
+
+[node name="CollisionShape2D12" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 893.338, 768.494 )
+rotation = 1.5708
+shape = SubResource( 5 )
+
+[node name="CollisionShape2D13" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 398.363, 883.157 )
+rotation = 1.5708
+shape = SubResource( 5 )
+
+[node name="CollisionShape2D14" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 376.576, 308.627 )
+rotation = 1.5708
+shape = SubResource( 6 )
+
+[node name="CollisionShape2D15" type="CollisionShape2D" parent="Map/Entities/Walls"]
+position = Vector2( 730.576, 462.627 )
+rotation = 1.5708
+shape = SubResource( 6 )
+
+[node name="Caves" type="StaticBody2D" parent="Map/Entities" groups=[
+"Stuckables",
+]]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Caves"]
+position = Vector2( 144.25, 38.1837 )
+polygon = PoolVector2Array( 225.869, -50.5007, 180.614, -1.0032, 142.43, 14.5532, 129.702, 28.6953, 84.4474, 32.9379, 85.8615, -5.24585, 66.0626, -23.6306, -0.405487, -32.1159, -58.3882, -23.6306, -71.1161, 0.411011, -69.7019, 34.3521, -129.099, 31.5237, -174.354, 0.411011, -177.182, -67.4713 )
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Map/Entities/Caves"]
+position = Vector2( 1755.65, 1045.41 )
+rotation = 3.14159
+polygon = PoolVector2Array( 225.869, -50.5007, 180.614, -1.0032, 142.43, 14.5532, 129.702, 28.6953, 84.4474, 32.9379, 85.8615, -5.24585, 66.0626, -23.6306, -0.405487, -32.1159, -58.3882, -23.6306, -71.1161, 0.411011, -69.7019, 34.3521, -129.099, 31.5237, -174.354, 0.411011, -177.182, -67.4713 )
+
+[node name="Overlay" type="Node2D" parent="Map"]
+
+[node name="Overlay" type="Sprite" parent="Map/Overlay"]
+texture = ExtResource( 5 )
+centered = false
+
+[node name="Collectors" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="Collectors"]
+position = Vector2( 551.543, 381.838 )
+
+[node name="Node2D2" type="Node2D" parent="Collectors"]
+position = Vector2( 178.191, 975.807 )
+
+[node name="Node2D3" type="Node2D" parent="Collectors"]
+position = Vector2( 1668.77, 466.69 )
+
+[node name="Node2D4" type="Node2D" parent="Collectors"]
+position = Vector2( 1363.3, 1009.75 )
+
+[node name="Node2D5" type="Node2D" parent="Collectors"]
+position = Vector2( 1168.14, 124.451 )
+
+[node name="Node2D6" type="Node2D" parent="Collectors"]
+position = Vector2( 1326.53, 118.794 )
+
+[node name="Node2D7" type="Node2D" parent="Collectors"]
+position = Vector2( 1046.52, 791.96 )
+
+[node name="Node2D8" type="Node2D" parent="Collectors"]
+position = Vector2( 989.949, 1004.09 )
+
+[node name="CustomLogic" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="CustomLogic"]
+light_mask = 3
+occluder = SubResource( 7 )
+light_mask = 3
+
+[node name="LightOccluder2D2" type="LightOccluder2D" parent="CustomLogic"]
+light_mask = 3
+occluder = SubResource( 8 )
+light_mask = 3
+
+[node name="LightOccluder2D3" type="LightOccluder2D" parent="CustomLogic"]
+light_mask = 3
+position = Vector2( -353.861, 405.774 )
+occluder = SubResource( 9 )
+light_mask = 3
+
+[node name="LightOccluder2D4" type="LightOccluder2D" parent="CustomLogic"]
+light_mask = 3
+position = Vector2( -704.676, 372.439 )
+occluder = SubResource( 10 )
+light_mask = 3
+
+[node name="LightOccluder2D5" type="LightOccluder2D" parent="CustomLogic"]
+light_mask = 3
+position = Vector2( 486.033, -202.734 )
+occluder = SubResource( 11 )
+light_mask = 3
+
+[node name="LightOccluder2D6" type="LightOccluder2D" parent="CustomLogic"]
+light_mask = 3
+position = Vector2( 486.033, -202.734 )
+occluder = SubResource( 12 )
+light_mask = 3
+
+[node name="LightOccluder2D7" type="LightOccluder2D" parent="CustomLogic"]
+light_mask = 3
+position = Vector2( 486.033, -202.734 )
+occluder = SubResource( 13 )
+light_mask = 3
+
+[node name="LightOccluder2D8" type="LightOccluder2D" parent="CustomLogic"]
+light_mask = 3
+position = Vector2( 486.033, -202.734 )
+occluder = SubResource( 14 )
+light_mask = 3
+
+[node name="LightOccluder2D9" type="LightOccluder2D" parent="CustomLogic"]
+light_mask = 3
+position = Vector2( 486.033, -202.734 )
+occluder = SubResource( 15 )
+light_mask = 3
+
+[node name="CanvasModulate" type="CanvasModulate" parent="CustomLogic"]
+color = Color( 0.0392157, 0.235294, 0.0392157, 1 )
+
+[node name="Light2D" type="Light2D" parent="CustomLogic"]
+position = Vector2( 316.784, 322.441 )
+texture = ExtResource( 4 )
+texture_scale = 2.0
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_item_cull_mask = 2
+
+[node name="Light2D2" type="Light2D" parent="CustomLogic"]
+position = Vector2( 458.205, 825.901 )
+texture = ExtResource( 4 )
+texture_scale = 2.0
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_item_cull_mask = 2
+
+[node name="Light2D3" type="Light2D" parent="CustomLogic"]
+position = Vector2( 1168.14, 650.538 )
+texture = ExtResource( 4 )
+texture_scale = 2.0
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_item_cull_mask = 2
+
+[node name="Light2D4" type="Light2D" parent="CustomLogic"]
+position = Vector2( 1318.05, 302.642 )
+texture = ExtResource( 4 )
+texture_scale = 2.0
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_item_cull_mask = 2
+
+[node name="Light2D5" type="Light2D" parent="CustomLogic"]
+position = Vector2( 1813.02, 330.926 )
+texture = ExtResource( 4 )
+texture_scale = 2.0
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_item_cull_mask = 2
+
+[node name="Timer" type="Timer" parent="CustomLogic"]
+wait_time = 20.0
+
+[connection signal="timeout" from="CustomLogic/Timer" to="CustomLogic" method="_on_Timer_timeout"]

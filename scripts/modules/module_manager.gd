@@ -47,9 +47,6 @@ func _integrate_forces(state):
 		state.angular_velocity = (randf()-0.5)*MAX_ANGULAR_VEL_ON_IMPACT
 		shoot_away = Vector2.ZERO
 	
-	if modules.has('projectile'):
-		modules.projectile._integrate_forces(state)
-	
 	last_velocity = state.linear_velocity
 	last_rotation = get_rotation()
 
