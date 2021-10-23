@@ -7,6 +7,7 @@ const MIN_DIST_TO_PLAYER : float = 100.0
 const MIN_DIST_TO_OTHER_POWERUP : float = 200.0
 
 onready var timer = $Timer
+onready var tween = $Tween
 onready var map = get_node("/root/Main/Map")
 onready var shape_manager = get_node("/root/Main/ShapeManager")
 onready var spawner = get_node("/root/Main/Spawner")
@@ -76,6 +77,32 @@ func place_powerup():
 	
 	var rand_shape = shape_manager.get_random_shape()
 	p.set_shape(rand_shape)
+	
+	tween_bounce_appear(p)
+
+func tween_bounce_appear(obj):
+	var start_scale = Vector2.ZERO
+	var target_scale = Vector2(1,1)
+	
+	tween.interpolate_property(obj, "scale", 
+		start_scale, target_scale, 0.5,
+		Tween.TRANS_ELASTIC, Tween.EASE_OUT)
+	
+	tween.interpolate_property(obj, "rotation", 
+		0, 2*PI, 0.5,
+		Tween.TRANS_ELASTIC, Tween.EASE_OUT)
+	
+	tween.start()
+
+func tween_revealed_powerup(obj):
+	tween.interpolate_property(obj, "scale",
+	obj.get_scale()*0.75, obj.get_scale(), 0.5,
+	Tween.TRANS_ELASTIC, Tween.EASE_OUT)
+	
+	tween.interpolate_property(obj, "rotation",
+	0, 2*PI, 0.2,
+	Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	tween.start()
 
 func _on_AutoRevealTimer_timeout():
 	var ps = get_tree().get_nodes_in_group("PowerupsUnrevealed")

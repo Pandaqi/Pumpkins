@@ -1,11 +1,42 @@
 extends Node
 
 
-var bg_audio = null # TO DO
+var bg_audio = preload("res://assets/audio/soundtrack.mp3")
 var bg_audio_player
 
 var audio_preload = {
+	"slash": [
+		preload("res://assets/audio/slash1.ogg"),
+		preload("res://assets/audio/slash2.ogg"),
+		preload("res://assets/audio/slash3.ogg"),
+		preload("res://assets/audio/slash4.ogg"),
+	],
 	
+	"thud": preload("res://assets/audio/thud1.ogg"),
+	"throw": [
+		preload("res://assets/audio/throw1.ogg"),
+		preload("res://assets/audio/throw2.ogg"),
+		preload("res://assets/audio/throw3.ogg")
+	],
+	"windup_throw": preload("res://assets/audio/windup_throw.ogg"),
+	
+	"grab": preload("res://assets/audio/grab.ogg"),
+	"move": preload("res://assets/audio/move.ogg"),
+	
+	"collect": preload("res://assets/audio/collect.ogg"),
+	"lose": preload("res://assets/audio/lose.ogg"),
+	
+	"death": preload("res://assets/audio/death.ogg"),
+	"game_start": preload("res://assets/audio/game_start.ogg"),
+	"game_over": preload("res://assets/audio/game_over.ogg"),
+	
+	"ui_button_press": preload("res://assets/audio/ui_button_press.ogg"),
+	"ui_selection_change": preload("res://assets/audio/ui_selection_change.ogg"),
+	
+	# TO DO: get new sound effects for that?
+	"ui_team_change": preload("res://assets/audio/ui_button_press.ogg"),
+	"ui_player_add": preload("res://assets/audio/ui_button_press.ogg"),
+	"ui_player_remove": preload("res://assets/audio/ui_button_press.ogg"),
 }
 
 func _ready():
@@ -59,7 +90,7 @@ func play_dynamic_sound(creator, key, volume_alteration = 0, bus : String = "FX"
 	
 	var audio_player = create_audio_player(volume_alteration, bus, true)
 
-	audio_player.max_distance = 1000
+	audio_player.max_distance = 2000
 	audio_player.set_position(creator.get_global_position())
 	audio_player.pitch_scale = 1.0 + 0.075*(randf()-0.5)
 	

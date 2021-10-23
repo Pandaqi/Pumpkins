@@ -8,6 +8,8 @@ onready var map = get_node("../Map")
 var polygons = []
 var debug_overlap_polygons = []
 
+var debug_draw : bool = false
+
 var full_screen_poly = PoolVector2Array([Vector2(0,0), Vector2(1920, 0), Vector2(1920, 1080), Vector2(0, 1080)])
 
 func activate():
@@ -51,7 +53,6 @@ func create_circle_polygon(radius):
 func convert_all_children(node):
 	for N in node.get_children():
 		if N.get_child_count() > 0:
-			print("["+N.get_name()+"]")
 			convert_all_children(N)
 		else:
 			convert_body_into_nav_mesh(N)
@@ -95,8 +96,7 @@ func cut_holes_in_mesh(nav_poly):
 
 func merge_polygons():
 	var num_polygons = polygons.size()
-	print(num_polygons)
-	
+
 	var i = 0
 	while i < num_polygons:
 		var my_poly = polygons[i]
@@ -119,9 +119,7 @@ func merge_polygons():
 			
 			polygons.remove(j)
 			num_polygons -= 1
-			
-			print(num_polygons)
-			
+
 			j = i
 		
 		i += 1
@@ -134,7 +132,6 @@ func cut_offscreen_bits():
 		var intersect_polys = Geometry.intersect_polygons_2d(my_poly, other_poly)
 		if intersect_polys.size() <= 0: continue
 
-		print("CLIPPING OFFSCREEN")
 		polygons[i] = Geometry.offset_polygon_2d(intersect_polys[0], -0.2)[0]
 
 func build_navigation_mesh():
@@ -156,5 +153,7 @@ func build_navigation_mesh():
 	update()
 
 func _draw():
+	if not debug_draw: return
+	
 	for poly in debug_overlap_polygons:
 		draw_polygon(poly, [Color(1,1,1, 0.3)])

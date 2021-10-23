@@ -87,6 +87,8 @@ func check_win_by_collection():
 func game_over(team_num):
 	game_over_state = true
 	
+	GlobalAudio.play_static_sound("game_over")
+	
 	handout_awards()
 	show_gameover_gui(team_num)
 
@@ -168,7 +170,9 @@ func _input(ev):
 	if not interface_available: return
 	
 	if ev.is_action_released("restart"):
+		GlobalAudio.play_static_sound("ui_button_press")
 		Global.restart()
 	
 	elif ev.is_action_released("exit"):
+		GlobalAudio.play_static_sound("ui_button_press")
 		Global.load_menu()

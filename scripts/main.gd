@@ -7,6 +7,7 @@ onready var shape_manager = $ShapeManager
 onready var arena = $ArenaLoader
 onready var mode = $ModeManager
 onready var navigation = $Navigation
+onready var start_delay = $StartDelay
 
 func _ready():
 	randomize()
@@ -21,6 +22,8 @@ func _ready():
 	players.activate()
 	powerups.activate()
 	game_state.activate()
+	
+	start_delay.activate()
 	
 	#debug_game_over()
 

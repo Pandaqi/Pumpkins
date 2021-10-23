@@ -116,58 +116,26 @@ func slice_body(b, p1, p2, attacker):
 		print("Slicing didn't change anything")
 		return []
 	
+	GlobalAudio.play_dynamic_sound(b, "slash")
+	
 	# determine which shapes belong together ("are in the same layer")
 	var shape_layers = determine_shape_layers(new_shapes, p1, p2)
 	
-	var is_player_body = b.is_in_group("Players")
-	var is_powerup = b.is_in_group("Powerups")
-	var player_died = false
+	create_visual_effects(b)
 	
-	if is_player_body:
-		
-		# Find the BIGGEST of them all
-		# remove that shape from the list, change the current body to that shape
-		var biggest_key = -1
-		var biggest_area = -1
-		
-		for key in shape_layers:
-			var shp = shape_layers[key]
-			var area = shape_manager.calculate_area(shp)
-			
-			if area > biggest_area:
-				biggest_area = area
-				biggest_key = key
-		
-		# But if the biggest shape is still too small,
-		# the player is officially dead
-		var player_too_small = (biggest_area < PLAYER_MIN_AREA_FOR_SHAPE)
-		var players_can_die = mode.players_can_die()
-		if player_too_small and players_can_die:
-			player_died = true
-		
-		else:
-			var new_shape_for_this_body = shape_layers[biggest_key]
-			shape_layers.erase(biggest_key)
-			
-			b.modules.shaper.destroy()
-			b.modules.shaper.create_from_shape_list(new_shape_for_this_body)
-			
-			shoot_body_away_from_line(p1, p2, b)
-
-	if player_died:
-		# if we died, the body keeps existing, just in a differnt form
-		b.modules.status.die()
-		
-		# NOW ask the main node to check game over, because the "dying" has finished
-		main_node.player_died(original_player_num)
-	
-	elif (not is_player_body):
-		if is_powerup:
-			b.reveal_powerup(attacker)
-
-		else:
-			# destroy the old body completely; we'll create new ones
-			b.modules.status.delete()
+	# check if the shape needs to keep one part alive and/or die
+	var params = { 
+		'p1': p1,
+		'p2': p2,
+		'original_player_num': original_player_num,
+		'object_died': false, 
+		'is_keep_alive': false,
+		'is_powerup': false,
+		'is_player': false,
+		'attacker': attacker 
+	}
+	check_keep_alive(b, shape_layers, params)
+	handle_old_body_death(b, params)
 	
 	# create bodies for each set of points left over
 	var new_bodies = []
@@ -176,15 +144,74 @@ func slice_body(b, p1, p2, attacker):
 
 		if shape_manager.calculate_area(shp) < MIN_AREA_FOR_SHAPE: continue
 		
-		var body = create_body_from_shape_list(shp, { 'player_num': original_player_num, 'is_powerup': is_powerup })
+		var body = create_body_from_shape_list(shp, { 'player_num': original_player_num, 'is_powerup': params.is_powerup, 'is_dumpling': params.is_dumpling })
 		new_bodies.append(body)
 		
 		shoot_body_away_from_line(p1, p2, body)
 	
-	if is_player_body:
-		dramatic_slice.execute()
-	
 	return new_bodies
+
+func create_visual_effects(b):
+	if not b.is_in_group("KeepAlives"): return
+	dramatic_slice.execute()
+
+func check_keep_alive(b, shape_layers, params = {}):
+	if not b.is_in_group("KeepAlives"): return
+	
+	params.is_keep_alive = true
+	
+	# Find the BIGGEST of them all
+	# remove that shape from the list, change the current body to that shape
+	var biggest_key = -1
+	var biggest_area = -1
+	
+	for key in shape_layers:
+		var shp = shape_layers[key]
+		var area = shape_manager.calculate_area(shp)
+		
+		if area > biggest_area:
+			biggest_area = area
+			biggest_key = key
+	
+	# But if the biggest shape is still too small,
+	# the player is officially dead
+	var object_too_small = (biggest_area < PLAYER_MIN_AREA_FOR_SHAPE)
+	
+	if object_too_small and b.modules.status.can_die():
+		params.object_died = true
+	
+	else:
+		var new_shape_for_this_body = shape_layers[biggest_key]
+		shape_layers.erase(biggest_key)
+		
+		b.modules.shaper.destroy()
+		b.modules.shaper.create_from_shape_list(new_shape_for_this_body)
+		
+		shoot_body_away_from_line(params.p1, params.p2, b)
+
+func handle_old_body_death(b, params = {}):
+	params.is_powerup = b.is_in_group("Powerups")
+	params.is_player = b.is_in_group("Players")
+	params.is_dumpling = b.is_in_group("Dumplings")
+	
+	if params.object_died:
+		# if we died, the body keeps existing, just in a differnt form
+		b.modules.status.die()
+		
+		# NOW ask the main node to check game over, because the "dying" has finished
+		main_node.player_died(params.original_player_num)
+		return
+	
+	if params.is_keep_alive: return
+	
+	if params.is_powerup:
+		b.reveal_powerup(params.attacker)
+		return
+
+	# destroy the old body completely; we'll create new ones
+	# NOTE: this is actually the most common, basic way to deal with it
+	# 		everything above are just exceptions
+	b.modules.status.delete()
 
 func shoot_body_away_from_line(p1, p2, body):
 	var vec = (p2 - p1).normalized()
@@ -321,6 +348,9 @@ func create_body_from_shape_list(shapes : Array, params = {}) -> RigidBody2D:
 	body.modules.status.set_player_num(params.player_num)
 	if params.has('is_powerup') and params.is_powerup:
 		body.modules.status.make_powerup_leftover()
+	
+	if params.has('is_dumpling') and params.is_dumpling:
+		body.modules.status.make_dumpling_leftover()
 	
 	if params.player_num >= 0:
 		body.add_to_group("PlayerParts")

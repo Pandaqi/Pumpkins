@@ -5,7 +5,7 @@ const POWERUP_SCALE : float = 0.66
 var type : String
 var modules = {}
 
-onready var main_node = get_node("/root/Main")
+onready var map = get_node("/root/Main/Map")
 onready var shape_manager = get_node("/root/Main/ShapeManager")
 onready var slicer = get_node("/root/Main/Slicer")
 
@@ -47,7 +47,7 @@ func reveal_powerup(attacker):
 	var original_pos = revealed_powerup.get_global_position()
 	
 	self.call_deferred("remove_child", revealed_powerup)
-	main_node.call_deferred("add_child", revealed_powerup)
+	map.knives.call_deferred("add_child", revealed_powerup)
 	
 	revealed_powerup.call_deferred("reveal", original_pos)
 	

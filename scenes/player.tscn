@@ -94,6 +94,7 @@ tracks/0/keys = {
 
 [node name="Player" type="KinematicBody2D" groups=[
 "Grabbers",
+"KeepAlives",
 "Players",
 "Sliceables",
 ]]
@@ -160,8 +161,11 @@ script = ExtResource( 3 )
 [node name="StatTimer" type="Timer" parent="Shaper"]
 autostart = true
 
-[node name="Powerups" type="Node" parent="."]
+[node name="Powerups" type="Node2D" parent="."]
 script = ExtResource( 13 )
+
+[node name="Container" type="Node2D" parent="Powerups"]
+modulate = Color( 1, 1, 1, 0.533333 )
 
 [node name="Grower" type="Node" parent="."]
 script = ExtResource( 14 )
@@ -272,9 +276,9 @@ anims/RESET = SubResource( 9 )
 [connection signal="quick_slash" from="Slasher" to="Tutorial" method="_on_Slasher_quick_slash"]
 [connection signal="slash_range_changed" from="Slasher" to="Knives" method="_on_Slasher_slash_range_changed"]
 [connection signal="thrown_slash" from="Slasher" to="Tutorial" method="_on_Slasher_thrown_slash"]
-[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
 [connection signal="timeout" from="Shaper/StatTimer" to="Shaper" method="_on_StatTimer_timeout"]
 [connection signal="timeout" from="Grower/Timer" to="Grower" method="_on_Timer_timeout"]

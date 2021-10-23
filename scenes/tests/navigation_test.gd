@@ -66,9 +66,6 @@ func build_navigation_mesh():
 				if col_shape is CircleShape2D:
 					polygon = make_global(scale_shape(create_circle_polygon(col_shape.radius), BODY_SAFE_SCALE), trans)
 					nav_poly.add_outline(PoolVector2Array(polygon))
-					
-					print("ADDED POLYGON")
-					print(polygon)
 			
 			elif new_child is CollisionPolygon2D:
 				polygon = make_global(scale_shape(new_child.polygon, BODY_SAFE_SCALE), trans)

@@ -13,6 +13,7 @@ var forward_vec = Vector2.RIGHT
 var state = "stopped"
 
 var last_velocity : Vector2
+var move_audio_player = null
 
 signal movement_stopped()
 signal movement_started()
@@ -25,7 +26,11 @@ func _on_Input_move_vec(vec : Vector2):
 		return
 	
 	if not moving_enabled or vec.length() <= 0.03: 
-		if state != "stopped": emit_signal("movement_stopped")
+		if state != "stopped":
+			if move_audio_player: 
+				move_audio_player.queue_free()
+				move_audio_player = null
+			emit_signal("movement_stopped")
 		state = "stopped"
 		return
 	
@@ -36,6 +41,9 @@ func _on_Input_move_vec(vec : Vector2):
 	if reversed: vec *= -1
 	
 	move_regular(vec)
+	
+	if not move_audio_player or not is_instance_valid(move_audio_player):
+		move_audio_player = GlobalAudio.play_dynamic_sound(body, "move", -9)
 
 func continue_on_last_velocity():
 	body.move_and_slide(last_velocity)
@@ -44,7 +52,7 @@ func move_regular(vec):
 	body.slowly_orient_towards_vec(vec)
 	
 	var lerp_factor = 1.0
-	if ice: lerp_factor = 0.1
+	if ice: lerp_factor = 0.007
 	forward_vec = lerp(forward_vec, body.get_forward_vec(), lerp_factor)
 	
 	var speed_penalty_for_size = body.modules.shaper.get_size_as_ratio()*0.5 + 0.5

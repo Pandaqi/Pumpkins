@@ -44,9 +44,17 @@ var use_curve : bool = false
 var is_boomerang : bool = false
 var boomerang_state : String = "flying"
 
+onready var trail_particles = $TrailParticles
+
+func _ready():
+	trail_particles.process_material = trail_particles.process_material.duplicate(true)
+
 func set_owner(o):
 	my_owner = o
-	sprite.set_frame(my_owner.modules.status.player_num)
+	
+	var num = my_owner.modules.status.player_num
+	sprite.set_frame(num)
+	trail_particles.modulate = GlobalDict.player_colors[num]
 	anim_player.stop()
 
 func get_owner():
@@ -58,6 +66,7 @@ func has_no_owner():
 func remove_owner():
 	my_owner = null
 	sprite.set_frame(8)
+	trail_particles.modulate = Color(1,1,1,1)
 	anim_player.play("Highlight")
 
 func get_owner_rotation():
@@ -122,6 +131,9 @@ func move(dt):
 		return
 	
 	apply_curve()
+	
+	trail_particles.set_emitting(true)
+	trail_particles.process_material.direction = Vector3(velocity.x, velocity.y, 0)
 	
 	body.set_position(body.get_position() + velocity * dt)
 	body.set_rotation(velocity.angle())
@@ -225,9 +237,9 @@ func shoot_raycast():
 		succesful_grab = check_knife_grab(hit_body)
 	
 	if succesful_grab: return
-	
+
 	if hit_body.is_in_group("Sliceables"):
-		slice_through_body(result.collider)
+		slice_through_body(hit_body)
 		num_succesful_actions += 1
 	elif hit_body.is_in_group("Stuckables"):
 		get_stuck(result)
@@ -248,6 +260,7 @@ func stop():
 	record_succesful_actions()
 	
 	velocity = Vector2.ZERO
+	trail_particles.set_emitting(false)
 	remove_owner()
 
 func record_succesful_actions():
@@ -264,6 +277,9 @@ func get_stuck(result):
 	is_stuck = true
 	
 	record_succesful_actions()
+	
+	GlobalAudio.play_dynamic_sound(body, "thud")
+	particles.create_explosion_particles(body.global_position)
 
 func get_knife_top_pos():
 	var rot = body.rotation
@@ -299,7 +315,7 @@ func slice_through_body(obj):
 		collision_exceptions.append(sliced_body)
 	
 	var penalty = mode.get_player_slicing_penalty()
-	my_owner.modules.collector.collect(penalty)
+	if penalty != 0: my_owner.modules.collector.collect(penalty)
 	
 	my_owner.modules.statistics.record("players_sliced", 1)
 
@@ -311,6 +327,9 @@ func deflect(res):
 	
 	var too_soon = (OS.get_ticks_msec() - last_deflection_time) < MIN_TIME_BETWEEN_DEFLECTIONS
 	if too_soon: return
+	
+	particles.create_explosion_particles(body.global_position)
+	GlobalAudio.play_dynamic_sound(body, "thud")
 
 	# now MIRROR the velocity
 	var norm = res.normal
@@ -347,5 +366,6 @@ func _on_Timer_timeout():
 func check_knife_grab(other_body):
 	if not other_body.modules.knives.is_mine(body): return false
 
+	stop()
 	other_body.modules.knives.grab_knife(body)
 	return true

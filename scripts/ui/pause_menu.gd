@@ -8,6 +8,8 @@ func _ready():
 	hide(true)
 
 func _input(ev):
+	if tween.is_active(): return
+	
 	if not active:
 		if ev.is_action_released("pause_open"):
 			show()
@@ -33,6 +35,8 @@ func hide(immediate = false):
 		play_disappearance_tween($Buttons/Continue, 0.3)
 		play_disappearance_tween($Buttons/Exit, 0.6)
 		fade_out_tween($ColorRect)
+		
+		GlobalAudio.play_static_sound("ui_button_press")
 
 func start_pause_mode():
 	active = true
@@ -45,6 +49,8 @@ func end_pause_mode():
 	active = false
 
 func show():
+	GlobalAudio.play_static_sound("ui_button_press")
+	
 	$Buttons.set_visible(true)
 	$ColorRect.set_visible(true)
 	

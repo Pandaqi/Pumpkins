@@ -8,8 +8,11 @@ var is_bot : bool = false
 var is_ghost : bool = false
 
 onready var body = get_parent()
+onready var particles = get_node("/root/Main/Particles")
+onready var mode = get_node("/root/Main/ModeManager")
 
 var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
+var dumpling_part_color : Color = Color(1.0, 207/255.0, 112/255.0)
 
 func set_player_num(num):
 	player_num = num
@@ -71,8 +74,15 @@ func make_powerup_leftover():
 	player_num = -1
 	body.modules.drawer.set_color(powerup_part_color)
 
+func make_dumpling_leftover():
+	player_num = -1
+	body.modules.drawer.set_color(dumpling_part_color)
+
 func delete():
 	body.queue_free()
+
+func can_die():
+	return mode.players_can_die()
 
 func die():
 	is_dead = true
@@ -81,6 +91,9 @@ func die():
 	body.modules.knives.destroy_knives()
 	body.modules.collector.disable_collection()
 	body.modules.powerups.disable()
+	
+	particles.create_explosion_particles(body.global_position)
+	GlobalAudio.play_dynamic_sound(body, "death")
 
 func make_ghost():
 	body.modulate.a = 0.6

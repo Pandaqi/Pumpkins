@@ -83,11 +83,20 @@ func _on_Input_move_vec(vec : Vector2):
 		body.slowly_orient_towards_vec(vec_to_closest_target, 1.0)
 		return
 	
-	var long_hold = (OS.get_ticks_msec() - slash_start_time) > MAX_TIME_HELD
+	var long_hold = get_time_held() > MAX_TIME_HELD
 	if body.modules.status.rotate_incrementally():
 		var rotate_dir = 1 if vec.x > 0 else -1
 		var rotate_speed = ROTATE_SPEED
 		if long_hold: rotate_speed *= 0.25
+		
+		# up/down keys are for faster rotating
+		if vec.y > 0:
+			rotate_dir = 1
+			rotate_speed *= 2
+		elif vec.y < 0:
+			rotate_dir = -1
+			rotate_speed *= 2
+		
 		body.rotate(rotate_dir*(2*PI)*rotate_speed)
 	
 	else:
@@ -115,18 +124,25 @@ func snap_to_closest_target(aim_vec):
 	return final_vec_to
 
 func start_slash():
+	if body.modules.knives.has_no_knives(): return
+	
+	GlobalAudio.play_dynamic_sound(body, "windup_throw")
+	
 	slash_start_time = OS.get_ticks_msec()
 	slashing_enabled = true
 
 func finish_slash():
+	if not slashing_enabled: return
+	
 	execute_slash()
 	slashing_enabled = false
 
 func execute_slash():
 	determine_slash_range()
 	
-	var time_held = OS.get_ticks_msec() - slash_start_time
-	if time_held < THROW_TIME_THRESHOLD:
+	GlobalAudio.play_dynamic_sound(body, "throw")
+
+	if get_time_held() < THROW_TIME_THRESHOLD:
 		execute_quick_slash()
 	else:
 		execute_thrown_slash()
@@ -205,6 +221,9 @@ func execute_thrown_slash():
 	
 	body.modules.knives.throw_first_knife()
 	emit_signal("thrown_slash")
+
+func get_slash_range():
+	return slash_range
 
 func determine_slash_range():
 	slash_range = clamp(range_multiplier * DEFAULT_SLASH_RANGE, SLASH_RANGE_BOUNDS.min, SLASH_RANGE_BOUNDS.max)

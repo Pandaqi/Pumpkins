@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/thud1.ogg-1caf46f6c840b5340992c504b1567511.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/thud1.ogg"
+dest_files=[ "res://.import/thud1.ogg-1caf46f6c840b5340992c504b1567511.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -26,6 +26,8 @@ func _input(ev):
 		advance_screen(-1)
 
 func advance_screen(ds):
+	GlobalAudio.play_static_sound("ui_button_press")
+	
 	if cur_screen >= 0:
 		screen_nodes[cur_screen].disable()
 	

@@ -18,9 +18,6 @@ func _on_TombstoneTimer_timeout():
 	
 	tombstone_timer.wait_time = rand_range(TIMER_BOUNDS.min, TIMER_BOUNDS.max)
 	tombstone_timer.start()
-	
-	print("DID SOMETHING")
-	print(cur_hidden_tombstone)
 
 func show_previous_tombstone():
 	if not cur_hidden_tombstone: return

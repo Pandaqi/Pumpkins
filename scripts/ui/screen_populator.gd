@@ -218,6 +218,7 @@ func check_movement(ev):
 	if offset.length() < 0.05: return false
 	
 	var new_pos = keep_within_grid(focus_pos, offset)
+	GlobalAudio.play_static_sound("ui_selection_change")
 	
 	focus_on(new_pos)
 	return true
@@ -275,7 +276,7 @@ func execute_toggle():
 		disable_all_cells()
 	
 	focus_cell.toggle()
-	GlobalAudio.play_static_sound("button")
+	GlobalAudio.play_static_sound("ui_button_press")
 
 func disable_all_cells():
 	for x in range(cols):

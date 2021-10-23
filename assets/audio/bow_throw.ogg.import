@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/bow_throw.ogg-2526bb732a2cfe98a6a9e06c16d233c0.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/bow_throw.ogg"
+dest_files=[ "res://.import/bow_throw.ogg-2526bb732a2cfe98a6a9e06c16d233c0.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

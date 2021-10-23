@@ -44,6 +44,9 @@ func _on_Timer_timeout():
 	cur_autothrow_time = timer.wait_time
 	timer.start()
 
+func has_no_knives():
+	return knives_held.size() <= 0
+
 func _on_Slasher_slash_range_changed(s):
 	$AutoThrow.set_scale(s)
 
@@ -134,6 +137,7 @@ func grab_knife(knife):
 	var snap_vec = income_vec.rotated(-body.rotation)
 	if loading_done:
 		snap_vec = snap_vec_to_knife_angles(knife, snap_vec)
+		GlobalAudio.play_dynamic_sound(body, "grab")
 
 	var new_position = snap_vec * get_radius()
 	var new_rotation = snap_vec.angle()
@@ -165,7 +169,7 @@ func move_first_knife_to_back():
 
 func throw_knife(knife):
 	if knife_overlaps_problematic_body(knife): return
-	
+
 	knives_held.erase(knife)
 	
 	var projectile = knife.get_node("Projectile")
@@ -322,12 +326,14 @@ func knife_overlaps_problematic_body(knife):
 	var query_params = Physics2DShapeQueryParameters.new()
 	query_params.set_shape(shp)
 	
+	query_params.collision_layer = 1 + 4 + 8
 	query_params.transform = query_params.transform.rotated(knife.global_rotation)
 	query_params.transform.origin = knife.get_global_position()
 	
 	var result = space_state.intersect_shape(query_params)
 	if result:
 		for obj in result:
+			if obj.collider.is_in_group("Players"): continue
 			if not obj.collider.is_in_group("Sliceables"): return true
 	
 	return false

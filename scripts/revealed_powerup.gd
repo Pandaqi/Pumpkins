@@ -4,12 +4,15 @@ var type : String = ""
 var still_inside : bool = true
 
 onready var sprite = $Sprite
+onready var powerups = get_node("/root/Main/Powerups")
 
 func reveal(pos : Vector2):
 	set_position(pos)
 	set_rotation(randf()*2*PI)
 	set_visible(true)
 	still_inside = false
+	
+	powerups.tween_revealed_powerup(self)
 
 func unreveal():
 	set_visible(false)
@@ -26,7 +29,7 @@ func _on_Area2D_body_entered(body):
 			return
 	
 	body.modules.statistics.record("powerups_grabbed", 1)
-	body.modules.powerups.grab(type)
+	body.modules.powerups.grab(self, type)
 	self.queue_free()
 	
 	if still_inside:

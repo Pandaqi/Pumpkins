@@ -12,6 +12,7 @@ func set_color(col):
 
 func _draw():
 	var num_shapes = body.shape_owner_get_shape_count(0)
+	var outline_layer = []
 	var bottom_layer = []
 	var middle_layer = []
 	var middle_layer_2 = []
@@ -20,10 +21,15 @@ func _draw():
 	for i in range(num_shapes):
 		var points = Array(body.shape_owner_get_shape(0, i).points)
 		
-		bottom_layer.append(points)
-		middle_layer.append(shape_manager.scale_shape(points, 0.9))
-		middle_layer_2.append(shape_manager.scale_shape(points, 0.75))
-		top_layer.append(shape_manager.scale_shape(points, 0.33))
+		outline_layer.append(points)
+		bottom_layer.append(shape_manager.scale_shape(points, 0.9))
+		middle_layer.append(shape_manager.scale_shape(points, 0.8))
+		middle_layer_2.append(shape_manager.scale_shape(points, 0.65))
+		top_layer.append(shape_manager.scale_shape(points, 0.3))
+	
+	var outline_color = Color(0.0, 0.0, 0.0)
+	for i in range(num_shapes):
+		draw_polygon(outline_layer[i], [outline_color])
 	
 	for i in range(num_shapes):
 		draw_polygon(bottom_layer[i], [color.darkened(0.7)])

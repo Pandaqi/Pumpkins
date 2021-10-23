@@ -8,6 +8,7 @@ onready var magnet_area = $MagnetArea
 onready var main_node = get_node("/root/Main")
 onready var mode = get_node("/root/Main/ModeManager")
 onready var collectors = get_node("/root/Main/Collectors")
+onready var particles = get_node("/root/Main/Particles")
 
 var num_collected : int = 0
 
@@ -19,10 +20,15 @@ func count():
 	return num_collected
 
 func collect(dc):
+	if dc == 0: return
+	
 	num_collected += dc
 	
 	main_node.player_progression(body.modules.status.player_num)
 	collectors.update_team_count(body.modules.status.team_num)
+	
+	GlobalAudio.play_dynamic_sound(body, "collect")
+	particles.create_collectible_particle(body.global_position, "+" + str(dc))
 
 func disable_collection():
 	collection_disabled = true

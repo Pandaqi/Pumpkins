@@ -1,25 +1,42 @@
-extends Node
+extends Node2D
 
+const MAX_POWERUPS : int = 5
 const POWERUP_DURATION : float = 10.0 # in seconds
 
 const GROWTH_FACTOR : float = 0.2
 
+var powerup_icons = []
 var temporary = []
+
 onready var body = get_parent()
 onready var map = get_node("/root/Main/Map")
+onready var particles = get_node("/root/Main/Particles")
 
 var powerup_fb_scene = preload("res://scenes/powerup_feedback.tscn")
+var powerup_icon_scene = preload("res://scenes/powerup_icon.tscn")
 
 var disabled : bool = false
 
 var repel_knives : bool = false
 var auto_unwrap : bool = false
 
+func _ready():
+	for i in range(MAX_POWERUPS):
+		var ic = powerup_icon_scene.instance()
+		powerup_icons.append(ic)
+		$Container.add_child(ic)
+
 func disable():
 	disabled = true
 
-func grab(type):
+func grab(obj, type):
 	if disabled: return
+	if temporary.size() >= MAX_POWERUPS: 
+		print("AT MAXIMUM POWERUPS")
+		return
+	
+	GlobalAudio.play_dynamic_sound(body, "collect")
+	particles.create_explosion_particles(obj.global_position)
 	
 	show_feedback(type)
 	activate_effect(type)
@@ -44,9 +61,33 @@ func show_feedback(type, removal = false):
 		fb.make_removal()
 
 func _physics_process(_dt):
+	show_temporary_effects_ui()
+	
 	if disabled: return
 	
 	handle_temporary_effects()
+
+func show_temporary_effects_ui():
+	var rot_step = 0.1*PI
+	var cur_rot = -0.5*PI
+	var radius = body.modules.slasher.get_slash_range()*0.9 # to account for white-space margin in that sprite
+	
+	for ic in powerup_icons:
+		ic.set_visible(false)
+		
+		var pos = Vector2(cos(cur_rot), sin(cur_rot))*radius
+		ic.set_position(pos)
+		cur_rot += rot_step
+	
+	$Container.set_rotation(-body.rotation)
+	
+	for i in range(temporary.size()):
+		var type = temporary[i].type
+		var frame = GlobalDict.powerups[type].frame
+		var icon = powerup_icons[i]
+		
+		icon.get_node("Sprite").set_frame(frame)
+		icon.set_visible(true)
 
 func handle_temporary_effects():
 	if temporary.size() <= 0: return
@@ -169,4 +210,5 @@ func deactivate_effect(type):
 		"auto_unwrap":
 			auto_unwrap = false
 	
+	GlobalAudio.play_dynamic_sound(body, "lose")
 	show_feedback(type, true)
