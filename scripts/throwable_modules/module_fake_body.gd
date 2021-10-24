@@ -56,7 +56,7 @@ func build_exclude_array():
 		exclude.append(body)
 	
 	if body.modules.owner.has_none(): return exclude
-	if not body.modules.grabber.grabbing_disabled: return exclude
+	if not body.modules.grabber.is_disabled_for_owner(): return exclude
 	exclude.append(body.modules.owner.get_owner())
 	
 	return exclude

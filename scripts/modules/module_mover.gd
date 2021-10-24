@@ -1,6 +1,6 @@
 extends Node
 
-const MOVE_SPEED : float = 400.0
+const MOVE_SPEED : float = 360.0
 var speed_multiplier : float = 1.0
 
 onready var body : KinematicBody2D = get_parent()
@@ -20,7 +20,7 @@ signal movement_started()
 
 signal moved(amount)
 
-func _on_Input_move_vec(vec : Vector2):
+func _on_Input_move_vec(vec : Vector2, dt : float):
 	if not moving_enabled and GlobalDict.cfg.use_slidy_throwing:
 		continue_on_last_velocity()
 		return

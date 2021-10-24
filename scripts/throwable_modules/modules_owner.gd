@@ -32,6 +32,9 @@ func set_owner(o):
 func get_owner():
 	return my_owner
 
+func is_body(other_body):
+	return my_owner == other_body
+
 func has_none():
 	return (my_owner == null)
 

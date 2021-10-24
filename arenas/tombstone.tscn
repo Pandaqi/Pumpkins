@@ -4,6 +4,8 @@
 polygon = PoolVector2Array( 190.794, 366.36, 250.01, 366.99, 247.49, 296.435, 262.609, 297.065, 261.979, 273.756, 175.045, 274.386, 173.155, 297.695, 187.644, 297.695 )
 
 [node name="StaticBody2D" type="StaticBody2D"]
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PoolVector2Array( 190.794, 367.62, 248.75, 367.62, 246.86, 296.435, 262.609, 295.805, 260.719, 273.756, 174.415, 274.386, 172.525, 297.065, 187.644, 297.695 )

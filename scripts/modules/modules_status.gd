@@ -18,14 +18,19 @@ func set_player_num(num):
 	player_num = num
 	
 	body.modules.drawer.set_color(GlobalDict.player_colors[num])
+	if body.modules.has('fader'):
+		body.modules.fader.activate(is_from_a_player())
 	
+	set_player_specific_data()
+
+func set_player_specific_data():
 	if not body.is_in_group("Players"): return
 	
 	if body.modules.has('input'):
-		body.modules.input.set_player_num(num)
+		body.modules.input.set_player_num(player_num)
 	
 	if body.modules.has('bot'):
-		body.modules.bot.set_player_num(num)
+		body.modules.bot.set_player_num(player_num)
 	
 	body.modules.slasher.set_player_num(player_num)
 	body.modules.knives.activate()
@@ -107,6 +112,8 @@ func make_ghost():
 	body.modules.drawer.disable()
 
 func undo_ghost():
+	if is_dead: return
+	
 	body.modulate.a = 1.0
 	
 	is_ghost = false

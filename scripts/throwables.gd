@@ -28,6 +28,8 @@ func precalculate_throwable_probabilities():
 		full_list[key].weight = running_sum
 
 func get_random_type():
+	if available_types.size() <= 0: return null
+	
 	var target = randf()
 	for key in available_types:
 		if full_list[key].weight >= target:

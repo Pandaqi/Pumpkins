@@ -1,6 +1,6 @@
 extends Node
 
-const MAX_AREA : float = 5000.0
+const MAX_AREA : float = 4500.0
 const MIN_AREA : float = 400.0
 
 var area : float = 0.0
@@ -43,9 +43,12 @@ func morph_to_random_shape():
 	var rand_shape = shape_manager.get_random_shape()
 	var points = GlobalDict.predefined_shapes[rand_shape].points
 	
-	var other_area : float = 20.0 # most predefined shapes are roughly radius 20
+	var other_area : float = 5000.0 # most predefined shapes are roughly this area
 	var scale_factor = area / other_area
-	
+
+	# limit the scale factor nonetheless, to prevent the "blowing up" bug :p
+	scale_factor = clamp(scale_factor, 0.75, 1.25)
+
 	points = shape_manager.scale_shape(points, scale_factor)
 
 	destroy()

@@ -86,6 +86,8 @@ func get_stuck(result):
 	GlobalAudio.play_dynamic_sound(body, "thud")
 	particles.create_explosion_particles(body.global_position)
 	
+	body.modules.fakebody.reset_all()
+	
 	return true
 
 func check_repellant_powerup(obj):

@@ -71,6 +71,8 @@ centered = false
 [node name="Walls" type="StaticBody2D" parent="Map/Entities" groups=[
 "Stuckables",
 ]]
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Walls"]
 position = Vector2( 498.513, 271.163 )
@@ -142,6 +144,8 @@ shape = SubResource( 6 )
 [node name="Caves" type="StaticBody2D" parent="Map/Entities" groups=[
 "Stuckables",
 ]]
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Caves"]
 position = Vector2( 144.25, 38.1837 )

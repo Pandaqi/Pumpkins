@@ -137,10 +137,14 @@ func update_interface(play_tweens : bool = true):
 		last_bot_player.show_bot_leave_button()
 
 func add_bot():
+	if (GlobalInput.get_player_count() + num_bots) >= max_players: return
+	
 	num_bots += 1
 	update_interface()
 
 func remove_bot():
+	if num_bots <= 0: return
+	
 	num_bots -= 1
 	update_interface()
 

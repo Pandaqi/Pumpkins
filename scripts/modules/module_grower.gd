@@ -1,6 +1,6 @@
 extends Node
 
-const AUTO_GROW_INTERVAL : float = 5.0
+const AUTO_GROW_INTERVAL : float = 8.0
 
 onready var timer = $Timer
 
@@ -14,7 +14,7 @@ func _ready():
 	timer.start()
 
 func _on_Timer_timeout():
-	grow(0.2)
+	grow(0.15)
 
 func grow(val):
 	if body.modules.shaper.at_max_size(): return

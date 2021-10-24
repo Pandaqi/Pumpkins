@@ -206,18 +206,26 @@ script = ExtResource( 3 )
 [node name="Bounds" type="Node2D" parent="."]
 
 [node name="StaticBody2D" parent="Bounds" instance=ExtResource( 4 )]
+collision_layer = 21
+collision_mask = 21
 
 [node name="StaticBody2D2" parent="Bounds" instance=ExtResource( 4 )]
 position = Vector2( 922.067, 1083.29 )
 rotation = 3.14159
+collision_layer = 21
+collision_mask = 21
 
 [node name="StaticBody2D3" parent="Bounds" instance=ExtResource( 4 )]
 position = Vector2( 1926.16, 684.479 )
 rotation = 1.5708
+collision_layer = 21
+collision_mask = 21
 
 [node name="StaticBody2D4" parent="Bounds" instance=ExtResource( 4 )]
 position = Vector2( -5.65723, 692.965 )
 rotation = -1.5708
+collision_layer = 21
+collision_mask = 21
 
 [node name="Map" type="Node2D" parent="."]
 script = ExtResource( 5 )

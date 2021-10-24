@@ -1,7 +1,7 @@
 extends Node
 
 const DEFAULT_PLAYER_RADIUS : float = 25.0
-const MIN_DIST_BETWEEN_PLAYERS : float = 200.0
+const MIN_DIST_BETWEEN_PLAYERS : float = 400.0
 
 var num_players
 var player_scene = preload("res://scenes/player.tscn")
@@ -16,7 +16,9 @@ onready var collectors = get_node("../Collectors")
 
 func activate():
 	create_players()
-	show_team_reminders()
+	collectors.show_player_icons()
+	add_exceptions_between_team_members()
+	#show_team_reminders()
 
 func create_players():
 	var max_players = GlobalDict.cfg.max_players
@@ -54,16 +56,24 @@ func create_players():
 			p.remove_from_group("Sliceables")
 		
 		p.set_rotation(randf()*2*PI)
-	
-	collectors.show_player_icons()
 
-func show_team_reminders():
-	for i in range(8):
-		var players = get_players_in_team(i)
-		if players.size() <= 1: continue
-		
-		for p in players:
-			particles.place_team_reminder(p.get_global_position(), i)
+func add_exceptions_between_team_members():
+	var players = get_tree().get_nodes_in_group("Players")
+	
+	for p in players:
+		var team_members = get_players_in_team(p.modules.status.team_num)
+		for member in team_members:
+			if member == self: continue
+			p.add_collision_exception_with(member)
+
+
+#func show_team_reminders():
+#	for i in range(8):
+#		var players = get_players_in_team(i)
+#		if players.size() <= 1: continue
+#
+#		for p in players:
+#			particles.place_team_reminder(p.get_global_position(), i)
 
 func get_players_in_team(team_num):
 	var players = get_tree().get_nodes_in_group("Players")

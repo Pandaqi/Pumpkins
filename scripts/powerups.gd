@@ -18,6 +18,7 @@ onready var throwables = get_node("/root/Main/Throwables")
 var powerup_scene = preload("res://scenes/powerup.tscn")
 
 var available_powerups = []
+var full_list = []
 var placement_params
 
 func activate():
@@ -64,6 +65,8 @@ func check_powerup_placement():
 	place_powerup()
 
 func get_random_type():
+	if available_powerups.size() <= 0: return null 
+	
 	var target = randf()
 	for key in available_powerups:
 		if GlobalDict.powerups[key].weight >= target:
@@ -76,11 +79,14 @@ func place_powerup():
 	map.knives.add_child(p)
 	
 	var is_throwable = (randf() <= POWERUP_IS_THROWABLE_PROB)
-	p.set_throwable(is_throwable)
 	
 	var rand_type = get_random_type()
-	if is_throwable: rand_type = throwables.get_random_type()
+	if not rand_type: is_throwable = true
 	
+	if is_throwable: rand_type = throwables.get_random_type()
+	if not rand_type: rand_type = "knife" # if all else fails, default to just giving more knives
+	
+	p.set_throwable(is_throwable)
 	p.set_type(rand_type)
 	
 	var rand_shape = shape_manager.get_random_shape()

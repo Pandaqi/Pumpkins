@@ -60,12 +60,13 @@ func check_team_change(ev):
 func check_new_controller(ev):
 	if not (ev is InputEventJoypadButton): return
 	if ev.pressed: return
-	if GlobalInput.device_already_registered(ev.device): return
+	if GlobalInput.device_already_registered(ev.device): 
+		var is_first_controller_player = (ev.device == 0)
+		if ev.is_action_released("add_bot") and is_first_controller_player:
+			main.add_bot()
+		return
 	
-	if ev.is_action_released("add_bot"):
-		main.add_bot()
-	else:
-		GlobalInput.add_new_player('controller', ev.device)
+	GlobalInput.add_new_player('controller', ev.device)
 	
 	GlobalAudio.play_static_sound("ui_player_add")
 	main.update_interface()

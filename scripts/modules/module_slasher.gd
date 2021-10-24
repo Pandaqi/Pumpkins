@@ -3,7 +3,7 @@ extends Node2D
 const THROW_TIME_THRESHOLD : float = 220.0 # milliseconds
 const QUICK_SLASH_COOLDOWN_DURATION : float = 3000.0 # milliseconds
 
-const ROTATE_SPEED : float = 0.4*0.016
+const ROTATE_SPEED : float = 1.0
 const AIM_INTERP_FACTOR : float = 0.25
 
 onready var body = get_parent()
@@ -24,10 +24,12 @@ var range_multiplier : float = 1.0
 var slash_range : float
 onready var range_sprite = $Sprite
 
-const MAX_TIME_HELD : float = 800.0 # holding longer than this changing nothing anymore
-const THROW_STRENGTH_BOUNDS = { 'min': 800, 'max': 2000 }
-const BASE_THROW_STRENGTH : float = 1000.0
+const MAX_TIME_HELD : float = 700.0 # holding longer than this changing nothing anymore
+const THROW_STRENGTH_BOUNDS = { 'min': 1300, 'max': 2200 }
 var strength_multiplier : float = 1.0
+
+const IDLE_PENALTY_INTERVAL : float = 8.0
+onready var idle_timer = $IdleTimer
 
 signal slash_range_changed(new_scale)
 signal quick_slash()
@@ -39,13 +41,15 @@ func _ready():
 	map.ground.add_child(range_sprite)
 	determine_slash_range()
 	
-	if not GlobalDict.cfg.show_guides:
+	if (not GlobalDict.cfg.show_guides) or (not GlobalDict.cfg.allow_quick_slash):
 		range_sprite.queue_free()
 		range_sprite = null
 
 func set_player_num(num):
 	player_num = num
-	range_sprite.set_frame(num)
+	
+	if range_sprite:
+		range_sprite.set_frame(num)
 
 func hide_range_sprite():
 	if not range_sprite: return
@@ -72,7 +76,7 @@ func _on_Input_button_press():
 func _on_Input_button_release():
 	finish_slash()
 
-func _on_Input_move_vec(vec : Vector2):
+func _on_Input_move_vec(vec : Vector2, dt : float):
 	if not slashing_enabled: return
 	if vec.length() <= 0.1: return
 	
@@ -97,7 +101,7 @@ func _on_Input_move_vec(vec : Vector2):
 			rotate_dir = -1
 			rotate_speed *= 2
 		
-		body.rotate(rotate_dir*(2*PI)*rotate_speed)
+		body.rotate(rotate_dir*(2*PI)*rotate_speed*dt)
 	
 	else:
 		var factor = AIM_INTERP_FACTOR
@@ -141,11 +145,15 @@ func execute_slash():
 	determine_slash_range()
 	
 	GlobalAudio.play_dynamic_sound(body, "throw")
+	reset_idle_timer()
+	
+	var quick_slash : bool = GlobalDict.cfg.allow_quick_slash and (get_time_held() < THROW_TIME_THRESHOLD)
 
-	if get_time_held() < THROW_TIME_THRESHOLD:
+	if quick_slash:
 		execute_quick_slash()
-	else:
-		execute_thrown_slash()
+		return
+	
+	execute_thrown_slash()
 
 func quick_slash_still_disabled():
 	return (OS.get_ticks_msec() - last_quick_slash_time) < QUICK_SLASH_COOLDOWN_DURATION
@@ -242,23 +250,23 @@ func change_range_multiplier(val):
 	determine_slash_range()
 
 func get_throw_strength(use_full_strength : bool = false):
-	if use_full_strength: 
-		return strength_multiplier * BASE_THROW_STRENGTH
+	if use_full_strength:  return THROW_STRENGTH_BOUNDS.max
 	
-	var strength = strength_multiplier * (get_time_held() / MAX_TIME_HELD) * BASE_THROW_STRENGTH
-	return clamp(strength, THROW_STRENGTH_BOUNDS.min, THROW_STRENGTH_BOUNDS.max)
+	var hold_ratio = clamp(get_time_held() / MAX_TIME_HELD, 0.1, 1.0)
+	var strength = strength_multiplier * hold_ratio * (THROW_STRENGTH_BOUNDS.max - THROW_STRENGTH_BOUNDS.min) + THROW_STRENGTH_BOUNDS.min
+	return strength
 
 func change_throw_multiplier(val):
 	strength_multiplier = clamp(strength_multiplier * val, 0.2, 3.0)
 
 func get_curve_strength():
-	var linear_val = clamp(strength_multiplier * BASE_THROW_STRENGTH, THROW_STRENGTH_BOUNDS.min, THROW_STRENGTH_BOUNDS.max)
-	return 0.016*linear_val
+	return 0.016*get_throw_strength(true)
 
 func get_time_held():
 	return (OS.get_ticks_msec() - slash_start_time)
 
 func in_long_throw_mode():
+	if not GlobalDict.cfg.allow_quick_slash: return true
 	return get_time_held() > THROW_TIME_THRESHOLD
 
 func pos_within_range(pos):
@@ -267,3 +275,13 @@ func pos_within_range(pos):
 
 func held_too_long():
 	return get_time_held() > MAX_TIME_HELD
+
+func reset_idle_timer():
+	idle_timer.stop()
+	idle_timer.wait_time = IDLE_PENALTY_INTERVAL
+	idle_timer.start()
+
+# We've grabbed/thrown a knife and then not done something for X seconds
+# The penalty? Automatically throw something
+func _on_IdleTimer_timeout():
+	execute_thrown_slash()

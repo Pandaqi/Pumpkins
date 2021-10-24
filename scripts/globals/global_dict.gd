@@ -13,6 +13,7 @@ var base_cfg = {
 
 	'use_slidy_throwing': false,
 	'auto_throw_knives': false,
+	'allow_quick_slash': false,
 	
 	'navigate_settings_with_joystick': true,
 	'add_default_settings_buttons': true,
@@ -23,11 +24,11 @@ var cfg = {}
 var modes = {
 	"dicey_slicey": { "frame": 0, "win": "survival", "fade_rubble": true, "players_can_die": true, "def": true },
 	
-	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 10, "auto_grow": true, "collectible_group": "PlayerParts" },
+	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 5, "auto_grow": true, "collectible_group": "PlayerParts" },
 	
-	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 20, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3 },
+	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 10, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3 },
 	
-	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 10, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
+	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 6, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
 	
 	"dwarfing_dumplings": { "frame": 4,"win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true },
 	
@@ -35,10 +36,10 @@ var modes = {
 }
 
 var arenas = {
-	"ghost_town": { "frame": 2, "def": true },
+	"dark_jungle": { "frame": 3, "def": true },
+	"ghost_town": { "frame": 2 },
 	"spooky_forest": { "frame": 0 },
 	"graveyard": { "frame": 1 },
-	"dark_jungle": { "frame": 3 }
 }
 
 var configurable_settings = {
@@ -57,7 +58,7 @@ var throwables = {
 	"boomerang": { "body": false, "owner": "auto", "base_frame": 9, "frame": 1, "prob": 3, "def": true },
 	"curve": { "body": false, "owner": "auto", "base_frame": 18, "frame": 2, "prob": 2 },
 	"ghost_knife": { "body": false, "owner": "hostile", "base_frame": 27, "frame": 3 },
-	"dumpling": { "body": true, "owner": "friendly", "base_frame": 28, "prob": 4, "frame": 4, "def": true } 
+	"dumpling": { "body": true, "owner": "friendly", "base_frame": 28, "prob": 4, "frame": 4 } 
 }
 
 var nav_data = {
@@ -113,16 +114,16 @@ var predefined_shapes = {
 }
 
 var powerups = {
-	"grow": { "frame": 0, "category": "shape", "prob": 5, "def": true },
-	"shrink": { "frame": 1, "category": "shape", "prob": 5, "def": true },
-	"morph": { "frame": 2, "category": "shape", "def": true },
+	"grow": { "frame": 0, "category": "shape", "prob": 5 },
+	"shrink": { "frame": 1, "category": "shape", "prob": 5 },
+	"morph": { "frame": 2, "category": "shape" },
 	"ghost": { "frame": 3, "temporary": true, "category": "shape" },
 	"hungry": { "frame": 4, "temporary": true, "category": "shape" },
 	
 	"grow_range": { "frame": 5, "category": "slashing" },
 	"shrink_range": { "frame": 6, "category": "slashing" },
-	"repel_knives": { "frame": 7, "temporary": true, "category": "slashing", "def": true, "prob": 3 },
-	"lose_knife": { "frame": 8, "category": "slashing", "def": true },
+	"repel_knives": { "frame": 7, "temporary": true, "category": "slashing", "prob": 3 },
+	"lose_knife": { "frame": 8, "category": "slashing" },
 	"faster_throw": { "frame": 11, "category": "slashing" },
 	"slower_throw": { "frame": 12, "category": "slashing"},
 	

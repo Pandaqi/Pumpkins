@@ -32,6 +32,8 @@ centered = false
 [node name="EdgeTrees" type="StaticBody2D" parent="Map/Entities" groups=[
 "Deflectables",
 ]]
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/EdgeTrees"]
 position = Vector2( 30.2723, 21.8633 )
@@ -165,6 +167,8 @@ centered = false
 "Stuckables",
 ]]
 position = Vector2( 458.723, 139.693 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D"]
 polygon = PoolVector2Array( -36.2556, -10.932, -2.21713, -28.9523, 33.1561, -21.6107, 34.491, 22.439, -25.5768, 31.7829 )
@@ -173,18 +177,24 @@ polygon = PoolVector2Array( -36.2556, -10.932, -2.21713, -28.9523, 33.1561, -21.
 "Stuckables",
 ]]
 position = Vector2( 574.187, 121.673 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D2"]
 polygon = PoolVector2Array( -20.2374, -10.2646, 13.801, -14.9365, 21.8101, 7.75574, 2.45483, 19.1019, -19.57, 15.0974 )
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 504.775, 340.587 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D3"]
 polygon = PoolVector2Array( -62.0529, 26.1455, -50.2749, 40.4132, -3.53268, 57.7653, 55.4595, 41.7195, 64.4263, 1.13284, 26.9751, -40.3368, -13.0249, -41.3368, -52.5249, -7.83682 )
 
 [node name="StaticBody2D4" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 172.775, 412.587 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D4"]
 polygon = PoolVector2Array( -3.2795, -32.6988, 10.8626, -31.2845, 33.4901, -3.00027, 27.8332, 15.3845, -18.1287, 28.8195, -34.3922, 9.72763, -30.8567, -5.12161 )
@@ -193,6 +203,8 @@ polygon = PoolVector2Array( -3.2795, -32.6988, 10.8626, -31.2845, 33.4901, -3.00
 "Stuckables",
 ]]
 position = Vector2( 126.106, 523.603 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D5"]
 polygon = PoolVector2Array( -1.15819, -20.678, -24.4927, -6.53589, -15.3003, 13.2631, 3.79156, 23.8697, 21.4692, 5.48492 )
@@ -201,12 +213,16 @@ polygon = PoolVector2Array( -1.15819, -20.678, -24.4927, -6.53589, -15.3003, 13.
 "Stuckables",
 ]]
 position = Vector2( 167.118, 743.513 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D6"]
 polygon = PoolVector2Array( -10.3506, -35.5272, -41.4633, -6.53589, -4.69374, 36.5977, 34.1971, 14.6774, 22.8834, -19.2638 )
 
 [node name="StaticBody2D7" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 391.978, 842.508 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D7"]
 polygon = PoolVector2Array( -17.9781, -41.5077, 35.0219, -35.5077, 49.0219, 13.4923, 0.0219421, 41.4923, -35.9781, 45.4923, -62.9781, 3.49231 )
@@ -215,6 +231,8 @@ polygon = PoolVector2Array( -17.9781, -41.5077, 35.0219, -35.5077, 49.0219, 13.4
 "Stuckables",
 ]]
 position = Vector2( 256.978, 922.508 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D8"]
 polygon = PoolVector2Array( -0.978058, -22.5077, 19.0219, -8.00769, -0.478058, 23.9923, -21.4781, 12.4923, -17.9781, -9.50769 )
@@ -223,24 +241,32 @@ polygon = PoolVector2Array( -0.978058, -22.5077, 19.0219, -8.00769, -0.478058, 2
 "Stuckables",
 ]]
 position = Vector2( 592.147, 713.204 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D9"]
 polygon = PoolVector2Array( -16.7934, -16.9727, -4.77258, -17.6798, 15.0264, -8.48743, 14.3193, 9.19025, 3.71271, 23.3324, -23.8645, 14.8471, -28.1071, 2.82629 )
 
 [node name="StaticBody2D10" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 908.147, 365.204 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D10"]
 polygon = PoolVector2Array( -16.1467, -45.204, 34.8533, -37.204, 45.8533, 1.79602, -3.14673, 58.796, -59.1467, 3.79602 )
 
 [node name="StaticBody2D11" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 930.147, 670.204 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D11"]
 polygon = PoolVector2Array( -32.1467, -23.204, 5.85327, -23.204, 43.8533, -9.20398, 36.8533, 22.796, -25.1467, 34.796, -43.1467, 15.796 )
 
 [node name="StaticBody2D12" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 1138.15, 889.204 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D12"]
 polygon = PoolVector2Array( -25.1467, -40.204, 5.85327, -45.204, 50.8533, -30.204, 64.8533, 17.796, 45.8533, 51.796, 6.85327, 53.796, -51.1467, 35.796, -61.1467, 0.796021 )
@@ -249,12 +275,16 @@ polygon = PoolVector2Array( -25.1467, -40.204, 5.85327, -45.204, 50.8533, -30.20
 "Stuckables",
 ]]
 position = Vector2( 1390.15, 926.204 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D13"]
 polygon = PoolVector2Array( -2.14673, -27.204, 38.8533, -10.204, 39.8533, 24.796, 23.8533, 42.796, -13.1467, 34.796, -32.1467, 19.796, -23.1467, -19.204 )
 
 [node name="StaticBody2D14" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 1438.15, 630.204 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D14"]
 polygon = PoolVector2Array( -20.1467, -53.204, 34.8533, -42.204, 50.8533, -20.204, 54.8533, 21.796, 48.8533, 39.796, 18.8533, 68.796, -13.1467, 63.796, -37.1467, 25.796, -51.1467, -28.204 )
@@ -263,12 +293,16 @@ polygon = PoolVector2Array( -20.1467, -53.204, 34.8533, -42.204, 50.8533, -20.20
 "Stuckables",
 ]]
 position = Vector2( 1163.79, 734.856 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D15"]
 polygon = PoolVector2Array( -10.3147, -9.71997, 10.8984, -13.9626, 20.798, -3.35602, 21.5051, 17.1501, -3.24365, 28.4638, -16.6787, 21.3928, -19.5071, 0.179565 )
 
 [node name="StaticBody2D16" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 1209.04, 143.715 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D16"]
 polygon = PoolVector2Array( -15.0442, -29.2145, 20.4558, -28.7145, 42.9558, -7.21454, 40.4558, 21.2855, -9.54419, 38.7855, -43.0442, 8.28546 )
@@ -277,18 +311,24 @@ polygon = PoolVector2Array( -15.0442, -29.2145, 20.4558, -28.7145, 42.9558, -7.2
 "Stuckables",
 ]]
 position = Vector2( 1334.91, 231.396 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D17"]
 polygon = PoolVector2Array( 0.814941, -19.731, 13.543, -18.3168, 24.8567, 2.18929, 19.9069, 13.503, -5.54895, 22.6954, -21.1052, 7.13902, -19.691, -9.12444 )
 
 [node name="StaticBody2D18" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 1584.52, 228.567 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D18"]
 polygon = PoolVector2Array( 3.64368, -44.4798, -38.0757, -18.3168, -24.6406, 34.7162, -7.67004, 60.172, 49.6056, 50.2726, 44.6559, -16.9026 )
 
 [node name="StaticBody2D19" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 1733.72, 358.675 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D19"]
 polygon = PoolVector2Array( -20.3982, -20.4381, 26.2709, -8.41733, 31.9277, 7.84613, 10.0074, 39.6659, -2.72046, 40.373, -29.5906, 18.4527, -35.2473, -4.17468 )
@@ -297,12 +337,16 @@ polygon = PoolVector2Array( -20.3982, -20.4381, 26.2709, -8.41733, 31.9277, 7.84
 "Stuckables",
 ]]
 position = Vector2( 1736.55, 248.366 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D20"]
 polygon = PoolVector2Array( 4.95361, -12.3664, 13.9536, -2.86636, 14.4536, 7.63364, -0.546387, 17.6336, -10.0464, 16.1336, -17.5464, 2.63364, -13.5464, -6.86636 )
 
 [node name="StaticBody2D21" type="StaticBody2D" parent="Map/Overlay"]
 position = Vector2( 1771.82, 614.547 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D21"]
 polygon = PoolVector2Array( -7.52271, -36.871, 52.7985, -20.9969, 40.8929, 34.5621, 21.8442, 49.6423, -17.0471, 56.7856, -52.7637, 32.181, -35.3022, -6.71033 )
@@ -311,6 +355,8 @@ polygon = PoolVector2Array( -7.52271, -36.871, 52.7985, -20.9969, 40.8929, 34.56
 "Stuckables",
 ]]
 position = Vector2( 1681.34, 930.44 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern"]
 polygon = PoolVector2Array( -5.93579, -73.778, -35.0038, -36.3623, -63.577, 46.9763, -25.4794, 83.4865, 60.2402, 18.403, 58.6528, -20.4883, 27.3997, -53.1417 )
@@ -320,6 +366,8 @@ polygon = PoolVector2Array( -5.93579, -73.778, -35.0038, -36.3623, -63.577, 46.9
 ]]
 position = Vector2( 1417.83, 425.647 )
 rotation = 2.00724
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern2"]
 polygon = PoolVector2Array( -5.93579, -73.778, -49.9858, -9.87695, -62.4601, 30.9734, -55.1451, 51.6267, -28.5202, 75.5724, 37.3199, 43.986, 69.7896, -0.936523, 50.0428, -45.1493, 17.8263, -74.7878 )
@@ -329,6 +377,8 @@ polygon = PoolVector2Array( -5.93579, -73.778, -49.9858, -9.87695, -62.4601, 30.
 ]]
 position = Vector2( 735.246, 511.366 )
 rotation = 4.14521
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern3"]
 polygon = PoolVector2Array( 11.3941, -72.8238, -21.2429, -54.0893, -51.8212, -10.5172, -67.9749, 38.4791, -41.7529, 71.1803, 10.1185, 56.2286, 44.8611, 30.9905, 66.4515, 1.77173, 42.3067, -47.4863 )
@@ -338,6 +388,8 @@ polygon = PoolVector2Array( 11.3941, -72.8238, -21.2429, -54.0893, -51.8212, -10
 ]]
 position = Vector2( 205.054, 146.264 )
 rotation = 2.9008
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern4"]
 polygon = PoolVector2Array( -7.12758, -73.8231, -41.7975, -32.4824, -58.4288, -4.69249, -67.0944, 40.5818, -43.8608, 72.4399, -11.7312, 68.0704, 44.8611, 30.9905, 64.2357, 4.99666, 59.1477, -13.4567, 28.5596, -56.0697 )

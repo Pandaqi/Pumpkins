@@ -308,6 +308,8 @@ shape = SubResource( 7 )
 "Deflectables",
 ]]
 position = Vector2( 960, 20 )
+collision_layer = 13
+collision_mask = 13
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Gate"]
 polygon = PoolVector2Array( -168.858, 25.9555, 7.73022, 31.0009, 164.137, 31.0009, 201.136, -22.8165, -202.494, -21.1347 )
@@ -317,6 +319,8 @@ polygon = PoolVector2Array( -168.858, 25.9555, 7.73022, 31.0009, 164.137, 31.000
 ]]
 position = Vector2( 944.864, 1057.67 )
 rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Gate2"]
 polygon = PoolVector2Array( -168.858, 25.9555, 7.73022, 31.0009, 164.137, 31.0009, 201.136, -22.8165, -202.494, -21.1347 )

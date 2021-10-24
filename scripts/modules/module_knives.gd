@@ -1,6 +1,6 @@
 extends Node2D
 
-const MAX_KNIVES : int = 8
+const MAX_KNIVES : int = 4
 const AUTO_THROW_INTERVAL : float = 5.0
 
 var knives_held = []
@@ -143,6 +143,8 @@ func grab_knife(knife):
 	knife.set_rotation(new_rotation)
 	
 	knife.modulate.a = 0.5
+	
+	body.modules.slasher.reset_idle_timer()
 	
 	if loading_done:
 		highlight_first_knife()
