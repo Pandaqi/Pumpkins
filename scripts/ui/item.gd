@@ -1,6 +1,7 @@
 extends Node2D
 
 var tile_scale : Vector2
+var glow_scale : Vector2
 
 var populator_node = null
 var grid_pos : Vector2
@@ -51,8 +52,9 @@ func set_sprite_to_default_buttons():
 	hover.hframes = 2
 	hover.vframes = 1
 
-func set_size(sc):
+func set_size(sc, glow_sc):
 	tile_scale = sc
+	glow_scale = glow_sc
 
 func set_type(frame : int, tp : String, sec : String):
 	type = tp
@@ -115,16 +117,8 @@ func update_selection_ui():
 		$Sprite.material = grayscale_shader
 		$Hover.material = grayscale_shader
 	
-	var small_size = false
-	if section == "powerups" or section == "settings":
-		small_size = true
-	
-	if small_size:
-		$Glow.set_scale(Vector2(1,1)*0.5)
-	
-	$Glow.set_visible(false)
-	if in_focus and val:
-		$Glow.set_visible(true)
+	$Glow.set_scale(Vector2(1,1)*glow_scale)
+	$Glow.set_visible(in_focus and val)
 	
 	if in_focus or val:
 		modulate.a = 1.0

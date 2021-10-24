@@ -4,10 +4,12 @@ var base_cfg = {
 	'game_mode': 'slicey_dicey',
 	'arena': 'graveyard',
 	'powerups': [],
+	'throwables': [],
 	
 	'max_players': 6,
 	'auto_pickup_powerups': false,
 	'num_starting_knives': 1,
+	'starting_throwable_type': 'knife',
 
 	'use_slidy_throwing': false,
 	'auto_throw_knives': false,
@@ -33,9 +35,10 @@ var modes = {
 }
 
 var arenas = {
+	"ghost_town": { "frame": 2, "def": true },
 	"spooky_forest": { "frame": 0 },
 	"graveyard": { "frame": 1 },
-	"ghost_town": { "frame": 2, "def": true }
+	"dark_jungle": { "frame": 3 }
 }
 
 var configurable_settings = {
@@ -50,8 +53,19 @@ var configurable_settings = {
 }
 
 var throwables = {
-	"knife": { "body": false, "needs_owner": true },
-	"dumpling": { "body": true, "needs_owner": false } 
+	"knife": { "body": false, "owner": "auto", "base_frame": 0, "frame": 0, "def": true, "prob": 5 },
+	"boomerang": { "body": false, "owner": "auto", "base_frame": 9, "frame": 1, "prob": 3, "def": true },
+	"curve": { "body": false, "owner": "auto", "base_frame": 18, "frame": 2, "prob": 2 },
+	"ghost_knife": { "body": false, "owner": "hostile", "base_frame": 27, "frame": 3 },
+	"dumpling": { "body": true, "owner": "friendly", "base_frame": 28, "prob": 4, "frame": 4, "def": true } 
+}
+
+var nav_data = {
+	"arenas": { "frames": Vector2(4,4), "single_choice_mode": true, "cols": 4, "large_tiles": true },
+	"modes": { "frames": Vector2(4,4), "single_choice_mode": true, "cols": 4, "large_tiles": true },
+	"powerups": { "frames": Vector2(8,8), "single_choice_mode": false, "cols": 7, "large_tiles": false },
+	"throwables": { "frames": Vector2(4,4), "single_choice_mode": false, "cols": 4, "large_tiles": false },
+	"settings": { "frames": Vector2(4,4), "single_choice_mode": false, "cols": 4, "large_tiles": false }
 }
 
 var player_colors = [
@@ -99,34 +113,28 @@ var predefined_shapes = {
 }
 
 var powerups = {
-	"grow": { "frame": 1, "category": "shape", "prob": 5, "def": true },
-	"shrink": { "frame": 2, "category": "shape", "prob": 5, "def": true },
-	"morph": { "frame": 3, "category": "shape", "def": true },
-	"ghost": { "frame": 4, "temporary": true, "category": "shape" },
-	"hungry": { "frame": 5, "temporary": true, "category": "shape" },
+	"grow": { "frame": 0, "category": "shape", "prob": 5, "def": true },
+	"shrink": { "frame": 1, "category": "shape", "prob": 5, "def": true },
+	"morph": { "frame": 2, "category": "shape", "def": true },
+	"ghost": { "frame": 3, "temporary": true, "category": "shape" },
+	"hungry": { "frame": 4, "temporary": true, "category": "shape" },
 	
-	"grow_range": { "frame": 6, "category": "slashing" },
-	"shrink_range": { "frame": 7, "category": "slashing" },
-	"extra_knife": { "frame": 8, "category": "slashing", "prob": 5, "def": true },
-	"lose_knife": { "frame": 9, "category": "slashing", "def": true },
-	"boomerang": { "frame": 10, "temporary": true, "category": "slashing" },
-	"curved": { "frame": 11, "temporary": true, "category": "slashing" },
-	"faster_throw": { "frame": 12, "category": "slashing" },
-	"slower_throw": { "frame": 13, "category": "slashing"},
+	"grow_range": { "frame": 5, "category": "slashing" },
+	"shrink_range": { "frame": 6, "category": "slashing" },
+	"repel_knives": { "frame": 7, "temporary": true, "category": "slashing", "def": true, "prob": 3 },
+	"lose_knife": { "frame": 8, "category": "slashing", "def": true },
+	"faster_throw": { "frame": 11, "category": "slashing" },
+	"slower_throw": { "frame": 12, "category": "slashing"},
 	
-	"faster_move": { "frame": 14, "category": "moving" },
-	"slower_move": { "frame": 15, "category": "moving" },
-	"reversed_controls": { "frame": 16, "temporary": true, "category": "moving" },
-	"ice": { "frame": 17, "temporary": true, "category": "moving" },
+	"faster_move": { "frame": 13, "category": "moving" },
+	"slower_move": { "frame": 14, "category": "moving" },
+	"reversed_controls": { "frame": 15, "temporary": true, "category": "moving" },
+	"ice": { "frame": 16, "temporary": true, "category": "moving" },
 	
-	"magnet": { "frame": 18, "temporary": true, "category": "collecting" },
-	"duplicator": { "frame": 19, "temporary": true, "category": "collecting" },
-	"clueless": { "frame": 20, "temporary": true, "category": "collecting" },
-	
-	"repel_knives": { "frame": 21, "temporary": true, "category": "slashing", "def": true, "prob": 3 },
-	"auto_unwrap": { "frame": 22, "temporary": true, "category": "collecting" },
-	
-	"dumpling": { "frame": 23, "category": "throwables", "def": true, "prob": 5 }
+	"magnet": { "frame": 17, "temporary": true, "category": "collecting" },
+	"duplicator": { "frame": 18, "temporary": true, "category": "collecting" },
+	"clueless": { "frame": 19, "temporary": true, "category": "collecting" },
+	"auto_unwrap": { "frame": 20, "temporary": true, "category": "collecting" },
 }
 
 func update_from_current_config():
@@ -163,6 +171,14 @@ func update_from_current_config():
 	
 	cfg.powerups = powerups_included
 	
+	# THROWABLES
+	var throwables_included = []
+	for key in throwables:
+		if GlobalConfig.read_game_config("throwables", key):
+			throwables_included.append(key)
+	
+	cfg.throwables = throwables_included
+	
 	# RULES
 	for key in configurable_settings:
 		var val = GlobalConfig.read_game_config("settings", key)
@@ -170,3 +186,15 @@ func update_from_current_config():
 
 func is_mobile():
 	return (OS.get_name() == "Android" or OS.get_name() == "iOS")
+
+func get_list_corresponding_with_key(key):
+	if key == "arenas":
+		return GlobalDict.arenas
+	elif key == "modes":
+		return GlobalDict.modes
+	elif key == "powerups":
+		return GlobalDict.powerups
+	elif key == "throwables":
+		return GlobalDict.throwables
+	elif key == "settings":
+		return GlobalDict.configurable_settings

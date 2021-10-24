@@ -11,6 +11,7 @@ var item_list = []
 var item_grid = []
 
 var base_item_scale : Vector2 = Vector2(0.5,0.5)
+var glow_scale : Vector2 = Vector2(1,1)
 var margin_between_items = 32.0
 var item_size = Vector2(1,1) * (128 + margin_between_items)
 
@@ -25,14 +26,13 @@ var enabled : bool = false
 var cols
 var rows
 var single_choice_mode : bool = false
+var large_tiles : bool = false
 
 var cur_flick_dir = Vector2.ZERO
 var last_flick_time = 0
 
 var use_joystick_to_switch_screens : bool
 var add_reset_and_random_buttons : bool
-
-var large_tiles : bool = false
 
 func enable():
 	enabled = true
@@ -42,47 +42,34 @@ func disable():
 
 func _ready():
 	use_joystick_to_switch_screens = GlobalDict.cfg.navigate_settings_with_joystick
-	
 	add_reset_and_random_buttons = GlobalDict.cfg.add_default_settings_buttons
 
+	var data = GlobalDict.nav_data[type]
+	
+	frames = data.frames
+	single_choice_mode = data.single_choice_mode
+	cols = data.cols
+	large_tiles = data.large_tiles
+	
+	if large_tiles: item_size *= 2
+	else: glow_scale *= 0.5
+	
 	texture = load("res://assets/ui/settings/" + type + ".png")
 	hover_texture = load("res://assets/ui/settings/" + type + "_hover.png")
+	item_list = GlobalDict.get_list_corresponding_with_key(type)
 	
-	item_list = GlobalConfig.get_list_corresponding_with_key(type)
 	var header_text = type.capitalize()
-	
-	if type == "arenas":
-		frames = Vector2(4,4)
-		single_choice_mode = true
-		cols = 4
-		large_tiles = true
-		
-	elif type == "modes":
-		frames = Vector2(4,4)
-		cols = 4
-		single_choice_mode = true
-		large_tiles = true
-		
-	elif type == "powerups":
-		frames = Vector2(8,8)
-		cols = 7
-		
-	elif type == "settings":
-		frames = Vector2(4,4)
-		cols = 4
-	
-	if large_tiles:
-		item_size *= 2
-	
 	$Container.add_child(item_header_scene.instance())
 	$Container/Header/Label.set_text(header_text)
 	
 	create_item_list_visuals()
 
 func create_item_list_visuals():
-	var total_num_items = item_list.size()
+	var keys = item_list.keys()
+	var total_num_items = keys.size()
+	if should_add_default_buttons(): total_num_items += 2
 	
-	rows = ceil((total_num_items + 0.0) / cols)
+	rows = ceil(total_num_items / float(cols))
 
 	item_grid.resize(cols)
 	for x in range(cols):
@@ -91,12 +78,10 @@ func create_item_list_visuals():
 		
 		for y in range(rows):
 			var index = x + y*cols
-			var keys = item_list.keys()
 			
-			# no item left?
 			if index >= keys.size(): continue
-			var item_type = keys[index]
-			
+
+			var key = keys[index]
 			var s = item_list_scene.instance()
 			
 			var sprite = s.get_node("Sprite")
@@ -110,9 +95,13 @@ func create_item_list_visuals():
 			hover.vframes = frames.y
 			
 			# Arguments = frame, specific item type, our type ( = section in config)
-			s.set_size(base_item_scale)
-			s.set_type(index, item_type, type)
-			s.single_choice_mode = single_choice_mode # IMPORTANT: must happen before reading values from config!
+			var item_type = key
+			var frame_index = item_list[key].frame
+			s.set_type(frame_index, item_type, type)
+			s.set_size(base_item_scale, glow_scale)
+			
+			 # IMPORTANT: must happen before reading values from config!
+			s.single_choice_mode = single_choice_mode
 			s.populator_node = self
 			s.grid_pos = Vector2(x,y)
 			s.read_value_from_config()
@@ -134,9 +123,13 @@ func create_item_list_visuals():
 	if large_tiles: header_offset *= 2
 	$Container/Header.set_position(Vector2(offset.x, header_offset))
 
+func should_add_default_buttons():
+	if single_choice_mode: return false
+	if not add_reset_and_random_buttons: return false
+	return true
+
 func place_default_buttons():
-	if single_choice_mode: return
-	if not add_reset_and_random_buttons: return
+	if not should_add_default_buttons(): return
 	
 	var reset_placed = false
 	var random_placed = false
@@ -155,7 +148,7 @@ func place_default_buttons():
 				s.make_random_button()
 				random_placed = true
 			
-			s.set_size(base_item_scale)
+			s.set_size(base_item_scale, glow_scale)
 			s.set_position(Vector2(x,y)*item_size)
 			$Container.add_child(s)
 			item_grid[x][y] = s

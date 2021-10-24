@@ -14,6 +14,7 @@ func is_poki_build():
 
 func start_game():
 	GlobalDict.update_from_current_config()
+# warning-ignore:return_value_discarded
 	get_tree().change_scene_to(scenes.Main)
 	
 	is_restart = false
@@ -23,10 +24,13 @@ func start_game():
 
 func restart():
 	is_restart = true
+# warning-ignore:return_value_discarded
 	get_tree().reload_current_scene()
 
 func load_settings():
+# warning-ignore:return_value_discarded
 	get_tree().change_scene_to(scenes.Settings)
 
 func load_menu():
+# warning-ignore:return_value_discarded
 	get_tree().change_scene_to(scenes.GameConfig)

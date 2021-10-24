@@ -90,7 +90,7 @@ func read_situation():
 	collectibles_close = mode.get_collectibles()
 	
 	# information about closest player
-	closest = players.get_closest_to(pos, body)
+	closest = players.get_closest_to(pos, [body])
 	vec_to_closest = ((closest.get_global_position()) - pos).normalized()
 	dist_to_closest = ((closest.get_global_position()) - pos).length()
 	
@@ -122,11 +122,11 @@ func assemble_movement_vector():
 		'prevent_attack': false
 	}
 	
-	check_immediate_danger(params)
-	stock_resources(params)
-	attack(params)
+	check_immediate_danger()
+	stock_resources()
+	attack()
 
-func check_immediate_danger(params):
+func check_immediate_danger():
 	var our_pos = body.get_global_position()
 	
 	# check knives around us
@@ -161,7 +161,7 @@ func check_immediate_danger(params):
 	# (if someone is winning, annoy them; if we're far behind, take more risks)
 	# TO DO
 
-func stock_resources(params):
+func stock_resources():
 	var our_pos = body.get_global_position()
 	
 	# check knives around us
@@ -236,7 +236,7 @@ func stock_resources(params):
 	# (purposefully avoid/grab/slash powerups)
 	# TO DO
 
-func attack(params):
+func attack():
 	# without knives, we cannot attack anyway :p
 	if num_knives <= 0: return
 	if params.prevent_attack: return
@@ -329,21 +329,6 @@ func shoot_raycast(start, end, exclude = [], col_layer = 1 + 2 + 4 + 8):
 	update()
 	
 	return space_state.intersect_ray(start, end, exclude, col_layer)
-
-func shoot_triple_raycast(start, vec, exclude, col_layer = 1):
-	var offset = 0.25*PI
-	var ortho_vec = vec.rotated(0.5*PI)
-	
-	var rc1 = shoot_raycast(start, start + vec, exclude, col_layer)
-	if rc1: return rc1
-	
-	var rc2 = shoot_raycast(start, start + 0.5*ortho_vec + vec, exclude, col_layer)
-	if rc2: return rc2
-	
-	var rc3 = shoot_raycast(start, start - 0.5*ortho_vec + vec, exclude, col_layer)
-	if rc3: return rc3
-	
-	return null
 
 func test_move(start, vec):
 	var shaper = body.modules.shaper

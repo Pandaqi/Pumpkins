@@ -18,7 +18,7 @@ var last_deflection_time : float
 #
 # Polling the results from the (fake) body
 #
-func _physics_process(dt):
+func _physics_process(_dt):
 	poll_special_hits()
 	poll_front_raycast()
 	poll_back_raycast()
@@ -34,20 +34,32 @@ func poll_front_raycast():
 	# a boomerang always returns after any hit
 	body.modules.mover.boomerang_state = "returning"
 
+	var handled = false
 	if hit_body.is_in_group("Sliceables"):
-		slice_through_body(hit_body)
-		body.modules.status.record_succesful_action(1)
-	elif hit_body.is_in_group("Stuckables"):
-		get_stuck(result)
+		handled = slice_through_body(hit_body)
+	
+	if body.modules.status.type == "ghost_knife": 
+		if handled: body.queue_free()
+		return
+	
+	if handled: return
+	
+	if hit_body.is_in_group("Stuckables"):
+		handled = get_stuck(result)
 		
-		var custom_behavior = (hit_body.script and hit_body.has_method("on_knife_entered"))
-		if custom_behavior:
-			hit_body.on_knife_entered(body)
-		else:
-			if GlobalDict.cfg.stuck_reset:
-				body.modules.owner.remove()
-	else:
-		deflect(result)
+		# TO DO: Clean this shit up
+		if handled:
+			var custom_behavior = (hit_body.script and hit_body.has_method("on_knife_entered"))
+			if custom_behavior:
+				hit_body.on_knife_entered(body)
+			else:
+				if GlobalDict.cfg.stuck_reset:
+					body.modules.owner.remove()
+	
+	if handled: return
+	
+	deflect(result)
+	handled = true
 
 func poll_back_raycast():
 	var result = body.modules.fakebody.back_raycast
@@ -63,6 +75,8 @@ func poll_special_hits():
 # Calculating the interactions we have
 #
 func get_stuck(result):
+	if body.modules.status.type == "boomerang": return false
+	
 	body.modules.mover.set_velocity(Vector2.ZERO)
 	body.set_position(result.position)
 	body.set_rotation(-result.normal.angle())
@@ -71,19 +85,29 @@ func get_stuck(result):
 	
 	GlobalAudio.play_dynamic_sound(body, "thud")
 	particles.create_explosion_particles(body.global_position)
+	
+	return true
 
 func check_repellant_powerup(obj):
 	if not obj.is_in_group("Players"): return false
 	if not obj.modules.powerups.repel_knives: return false
-	
-	var normal = (obj.global_position - body.global_position).normalized()
-	var rand_normal = normal.rotated((randf() - 0.5)*0.25*PI)
-	deflect({ 'normal': rand_normal })
+	return true
+
+func check_dumpling(obj):
+	if not obj.is_in_group("Players"): return false
+	if not obj.modules.knives.has_type("dumpling"): return false
+	if not obj.modules.knives.has_dumpling_on_income_vec(body): return false
 	return true
 
 func slice_through_body(obj):
+	# projectiles with a real body can NEVER slice something
+	if body.modules.fakebody.has_real_body: return false
+	
 	var res = check_repellant_powerup(obj)
-	if res: return
+	if res: return false
+	
+	res = check_dumpling(obj)
+	if res: return false
 	
 	var normal = body.modules.mover.velocity.normalized()
 	var center = body.global_position
@@ -104,10 +128,13 @@ func slice_through_body(obj):
 	for sliced_body in result:
 		body.modules.fakebody.add_collision_exception(sliced_body)
 	
-	var penalty = mode.get_player_slicing_penalty()
-	if penalty != 0: my_owner.modules.collector.collect(penalty)
+	body.modules.status.record_succesful_action(1)
 	
-	my_owner.modules.statistics.record("players_sliced", 1)
+	if my_owner:
+		var penalty = mode.get_player_slicing_penalty()
+		if penalty != 0: my_owner.modules.collector.collect(penalty)
+		
+		my_owner.modules.statistics.record("players_sliced", 1)
 
 	return true
 
@@ -132,7 +159,9 @@ func deflect(res):
 	last_deflection_time = OS.get_ticks_msec()
 
 # Ghosts slow down moving knifes
-func apply_ghost_effect(ghost):
+func apply_ghost_effect(_ghost):
+	# TO DO: use the ghost argument for something?? (remove underscore then)
+	
 	var vel = body.modules.mover.velocity
 	vel *= GHOST_SLOWDOWN
 	vel = vel.rotated((randf()-0.5)*GHOST_RAND_ROTATION)

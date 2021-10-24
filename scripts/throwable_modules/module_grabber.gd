@@ -34,5 +34,7 @@ func complete_grab(other_body):
 	body.modules.owner.set_owner(other_body)
 	body.modules.status.reset_to_held_state()
 	
+	body.add_collision_exception_with(other_body)
+	
 	other_body.modules.knives.grab_knife(body)
 	return true

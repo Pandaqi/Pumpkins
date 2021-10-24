@@ -46,6 +46,7 @@ func _on_Input_move_vec(vec : Vector2):
 		move_audio_player = GlobalAudio.play_dynamic_sound(body, "move", -9)
 
 func continue_on_last_velocity():
+# warning-ignore:return_value_discarded
 	body.move_and_slide(last_velocity)
 
 func move_regular(vec):
@@ -59,6 +60,7 @@ func move_regular(vec):
 	var final_speed = speed_multiplier*MOVE_SPEED*speed_penalty_for_size
 	var final_vec = forward_vec*final_speed
 	var old_pos = body.get_global_position()
+# warning-ignore:return_value_discarded
 	body.move_and_slide(final_vec)
 	
 	last_velocity = final_vec

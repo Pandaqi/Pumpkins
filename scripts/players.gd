@@ -73,7 +73,7 @@ func get_players_in_team(team_num):
 		arr.append(p)
 	return arr
 
-func get_closest_to(pos, ignore):
+func get_closest_to(pos, ignore = []):
 	var players = get_tree().get_nodes_in_group("Players")
 
 	var best_match = null
@@ -81,7 +81,7 @@ func get_closest_to(pos, ignore):
 	for p in players:
 		var dist = (p.get_global_position() - pos).length()
 		if dist > best_dist: continue
-		if p == ignore: continue
+		if p in ignore: continue
 		
 		best_dist = dist
 		best_match = p

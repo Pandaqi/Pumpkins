@@ -5,9 +5,25 @@ var being_held : bool = false
 var is_stuck : bool = false
 
 var type : String = "knife"
+var base_frame : int = 0
 
 onready var body = get_parent()
 onready var sprite = get_node("../Sprite")
+
+func set_type(tp):
+	type = tp
+	
+	var data = GlobalDict.throwables[type]
+
+	base_frame = data.base_frame
+	sprite.set_frame(base_frame)
+	
+	body.modules.owner.set_mode(data.owner)
+	body.modules.mover.set_body(data.body)
+	body.modules.fakebody.set_body(data.body)
+	
+	if type == "boomerang":
+		body.modules.shadowlocation.type = "circle"
 
 func record_succesful_actions():
 	if num_succesful_actions <= 0: return

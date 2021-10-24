@@ -11,6 +11,7 @@ var temporary = []
 onready var body = get_parent()
 onready var map = get_node("/root/Main/Map")
 onready var particles = get_node("/root/Main/Particles")
+onready var throwables = get_node("/root/Main/Throwables")
 
 var powerup_fb_scene = preload("res://scenes/powerup_feedback.tscn")
 var powerup_icon_scene = preload("res://scenes/powerup_icon.tscn")
@@ -21,7 +22,7 @@ var repel_knives : bool = false
 var auto_unwrap : bool = false
 
 func _ready():
-	for i in range(MAX_POWERUPS):
+	for _i in range(MAX_POWERUPS):
 		var ic = powerup_icon_scene.instance()
 		powerup_icons.append(ic)
 		$Container.add_child(ic)
@@ -29,21 +30,31 @@ func _ready():
 func disable():
 	disabled = true
 
-func grab(obj, type):
+func at_max_capacity():
+	return temporary.size() >= MAX_POWERUPS
+
+func grab(obj, type, is_throwable):
 	if disabled: return
-	if temporary.size() >= MAX_POWERUPS: 
-		print("AT MAXIMUM POWERUPS")
+	
+	var already_full = at_max_capacity()
+	if is_throwable: already_full = body.modules.knives.at_max_capacity()
+	if already_full: 
+		print("AT MAXIMUM")
 		return
 	
 	GlobalAudio.play_dynamic_sound(body, "collect")
 	particles.create_explosion_particles(obj.global_position)
 	
-	show_feedback(type)
-	activate_effect(type)
+	show_feedback(type, false, is_throwable)
 	
-	if GlobalDict.powerups[type].has("temporary"):
-		remove_powerup_if_already_exists(type)
-		temporary.append({ 'type': type, 'time': OS.get_ticks_msec() })
+	if is_throwable:
+		activate_throwable(type)
+	
+	else:
+		activate_effect(type)
+		if GlobalDict.powerups[type].has("temporary"):
+			remove_powerup_if_already_exists(type)
+			temporary.append({ 'type': type, 'time': OS.get_ticks_msec() })
 
 func remove_powerup_if_already_exists(type : String):
 	for obj in temporary:
@@ -51,14 +62,18 @@ func remove_powerup_if_already_exists(type : String):
 		temporary.erase(obj)
 		return
 
-func show_feedback(type, removal = false):
+func activate_throwable(type):
+	throwables.call_deferred("create_new_for", body, type)
+
+func show_feedback(type, removal = false, is_throwable = false):
 	var fb = powerup_fb_scene.instance()
+	if is_throwable: fb.make_throwable()
+	
 	fb.set_type(type)
 	fb.set_player(body)
 	map.overlay.add_child(fb)
 	
-	if removal:
-		fb.make_removal()
+	if removal: fb.make_removal()
 
 func _physics_process(_dt):
 	show_temporary_effects_ui()
@@ -129,18 +144,9 @@ func activate_effect(type):
 		
 		"shrink_range":
 			body.modules.slasher.change_range_multiplier(0.5)
-		
-		"extra_knife":
-			body.modules.knives.create_new_knife()
-		
+
 		"lose_knife":
-			body.modules.knives.lose_random_knife()
-		
-		"boomerang":
-			body.modules.knives.make_boomerang()
-		
-		"curved":
-			body.modules.knives.use_curve = true
+			body.modules.knives.lose_random()
 		
 		"faster_throw":
 			body.modules.slasher.change_throw_multiplier(1.5)
@@ -182,12 +188,6 @@ func deactivate_effect(type):
 		
 		"hungry":
 			body.modules.collector.is_hungry = false
-		
-		"boomerang":
-			body.modules.knives.undo_boomerang()
-		
-		"curved":
-			body.modules.knives.use_curve = false
 		
 		"reversed_controls":
 			body.modules.mover.reversed = false

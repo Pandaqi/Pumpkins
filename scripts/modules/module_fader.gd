@@ -5,7 +5,7 @@ onready var timer = $Timer
 onready var body = get_parent()
 
 onready var mode = get_node("/root/Main/ModeManager")
-var self_destruct : bool = false
+var has_self_destructed : bool = false
 
 func _ready():
 	if not mode.does_rubble_fade():
@@ -18,8 +18,8 @@ func _ready():
 # NOTE: if we don't ensure a minimum value greater than 0,
 # there will be some time where the thing is _practically invisible_ but still influences game state
 # which isn't ideal
-func _physics_process(dt):
-	if self_destruct: return
+func _physics_process(_dt):
+	if has_self_destructed: return
 	body.modulate.a = clamp(timer.time_left / FADE_DURATION, 0.1, 1.0)
 
 func _on_Timer_timeout():
@@ -27,5 +27,5 @@ func _on_Timer_timeout():
 
 func self_destruct():
 	body.modules.fader = null
-	self_destruct = true
+	has_self_destructed = true
 	self.queue_free()

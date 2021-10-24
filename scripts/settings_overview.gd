@@ -61,7 +61,7 @@ func read_settings():
 		settings_enabled.append(key)
 	
 	var num_settings = min(settings_enabled.size(), MAX_SETTINGS_TO_SHOW)
-	for i in range(settings_enabled.size()):
+	for i in range(num_settings):
 		var s = setting_sprite.instance()
 		var frame = GlobalDict.configurable_settings[ settings_enabled[i] ].frame
 		s.set_frame(frame)

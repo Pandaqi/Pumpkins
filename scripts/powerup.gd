@@ -3,6 +3,7 @@ extends StaticBody2D
 const POWERUP_SCALE : float = 0.66
 
 var type : String
+var is_throwable : bool = false
 var modules = {}
 
 onready var map = get_node("/root/Main/Map")
@@ -14,8 +15,17 @@ onready var revealed_powerup = $RevealedPowerup
 
 onready var col_shape = $CollisionShape2D
 
+var throwable_tex = preload("res://assets/throwable_icons.png")
+
 func _ready():
 	revealed_powerup.unreveal()
+
+func set_throwable(val):
+	is_throwable = val
+	revealed_powerup.is_throwable = val
+	
+	if is_throwable:
+		revealed_powerup.get_node("Sprite").texture = throwable_tex
 
 func set_shape(shape_name):
 	var data = GlobalDict.predefined_shapes[shape_name]
@@ -42,7 +52,10 @@ func auto_slice():
 
 func reveal_powerup(attacker):
 	if attacker:
-		attacker.modules.statistics.record("powerups_opened", 1)
+		if is_throwable:
+			attacker.modules.statistics.record("throwables_opened", 1)
+		else:
+			attacker.modules.statistics.record("powerups_opened", 1)
 	
 	var original_pos = revealed_powerup.get_global_position()
 	

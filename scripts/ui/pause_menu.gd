@@ -61,7 +61,7 @@ func show():
 	
 	get_tree().paused = true
 
-func play_appearance_tween(p, delay : int = 0.0):
+func play_appearance_tween(p, delay : float = 0.0):
 	var duration = 0.5
 	var base_scale = 0.5
 	
@@ -78,7 +78,7 @@ func play_appearance_tween(p, delay : int = 0.0):
 	
 	tween.start()
 
-func play_disappearance_tween(p, delay : int = 0.0):
+func play_disappearance_tween(p, delay : float = 0.0):
 	var duration = 0.5
 	var base_scale = 0.5
 	

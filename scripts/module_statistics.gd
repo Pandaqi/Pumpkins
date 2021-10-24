@@ -14,6 +14,8 @@ var awards = {
 	"distance_traveled": 0, # congregator; don't record directly
 	"powerups_opened": 0,
 	"powerups_grabbed": 0,
+	"throwables_opened": 0,
+	"throwables_grabbed": 0,
 	"accumulated_size": 0,
 	"average_size": 0, # congregator; don't record directly
 	

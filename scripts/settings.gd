@@ -1,6 +1,6 @@
 extends Node2D
 
-var screens = ["modes", "arenas", "powerups", "settings"]
+var screens = ["modes", "arenas", "powerups", "throwables", "settings"]
 var screen_nodes = []
 var cur_screen = -1
 

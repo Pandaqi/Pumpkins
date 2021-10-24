@@ -6,11 +6,14 @@ const POWERUP_SIZE : float = 64.0 # 0.5*128
 const MIN_DIST_TO_PLAYER : float = 100.0
 const MIN_DIST_TO_OTHER_POWERUP : float = 200.0
 
+const POWERUP_IS_THROWABLE_PROB : float = 0.4
+
 onready var timer = $Timer
 onready var tween = $Tween
 onready var map = get_node("/root/Main/Map")
 onready var shape_manager = get_node("/root/Main/ShapeManager")
 onready var spawner = get_node("/root/Main/Spawner")
+onready var throwables = get_node("/root/Main/Throwables")
 
 var powerup_scene = preload("res://scenes/powerup.tscn")
 
@@ -72,7 +75,12 @@ func place_powerup():
 	p.set_rotation(randf() * 2 * PI)
 	map.knives.add_child(p)
 	
+	var is_throwable = (randf() <= POWERUP_IS_THROWABLE_PROB)
+	p.set_throwable(is_throwable)
+	
 	var rand_type = get_random_type()
+	if is_throwable: rand_type = throwables.get_random_type()
+	
 	p.set_type(rand_type)
 	
 	var rand_shape = shape_manager.get_random_shape()

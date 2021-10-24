@@ -5,7 +5,6 @@ const AUTO_THROW_INTERVAL : float = 5.0
 
 var knives_held = []
 
-var knife_scene = preload("res://scenes/knife_bodyless.tscn")
 var pickup_disabled : bool = false
 
 var num_snap_angles : int = 8
@@ -20,6 +19,7 @@ var use_curve : bool = false
 
 onready var body = get_parent()
 onready var map = get_node("/root/Main/Map")
+onready var throwables = get_node("/root/Main/Throwables")
 onready var guide = $Guide
 onready var timer = $Timer
 
@@ -47,6 +47,23 @@ func _on_Timer_timeout():
 func has_no_knives():
 	return knives_held.size() <= 0
 
+func has_type(type : String):
+	for knife in knives_held:
+		if knife.modules.status.type == type: return true
+	
+	return false
+
+func has_dumpling_on_income_vec(knife):
+	var income_vec = (knife.get_global_position() - body.get_global_position()).normalized()
+	var income_vec_rotated_correctly = income_vec.rotated(-body.rotation)
+	var ang = income_vec_rotated_correctly.angle()
+	var ang_index = snap_ang_to_index(ang)
+	
+	if not (ang_index in snap_angles_taken): return false
+	if knives_by_snap_angle[ang_index].modules.status.type != "dumpling": return false
+	
+	return true
+
 func _on_Slasher_slash_range_changed(s):
 	$AutoThrow.set_scale(s)
 
@@ -56,36 +73,19 @@ func scale_autothrow_indicator():
 	var ratio = 1.0 - (timer.time_left / cur_autothrow_time)
 	$AutoThrow/Sprite.set_scale(Vector2(1,1)*ratio)
 
-func _physics_process(dt):
+func _physics_process(_dt):
 	scale_autothrow_indicator()
 
 func get_random_throw_interval():
 	return AUTO_THROW_INTERVAL * (0.8 + randf()*0.4)
 
 func create_starting_knives():
+	var starting_type = GlobalDict.cfg.starting_throwable_type
 	for _i in range(GlobalDict.cfg.num_starting_knives):
-		create_new_knife()
+		throwables.create_new_for(body, starting_type)
 	
 	loading_done = true
 	randomly_position_knives()
-
-func make_boomerang():
-	for knife in knives_held:
-		knife.get_node("ShadowLocation").type = "circle"
-	
-	are_boomerang = true
-
-func undo_boomerang():
-	for knife in knives_held:
-		knife.get_node("ShadowLocation").type = "rect"
-	
-	are_boomerang = false
-
-func create_new_knife():
-	var knife = knife_scene.instance()
-	#knife.get_node("Sprite").set_frame(body.modules.status.player_num)
-	add_child(knife)
-	knife.modules.grabber.force_grab(body)
 
 func move_knife(knife, new_ang):
 	unsnap_knife_angle(knife.rotation)
@@ -104,7 +104,7 @@ func move_knife(knife, new_ang):
 	knife.set_position(new_position)
 	knife.set_rotation(new_ang)
 
-func lose_random_knife():
+func lose_random():
 	if knives_held.size() <= 0: return
 	
 	var rand_knife = knives_held[randi() % knives_held.size()]
@@ -115,9 +115,11 @@ func lose_random_knife():
 func count():
 	return knives_held.size()
 
+func at_max_capacity():
+	return (knives_held.size() >= MAX_KNIVES)
+
 func grab_knife(knife):
-	var at_max_capacity = (knives_held.size() >= MAX_KNIVES)
-	if at_max_capacity: return
+	if at_max_capacity(): return
 	if pickup_disabled: return
 	
 	knives_held.append(knife)
@@ -142,7 +144,8 @@ func grab_knife(knife):
 	
 	knife.modulate.a = 0.5
 	
-	highlight_first_knife()
+	if loading_done:
+		highlight_first_knife()
 
 func throw_first_knife():
 	if knives_held.size() <= 0: return null # TO DO: Feedback "KNIFE ICON, QUESTION MARK"
@@ -216,7 +219,7 @@ func highlight_first_knife():
 #
 func unsnap_knife_angle(rot):
 	var epsilon = 0.03
-	var ang_index : int = floor((rot + epsilon) / (2*PI) * num_snap_angles)
+	var ang_index : int = int(floor((rot + epsilon) / (2*PI) * num_snap_angles))
 	knives_by_snap_angle.erase(ang_index)
 	snap_angles_taken.erase(ang_index)
 
@@ -228,13 +231,15 @@ func snap_ang(ang):
 	var ang_index = snap_ang_to_index(ang)
 	return ang_index / float(num_snap_angles) * (2*PI)
 
-func snap_vec_to_knife_angles(knife, vec):
+func snap_vec_to_knife_angles(knife, vec, override = true):
 	var ang_index : int = snap_ang_to_index(vec.angle())
 	while (ang_index in snap_angles_taken):
 		ang_index = (ang_index + 1) % int(num_snap_angles)
 	
-	snap_angles_taken.append(ang_index)
-	knives_by_snap_angle[ang_index] = knife
+	if override:
+		snap_angles_taken.append(ang_index)
+		knives_by_snap_angle[ang_index] = knife
+	
 	var ang = ang_index / float(num_snap_angles) * (2*PI)
 	
 	return Vector2(cos(ang), sin(ang))
@@ -251,6 +256,8 @@ func randomly_position_knives():
 		knife.set_rotation(vec.angle())
 		
 		ang += (2*PI / float(num_knives))
+	
+	highlight_first_knife()
 
 # When we've been sliced (or we've grown), the knives need to reposition
 # Just keep their angle, but match the new radius
@@ -282,6 +289,8 @@ func get_radius():
 	return 1.25 * body.modules.shaper.approximate_radius()
 
 func is_mine(other_body):
+	if other_body.modules.owner.is_hostile(): return false
+	if other_body.modules.owner.is_friendly(): return true
 	if other_body.modules.owner.has_none(): return true
 	
 	var cur_owner = other_body.modules.owner.get_owner()
@@ -323,7 +332,9 @@ func knife_overlaps_problematic_body(knife):
 	var result = space_state.intersect_shape(query_params)
 	if result:
 		for obj in result:
-			if obj.collider.is_in_group("Players"): continue
-			if not obj.collider.is_in_group("Sliceables"): return true
+			var hit_body = obj.collider
+			if hit_body == knife: continue
+			if hit_body.is_in_group("Players"): continue
+			if not hit_body.is_in_group("Sliceables"): return true
 	
 	return false

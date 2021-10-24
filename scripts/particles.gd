@@ -26,10 +26,3 @@ func create_explosion_particles(pos):
 	p.set_position(pos)
 	
 	map.overlay.add_child(p)
-
-func show_team_reminder(body, num):
-	return
-	
-	var t = team_reminder.instance()
-	t.get_node("Sprite").set_frame(num)
-	body.add_child(t)

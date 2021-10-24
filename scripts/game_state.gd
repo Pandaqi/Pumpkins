@@ -11,7 +11,9 @@ var awards = {
 	"knives_used": "Knives Used",
 	"succesful_attacks": "Succesful Attacks (%)",
 	"powerups_opened": "Powerups Opened",
+	"throwables_opened": "Throwables Opened",
 	"powerups_grabbed": "Powerups Grabbed",
+	"throwables_grabbed": "Throwables Grabbed",
 	"distance_traveled": "Distance Traveled (km)",
 	"average_size": "Average Size (m)",
 	"quick_stabs": "Quick Stabs",
@@ -42,15 +44,11 @@ func check_win_by_survival():
 	var players = get_tree().get_nodes_in_group("Players")
 	
 	var players_alive = 0
-	var last_player_alive = null
 	var teams_left = []
 	
 	for p in players:
 		if p.modules.status.is_dead: continue
-		
 		players_alive += 1
-		last_player_alive = p
-		
 		teams_left.append(p.modules.status.team_num)
 	
 	var only_one_team_remains = true

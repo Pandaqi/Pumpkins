@@ -44,7 +44,7 @@ func enable_magnet():
 func disable_magnet():
 	magnet_enabled = false
 
-func check_magnet(dt):
+func check_magnet(_dt):
 	if not magnet_enabled: return
 	
 	for other_body in magnet_area.get_overlapping_bodies():

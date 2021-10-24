@@ -61,21 +61,11 @@ func read_game_config(section, name):
 		 default = ""
 		
 	else:
-		var list = get_list_corresponding_with_key(section)
+		var list = GlobalDict.get_list_corresponding_with_key(section)
 		if list[name].has('def'):
 			default = list[name].def
 	
 	return config.get_value(section, name, default)
-
-func get_list_corresponding_with_key(key):
-	if key == "arenas":
-		return GlobalDict.arenas
-	elif key == "modes":
-		return GlobalDict.modes
-	elif key == "powerups":
-		return GlobalDict.powerups
-	elif key == "settings":
-		return GlobalDict.configurable_settings
 
 func check_config():
 	if not config: load_config()

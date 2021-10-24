@@ -219,7 +219,7 @@ func shoot_raycast(start, end):
 func execute_thrown_slash():
 	body.modules.statistics.record("long_throws", 1)
 	body.modules.statistics.record("knives_used", 1)
-	
+
 	body.modules.knives.throw_first_knife()
 	emit_signal("thrown_slash")
 

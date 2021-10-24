@@ -2,18 +2,23 @@ extends Node2D
 
 const LINEAR_DAMPING : float = 0.995
 const MIN_SIGNIFICANT_VELOCITY : float = 20.0
+const MIN_BOOMERANG_VELOCITY : float = 500.0
+const GHOST_KNIFE_VELOCITY : float = 200.0
 
 const CURVE_SPEED : float = 0.016
 const CURVE_DAMPING : float = 0.98
 
-const BOOMERANG_PRECISION : float = 3.0 # higher is better
+const BOOMERANG_PRECISION : float = 4.2 # higher is better
+const GHOST_KNIFE_PRECISION : float = 5.0
 
 onready var body = get_parent()
 onready var sprite = get_node("../Sprite")
+onready var players = get_node("/root/Main/Players")
 
 var velocity : Vector2 = Vector2.ZERO
 var curve_force : Vector3 = Vector3.ZERO # NOTE: fake 3D vector makes calculating forces easier for 2D
 
+var has_real_body : bool = false
 var use_curve : bool = false
 var boomerang_state : String = "flying"
 
@@ -21,6 +26,9 @@ onready var trail_particles = $TrailParticles
 
 func _ready():
 	trail_particles.process_material = trail_particles.process_material.duplicate(true)
+
+func set_body(val : bool):
+	has_real_body = val
 
 func set_velocity(vel):
 	velocity = vel
@@ -36,6 +44,7 @@ func _physics_process(dt):
 	
 	apply_curve(dt)
 	apply_boomerang(dt)
+	apply_ghost_knife(dt)
 	move(dt)
 
 func stop():
@@ -49,6 +58,7 @@ func came_to_standstill():
 func move(dt):
 	if body.modules.status.is_stuck: return
 	if body.modules.status.being_held: return
+	
 	if velocity.length() <= MIN_SIGNIFICANT_VELOCITY:
 		came_to_standstill()
 		return
@@ -56,23 +66,45 @@ func move(dt):
 	trail_particles.set_emitting(true)
 	trail_particles.process_material.direction = Vector3(velocity.x, velocity.y, 0)
 	
-	body.set_position(body.get_position() + velocity * dt)
+	if has_real_body:
+		body.move_and_slide(velocity)
+	else:
+		body.set_position(body.get_position() + velocity * dt)
+	
 	body.set_rotation(velocity.angle())
 	
 	velocity *= LINEAR_DAMPING
 
+func apply_ghost_knife(dt):
+	if not body.modules.status.type == "ghost_knife": return
+	
+	var speed = GHOST_KNIFE_VELOCITY
+	var closest = players.get_closest_to(body.global_position)
+	var cur_vec = velocity.normalized()
+	if cur_vec.length() <= 0.03: cur_vec = Vector2.RIGHT
+	
+	var vec = (closest.global_position - body.global_position).normalized()
+
+	var lerped_vec = cur_vec.slerp(vec, GHOST_KNIFE_PRECISION*dt)
+	velocity = lerped_vec*speed
+
 func apply_boomerang(dt):
 	if not body.modules.status.type == "boomerang": return
+	if body.modules.status.being_held: return
 	
 	sprite.rotate(10*PI*dt)
 	if boomerang_state != "returning": return
 	
 	var cur_vel_norm = velocity.normalized()
 	var target_vel_norm = body.modules.owner.get_vec_to().normalized()
-	velocity = cur_vel_norm.slerp(target_vel_norm, BOOMERANG_PRECISION*dt) * velocity.length()
+	var cur_speed = velocity.length()
+	if cur_speed < MIN_BOOMERANG_VELOCITY: cur_speed = MIN_BOOMERANG_VELOCITY
+	
+	velocity = cur_vel_norm.slerp(target_vel_norm, BOOMERANG_PRECISION*dt) * cur_speed
 
-func apply_curve(dt):
+func apply_curve(_dt):
 	if not body.modules.status.type == "curve": return
+	if body.modules.status.being_held: return
 	if curve_force.length() <= 0.05: return
 	
 	var res = calculate_next_curve_step(velocity, curve_force)
@@ -105,6 +137,6 @@ func _on_Owner_owner_changed(num):
 	trail_particles.modulate = col
 
 func make_curving(strength):
-	var final_strength = strength*0.4
+	var final_strength = strength*0.15
 	var rand_dir = 1 if randf() <= 0.5 else -1
 	curve_force = Vector3(0,0,final_strength)*rand_dir

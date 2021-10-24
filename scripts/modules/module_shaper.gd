@@ -85,10 +85,10 @@ func approximate_radius():
 	return sqrt(area / PI)
 
 # Helper functions
-func get_average_centroid(shape_list):
+func get_average_centroid(shp_list):
 	var avg_centroid = Vector2.ZERO
 	var num_points = 0
-	for shape in shape_list:
+	for shape in shp_list:
 		for point in shape:
 			avg_centroid += point
 			num_points += 1

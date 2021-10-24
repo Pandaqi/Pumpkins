@@ -2,6 +2,7 @@ extends Node2D
 
 var type : String = ""
 var still_inside : bool = true
+var is_throwable : bool = false
 
 onready var sprite = $Sprite
 onready var powerups = get_node("/root/Main/Powerups")
@@ -20,7 +21,11 @@ func unreveal():
 func set_type(tp):
 	type = tp
 	
-	var frame = GlobalDict.powerups[type].frame
+	var frame = -1
+	if is_throwable:
+		frame = GlobalDict.throwables[type].frame
+	else:
+		frame = GlobalDict.powerups[type].frame
 	sprite.set_frame(frame)
 
 func _on_Area2D_body_entered(body):
@@ -28,8 +33,12 @@ func _on_Area2D_body_entered(body):
 		if not GlobalDict.cfg.auto_pickup_powerups and not body.modules.powerups.auto_unwrap:
 			return
 	
-	body.modules.statistics.record("powerups_grabbed", 1)
-	body.modules.powerups.grab(self, type)
+	if is_throwable:
+		body.modules.statistics.record("throwables_grabbed", 1)
+	else:
+		body.modules.statistics.record("powerups_grabbed", 1)
+	
+	body.modules.powerups.grab(self, type, is_throwable)
 	self.queue_free()
 	
 	if still_inside:

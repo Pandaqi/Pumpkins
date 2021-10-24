@@ -2,6 +2,8 @@ extends Node2D
 
 onready var body = get_parent()
 
+var has_real_body : bool = false
+
 var knife_half_size = 0.5 * (0.25*256)
 var back_raycast = null
 var front_raycast = null
@@ -9,7 +11,16 @@ var ghosts_hit = []
 
 var collision_exceptions = []
 
-func _physics_process(dt):
+func set_body(val : bool):
+	has_real_body = val
+	
+	if not has_real_body: disable_real_collisions()
+
+func disable_real_collisions():
+	body.collision_layer = 0 
+	body.collision_mask = 0
+
+func _physics_process(_dt):
 	reset_all()
 	
 	if body.modules.status.being_held: return
@@ -39,10 +50,16 @@ func shoot_back_raycast():
 	back_raycast = result
 
 func build_exclude_array():
-	if body.modules.owner.has_none(): return []
-	if not body.modules.grabber.grabbing_disabled: return []
+	var exclude = []
 	
-	return [body.modules.owner.get_owner()]
+	if has_real_body:
+		exclude.append(body)
+	
+	if body.modules.owner.has_none(): return exclude
+	if not body.modules.grabber.grabbing_disabled: return exclude
+	exclude.append(body.modules.owner.get_owner())
+	
+	return exclude
 
 func shoot_raycast():
 	if body.modules.status.is_stuck: return

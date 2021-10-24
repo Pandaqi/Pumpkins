@@ -1,0 +1,159 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://assets/throwable_items.png" type="Texture" id=1]
+[ext_resource path="res://scripts/throwable_modules/module_fake_body.gd" type="Script" id=2]
+[ext_resource path="res://scripts/throwable_modules/module_mover.gd" type="Script" id=3]
+[ext_resource path="res://scripts/throwable_modules/throwable.gd" type="Script" id=4]
+[ext_resource path="res://scripts/throwable_modules/module_thrower.gd" type="Script" id=5]
+[ext_resource path="res://scripts/throwable_modules/modules_owner.gd" type="Script" id=6]
+[ext_resource path="res://scripts/throwable_modules/module_status.gd" type="Script" id=7]
+[ext_resource path="res://scripts/modules/module_projectile_bodyless.gd" type="Script" id=8]
+[ext_resource path="res://scripts/modules/module_shadow_location.gd" type="Script" id=9]
+[ext_resource path="res://scripts/throwable_modules/module_grabber.gd" type="Script" id=10]
+[ext_resource path="res://assets/particles/throwable_trail.png" type="Texture" id=11]
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 29.968, 8.30107 )
+
+[sub_resource type="Gradient" id=6]
+offsets = PoolRealArray( 0, 0.761261, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -1.24886, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+flag_align_y = true
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 0.15
+scale_curve = SubResource( 4 )
+color_ramp = SubResource( 7 )
+
+[sub_resource type="Animation" id=1]
+resource_name = "Highlight"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 3, 3, 3, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.25, 0.25 ), Vector2( 0.28, 0.28 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0.25, 0.25 ) ]
+}
+
+[node name="Knife" type="KinematicBody2D" groups=[
+"Knives",
+"Throwables",
+]]
+script = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1.16257, -1.69893 )
+shape = SubResource( 8 )
+
+[node name="Status" type="Node" parent="."]
+script = ExtResource( 7 )
+
+[node name="Grabber" type="Node" parent="."]
+script = ExtResource( 10 )
+
+[node name="Timer" type="Timer" parent="Grabber"]
+wait_time = 0.5
+one_shot = true
+
+[node name="Thrower" type="Node2D" parent="."]
+script = ExtResource( 5 )
+
+[node name="Mover" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="TrailParticles" type="Particles2D" parent="Mover"]
+position = Vector2( -28.4678, -0.561867 )
+amount = 40
+lifetime = 0.5
+local_coords = false
+process_material = SubResource( 5 )
+texture = ExtResource( 11 )
+
+[node name="Owner" type="Node" parent="."]
+script = ExtResource( 6 )
+
+[node name="Projectile" type="Node2D" parent="."]
+script = ExtResource( 8 )
+
+[node name="FakeBody" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="ShadowLocation" type="Node2D" parent="." groups=[
+"ShadowMakers",
+]]
+script = ExtResource( 9 )
+type = "rect"
+
+[node name="Sprite" type="Sprite" parent="."]
+rotation = 1.5708
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 1 )
+hframes = 9
+vframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Highlight = SubResource( 1 )
+anims/RESET = SubResource( 2 )
+
+[connection signal="timeout" from="Grabber/Timer" to="Grabber" method="_on_Timer_timeout"]
+[connection signal="owner_changed" from="Owner" to="Mover" method="_on_Owner_owner_changed"]
