@@ -1,0 +1,503 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://assets/arenas/dark_jungle/bg.png" type="Texture" id=1]
+[ext_resource path="res://assets/arenas/dark_jungle/vine_placement.png" type="Texture" id=2]
+[ext_resource path="res://assets/arenas/dark_jungle/overlay.png" type="Texture" id=3]
+[ext_resource path="res://assets/arenas/dark_jungle/entities.png" type="Texture" id=4]
+[ext_resource path="res://arenas/arena_skeleton.tscn" type="PackedScene" id=5]
+[ext_resource path="res://arenas/vine.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/arenas/dark_jungle/border_vines.png" type="Texture" id=7]
+[ext_resource path="res://arenas/firefly.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scripts/arenas/dark_jungle/custom_logic.gd" type="Script" id=9]
+
+[sub_resource type="OccluderPolygon2D" id=1]
+polygon = PoolVector2Array( 2.41553, -44.511, 48.6648, -20.125, 50.3466, 15.1927, 25.9606, 39.5786, -14.4025, 42.9422, -45.5156, 4.26102, -33.743, -21.8068 )
+
+[sub_resource type="OccluderPolygon2D" id=2]
+polygon = PoolVector2Array( 5.77917, -43.6701, 41.9377, -22.6477, 51.1875, 6.78369, 24.2788, 43.7831, -14.4023, 37.8969, -43.8337, 15.1927, -38.7883, -17.6023 )
+
+[sub_resource type="OccluderPolygon2D" id=3]
+polygon = PoolVector2Array( -29.5388, -36.1021, 23.4377, -41.9883, 51.1873, -9.19336, 51.1873, 23.6016, 12.5061, 45.4649, -28.6979, 25.2834, -42.9932, -4.98889 )
+
+[sub_resource type="OccluderPolygon2D" id=4]
+polygon = PoolVector2Array( -21.9707, -34.4203, 32.6876, -39.4657, 52.8691, -15.0797, 44.4601, 22.7607, 13.3469, 49.6694, -29.5388, 35.3741, -39.6295, 3.42004 )
+
+[sub_resource type="OccluderPolygon2D" id=5]
+polygon = PoolVector2Array( 20.915, -35.2612, 57.0735, 2.5791, 47.8237, 36.215, 15.0287, 49.6693, -23.6525, 39.5786, -41.3113, -4.14807, -21.9707, -28.5341 )
+
+[sub_resource type="OccluderPolygon2D" id=6]
+polygon = PoolVector2Array( 6.61975, -42.8293, 37.7329, -27.6931, 44.4601, 18.5562, 12.506, 47.1467, -21.1298, 47.9875, -48.8794, 21.9197, -34.5841, -27.6931 )
+
+[sub_resource type="OccluderPolygon2D" id=7]
+polygon = PoolVector2Array( -17.7662, -42.8292, 21.7559, -41.9883, 41.0965, -19.2841, 37.733, 28.647, -7.67548, 49.6694, -38.7886, 29.4879, -44.6749, -4.98889 )
+
+[sub_resource type="OccluderPolygon2D" id=8]
+polygon = PoolVector2Array( 1354.68, 84.4431, 1393.36, 25.5804, 1416.9, -38.3278, 1529.58, -14.7827, 1458.95, 52.489, 1374.86, 87.8067 )
+
+[sub_resource type="OccluderPolygon2D" id=9]
+polygon = PoolVector2Array( 1455.58, -11.4191, 1465.67, 52.489, 1509.4, 111.352, 1485.86, 114.715, 1460.63, 89.4885, 1433.72, 96.2157, 1379.9, 65.9434, 1319.36, -4.69189 )
+
+[sub_resource type="OccluderPolygon2D" id=10]
+polygon = PoolVector2Array( 1280.68, 87.8067, 1317.68, 84.4431, 1463.99, 96.2157, 1568.26, 84.4431, 1645.63, 5.39886, 1588.45, -23.1916, 1199.95, -1.32831, 1171.36, 28.9439 )
+
+[node name="DarkJungle" instance=ExtResource( 5 )]
+
+[node name="Sprite" type="Sprite" parent="Map/BG" index="0"]
+light_mask = 3
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Sprite" type="Sprite" parent="Map/Entities" index="0"]
+texture = ExtResource( 4 )
+centered = false
+
+[node name="VineBlueprint" type="Sprite" parent="Map/Entities" index="1"]
+modulate = Color( 1, 1, 1, 0.054902 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="VineBlueprint2" type="Sprite" parent="Map/Entities" index="2"]
+texture = ExtResource( 7 )
+centered = false
+
+[node name="Poles" type="Node2D" parent="Map/Entities" index="3"]
+position = Vector2( 0, -1 )
+
+[node name="Pole" type="StaticBody2D" parent="Map/Entities/Poles" index="0" groups=[
+"Stuckables",
+]]
+position = Vector2( 970, 325 )
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Map/Entities/Poles/Pole" index="0"]
+polygon = PoolVector2Array( 3.745, -43.9433, 49.9943, -19.9778, 51.2557, 13.2376, 26.4492, 39.3054, -16.4365, 41.4077, -44.186, 6.09003, -34.5157, -21.2391 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Map/Entities/Poles/Pole" index="1"]
+light_mask = 2
+occluder = SubResource( 1 )
+light_mask = 2
+
+[node name="Pole2" type="StaticBody2D" parent="Map/Entities/Poles" index="1" groups=[
+"Stuckables",
+]]
+position = Vector2( 1154.9, 268.404 )
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Map/Entities/Poles/Pole2" index="0"]
+polygon = PoolVector2Array( -40.9102, -19.0145, 4.27966, -43.0959, 42.037, -22.5821, 51.2534, 8.04001, 24.4962, 42.527, -16.5315, 39.554, -42.9913, 15.1752 )
+
+[node name="LightOccluder2D2" type="LightOccluder2D" parent="Map/Entities/Poles/Pole2" index="1"]
+light_mask = 2
+position = Vector2( -0.746094, 0.256073 )
+occluder = SubResource( 2 )
+light_mask = 2
+
+[node name="Pole3" type="StaticBody2D" parent="Map/Entities/Poles" index="2" groups=[
+"Stuckables",
+]]
+position = Vector2( 1143.38, 704.393 )
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Map/Entities/Poles/Pole3" index="0"]
+polygon = PoolVector2Array( -29.3801, -27.3928, 22.1199, -34.3928, 50.1199, -2.39276, 49.1199, 30.1072, 11.6199, 52.1072, -27.3801, 35.1072, -43.3801, 2.10724 )
+
+[node name="LightOccluder2D3" type="LightOccluder2D" parent="Map/Entities/Poles/Pole3" index="1"]
+light_mask = 2
+position = Vector2( -0.996338, 8.2605 )
+occluder = SubResource( 3 )
+light_mask = 2
+
+[node name="Pole4" type="StaticBody2D" parent="Map/Entities/Poles" index="3" groups=[
+"Stuckables",
+]]
+position = Vector2( 968.88, 644.393 )
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Map/Entities/Poles/Pole4" index="0"]
+polygon = PoolVector2Array( -17.8801, -30.3928, 34.6199, -37.3928, 54.6199, -11.8928, 47.1199, 23.6072, 16.1199, 50.6072, -25.3801, 38.6072, -35.8801, 5.60724 )
+
+[node name="LightOccluder2D4" type="LightOccluder2D" parent="Map/Entities/Poles/Pole4" index="1"]
+light_mask = 2
+position = Vector2( 1.96082, 2.67059 )
+occluder = SubResource( 4 )
+light_mask = 2
+
+[node name="Pole5" type="StaticBody2D" parent="Map/Entities/Poles" index="4" groups=[
+"Stuckables",
+]]
+position = Vector2( 1043.13, 820.005 )
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Map/Entities/Poles/Pole5" index="0"]
+polygon = PoolVector2Array( -32.8808, -34.6721, 9.93066, -41.8073, 44.4176, -4.34723, 34.9041, 29.5451, 4.57922, 43.8156, -37.043, 32.5181, -52.5027, -9.10406 )
+
+[node name="LightOccluder2D5" type="LightOccluder2D" parent="Map/Entities/Poles/Pole5" index="1"]
+light_mask = 2
+position = Vector2( -11.7468, -5.60345 )
+occluder = SubResource( 5 )
+light_mask = 2
+
+[node name="Pole6" type="StaticBody2D" parent="Map/Entities/Poles" index="5" groups=[
+"Stuckables",
+]]
+position = Vector2( 541.958, 801.505 )
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Map/Entities/Poles/Pole6" index="0"]
+polygon = PoolVector2Array( 7.17126, -41.4027, 39.1254, -27.1075, 44.1707, 17.46, 12.2167, 45.2097, -18.8965, 48.5732, -47.487, 22.5054, -35.7144, -27.1075 )
+
+[node name="LightOccluder2D6" type="LightOccluder2D" parent="Map/Entities/Poles/Pole6" index="1"]
+light_mask = 2
+position = Vector2( 0.0256348, 0.282837 )
+occluder = SubResource( 6 )
+light_mask = 2
+
+[node name="Pole7" type="StaticBody2D" parent="Map/Entities/Poles" index="6" groups=[
+"Stuckables",
+]]
+position = Vector2( 643.707, 924.276 )
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Map/Entities/Poles/Pole7" index="0"]
+polygon = PoolVector2Array( -20.5782, -38.0391, 20.6257, -38.0391, 38.2845, -13.6531, 35.7618, 34.278, -9.64661, 53.6186, -38.2371, 35.1188, -44.9642, -0.198792 )
+
+[node name="LightOccluder2D7" type="LightOccluder2D" parent="Map/Entities/Poles/Pole7" index="1"]
+light_mask = 2
+position = Vector2( -2.49701, 5.32819 )
+occluder = SubResource( 7 )
+light_mask = 2
+
+[node name="Vines" type="Node2D" parent="Map/Entities" index="4"]
+
+[node name="Vine" parent="Map/Entities/Vines" index="0" instance=ExtResource( 6 )]
+scale = Vector2( 1, 1 )
+
+[node name="Vine2" parent="Map/Entities/Vines" index="1" instance=ExtResource( 6 )]
+position = Vector2( 165.515, 567.796 )
+rotation = 1.02781
+
+[node name="Vine3" parent="Map/Entities/Vines" index="2" instance=ExtResource( 6 )]
+position = Vector2( 231.105, 611.523 )
+rotation = 0.970171
+
+[node name="Vine4" parent="Map/Entities/Vines" index="3" instance=ExtResource( 6 )]
+position = Vector2( 306.403, 571.542 )
+rotation = 0.983269
+
+[node name="Vine5" parent="Map/Entities/Vines" index="4" instance=ExtResource( 6 )]
+position = Vector2( 368.645, 616.752 )
+rotation = 0.973434
+
+[node name="Vine6" parent="Map/Entities/Vines" index="5" instance=ExtResource( 6 )]
+position = Vector2( 446.374, 579.569 )
+rotation = 0.975094
+
+[node name="Vine7" parent="Map/Entities/Vines" index="6" instance=ExtResource( 6 )]
+position = Vector2( 23.5104, 566.864 )
+rotation = 0.933877
+
+[node name="Vine8" parent="Map/Entities/Vines" index="7" instance=ExtResource( 6 )]
+position = Vector2( 25.1922, 488.767 )
+rotation = 1.20644
+scale = Vector2( 1, 1 )
+
+[node name="Vine9" parent="Map/Entities/Vines" index="8" instance=ExtResource( 6 )]
+position = Vector2( 521.489, 595.057 )
+rotation = 0.946598
+
+[node name="Vine10" parent="Map/Entities/Vines" index="9" instance=ExtResource( 6 )]
+position = Vector2( 549.172, 527.364 )
+rotation = 2.80978
+
+[node name="Vine11" parent="Map/Entities/Vines" index="10" instance=ExtResource( 6 )]
+position = Vector2( 586.117, 457.517 )
+rotation = -0.316688
+
+[node name="Vine12" parent="Map/Entities/Vines" index="11" instance=ExtResource( 6 )]
+position = Vector2( 572.173, 376.904 )
+rotation = 2.79919
+
+[node name="Vine13" parent="Map/Entities/Vines" index="12" instance=ExtResource( 6 )]
+position = Vector2( 627.627, 327.16 )
+rotation = -0.332837
+
+[node name="Vine14" parent="Map/Entities/Vines" index="13" instance=ExtResource( 6 )]
+position = Vector2( 661.021, 257.543 )
+rotation = -0.304038
+
+[node name="Vine15" parent="Map/Entities/Vines" index="14" instance=ExtResource( 6 )]
+position = Vector2( 625.391, 190.33 )
+rotation = 2.82503
+
+[node name="Vine16" parent="Map/Entities/Vines" index="15" instance=ExtResource( 6 )]
+position = Vector2( 617.509, 105.838 )
+rotation = -0.69177
+
+[node name="Vine17" parent="Map/Entities/Vines" index="16" instance=ExtResource( 6 )]
+position = Vector2( 591.59, 631.567 )
+rotation = -1.12257
+
+[node name="Vine18" parent="Map/Entities/Vines" index="17" instance=ExtResource( 6 )]
+position = Vector2( 587.844, 707.613 )
+rotation = -1.14173
+
+[node name="Vine19" parent="Map/Entities/Vines" index="18" instance=ExtResource( 6 )]
+position = Vector2( 659.887, 756.22 )
+rotation = -1.12775
+
+[node name="Vine20" parent="Map/Entities/Vines" index="19" instance=ExtResource( 6 )]
+position = Vector2( 721.208, 880.252 )
+rotation = -1.19676
+
+[node name="Vine21" parent="Map/Entities/Vines" index="20" instance=ExtResource( 6 )]
+position = Vector2( 717.227, 954.286 )
+rotation = -1.14489
+
+[node name="Vine22" parent="Map/Entities/Vines" index="21" instance=ExtResource( 6 )]
+position = Vector2( 684.086, 1025.33 )
+rotation = -1.10452
+
+[node name="Vine23" parent="Map/Entities/Vines" index="22" instance=ExtResource( 6 )]
+position = Vector2( 736.385, 1090.46 )
+rotation = -1.11058
+
+[node name="Vine24" parent="Map/Entities/Vines" index="23" instance=ExtResource( 6 )]
+position = Vector2( 628.662, 562.557 )
+rotation = -2.1585
+
+[node name="Vine25" parent="Map/Entities/Vines" index="24" instance=ExtResource( 6 )]
+position = Vector2( 692.918, 607.285 )
+rotation = -2.17647
+
+[node name="Vine26" parent="Map/Entities/Vines" index="25" instance=ExtResource( 6 )]
+position = Vector2( 770.403, 565.077 )
+rotation = -2.1483
+
+[node name="Vine27" parent="Map/Entities/Vines" index="26" instance=ExtResource( 6 )]
+position = Vector2( 835.289, 609.174 )
+rotation = -2.1827
+
+[node name="Vine28" parent="Map/Entities/Vines" index="27" instance=ExtResource( 6 )]
+position = Vector2( 907.734, 571.377 )
+rotation = -2.26493
+
+[node name="Vine29" parent="Map/Entities/Vines" index="28" instance=ExtResource( 6 )]
+position = Vector2( 979.55, 531.059 )
+rotation = -2.1559
+
+[node name="Vine30" parent="Map/Entities/Vines" index="29" instance=ExtResource( 6 )]
+position = Vector2( 1044.44, 573.267 )
+rotation = -2.14431
+
+[node name="Vine31" parent="Map/Entities/Vines" index="30" instance=ExtResource( 6 )]
+position = Vector2( 1190.54, 609.794 )
+rotation = -2.14431
+
+[node name="Vine32" parent="Map/Entities/Vines" index="31" instance=ExtResource( 6 )]
+position = Vector2( 1264.49, 573.267 )
+rotation = -2.14431
+
+[node name="Vine33" parent="Map/Entities/Vines" index="32" instance=ExtResource( 6 )]
+position = Vector2( 1327.74, 616.03 )
+rotation = -2.14431
+
+[node name="Vine34" parent="Map/Entities/Vines" index="33" instance=ExtResource( 6 )]
+position = Vector2( 1403.47, 579.503 )
+rotation = -2.14431
+
+[node name="Vine35" parent="Map/Entities/Vines" index="34" instance=ExtResource( 6 )]
+position = Vector2( 1480.09, 598.212 )
+rotation = -2.14431
+
+[node name="Vine36" parent="Map/Entities/Vines" index="35" instance=ExtResource( 6 )]
+position = Vector2( 1554.92, 616.03 )
+rotation = -3.77504
+
+[node name="Vine37" parent="Map/Entities/Vines" index="36" instance=ExtResource( 6 )]
+position = Vector2( 1635.1, 583.067 )
+rotation = -2.14431
+
+[node name="Vine38" parent="Map/Entities/Vines" index="37" instance=ExtResource( 6 )]
+position = Vector2( 1708.16, 547.431 )
+rotation = -2.14431
+
+[node name="Vine39" parent="Map/Entities/Vines" index="38" instance=ExtResource( 6 )]
+position = Vector2( 1772.3, 589.303 )
+rotation = -2.14431
+
+[node name="Vine40" parent="Map/Entities/Vines" index="39" instance=ExtResource( 6 )]
+position = Vector2( 1831.99, 536.74 )
+rotation = -2.14431
+
+[node name="Vine41" parent="Map/Entities/Vines" index="40" instance=ExtResource( 6 )]
+position = Vector2( 1895.24, 578.613 )
+rotation = -2.14431
+
+[node name="Vine42" parent="Map/Entities/Vines" index="41" instance=ExtResource( 6 )]
+position = Vector2( 1930.88, 505.559 )
+rotation = -2.14431
+
+[node name="Vine43" parent="Map/Entities/Vines" index="42" instance=ExtResource( 6 )]
+position = Vector2( 1426.71, 658.424 )
+rotation = -3.55384
+
+[node name="Vine44" parent="Map/Entities/Vines" index="43" instance=ExtResource( 6 )]
+position = Vector2( 1436.48, 738.299 )
+rotation = -0.100759
+
+[node name="Vine45" parent="Map/Entities/Vines" index="44" instance=ExtResource( 6 )]
+position = Vector2( 1489.71, 794.21 )
+rotation = -0.304024
+
+[node name="Vine46" parent="Map/Entities/Vines" index="45" instance=ExtResource( 6 )]
+position = Vector2( 1440.62, 860.289 )
+rotation = -3.21221
+
+[node name="Vine47" parent="Map/Entities/Vines" index="46" instance=ExtResource( 6 )]
+position = Vector2( 1392.77, 922.984 )
+rotation = -3.40862
+
+[node name="Vine48" parent="Map/Entities/Vines" index="47" instance=ExtResource( 6 )]
+position = Vector2( 1353.28, 1007.44 )
+rotation = -4.72434
+
+[node name="Vine49" parent="Map/Entities/Vines" index="48" instance=ExtResource( 6 )]
+position = Vector2( 1361.89, 1084.65 )
+rotation = -2.92705
+
+[node name="Vine50" parent="Map/Entities/Vines" index="49" instance=ExtResource( 6 )]
+position = Vector2( 1409.57, 497.803 )
+rotation = -0.456271
+
+[node name="Vine51" parent="Map/Entities/Vines" index="50" instance=ExtResource( 6 )]
+position = Vector2( 1367.1, 437.259 )
+rotation = -0.32562
+
+[node name="Vine52" parent="Map/Entities/Vines" index="51" instance=ExtResource( 6 )]
+position = Vector2( 1410.41, 373.771 )
+rotation = -0.00474823
+
+[node name="Vine53" parent="Map/Entities/Vines" index="52" instance=ExtResource( 6 )]
+position = Vector2( 1449.09, 306.079 )
+rotation = -0.553721
+scale = Vector2( 1, 1 )
+
+[node name="Vine54" parent="Map/Entities/Vines" index="53" instance=ExtResource( 6 )]
+position = Vector2( 1399.9, 247.216 )
+rotation = -0.450793
+
+[node name="Vine55" parent="Map/Entities/Vines" index="54" instance=ExtResource( 6 )]
+position = Vector2( 1361.22, 181.626 )
+rotation = -0.277814
+
+[node name="Vine56" parent="Map/Entities/Vines" index="55" instance=ExtResource( 6 )]
+position = Vector2( 1383.92, 100.48 )
+rotation = 0.0229962
+
+[node name="Sprite" type="Sprite" parent="Map/Overlay" index="0"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Map/Overlay" index="1"]
+light_mask = 2
+occluder = SubResource( 8 )
+light_mask = 2
+
+[node name="LightOccluder2D2" type="LightOccluder2D" parent="Map/Overlay" index="2"]
+light_mask = 2
+position = Vector2( -901.441, -15.1361 )
+occluder = SubResource( 9 )
+light_mask = 2
+
+[node name="LightOccluder2D3" type="LightOccluder2D" parent="Map/Overlay" index="3"]
+light_mask = 2
+position = Vector2( -452.402, -13.4543 )
+occluder = SubResource( 10 )
+light_mask = 2
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/Overlay" index="4" groups=[
+"Stuckables",
+]]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D" index="0"]
+position = Vector2( 36.1675, 1050.1 )
+polygon = PoolVector2Array( -46.1332, -83.1534, 44.3486, -54.5802, 134.83, 2.56616, 172.928, 40.6638, -49.308, 50.1882 )
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D" index="1"]
+position = Vector2( 1810.88, 1094.55 )
+polygon = PoolVector2Array( 199.914, -132.363, 53.873, -97.4401, -39.7836, -41.8811, -79.4686, 12.0906, 249.123, 54.9504 )
+
+[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D" index="2"]
+position = Vector2( 836.33, 75.7422 )
+polygon = PoolVector2Array( -14.3689, -1.77274, 29.6318, -5.34033, 187.796, 2.9841, 279.365, -1.77274, 356.664, -80.2604, 298.392, -113.558, -88.0997, -90.9632, -117.83, -61.2331 )
+
+[node name="CollisionPolygon2D5" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D" index="3"]
+position = Vector2( 1312.01, 124.5 )
+polygon = PoolVector2Array( 103.363, -157.559, 76.011, -86.2065, 42.7131, -37.4489, 70.0649, -37.4489, 148.552, -76.6928, 217.527, -139.721 )
+
+[node name="CollisionPolygon2D6" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D" index="4"]
+position = Vector2( 378.621, 124.5 )
+polygon = PoolVector2Array( 234.938, -15.8828, 186.181, -90.8029, 176.667, -150.263, 43.4758, -141.939, 106.504, -72.9648, 150.504, -44.4238, 177.856, -46.8022, 217.1, -11.126 )
+
+[node name="CanvasModulate" type="CanvasModulate" parent="Map/Overlay" index="5"]
+visible = false
+color = Color( 0.0941176, 0.184314, 0.145098, 1 )
+
+[node name="Fireflies" type="Node2D" parent="Map/Overlay" index="6"]
+
+[node name="Firefly" parent="Map/Overlay/Fireflies" index="0" instance=ExtResource( 8 )]
+
+[node name="Firefly2" parent="Map/Overlay/Fireflies" index="1" instance=ExtResource( 8 )]
+position = Vector2( 1643.91, 313.415 )
+
+[node name="Firefly3" parent="Map/Overlay/Fireflies" index="2" instance=ExtResource( 8 )]
+position = Vector2( 1640.74, 830.908 )
+
+[node name="Firefly4" parent="Map/Overlay/Fireflies" index="3" instance=ExtResource( 8 )]
+position = Vector2( 272.398, 849.957 )
+
+[node name="Node2D" type="Node2D" parent="Collectors" index="0"]
+position = Vector2( 127.961, 260.411 )
+
+[node name="Node2D2" type="Node2D" parent="Collectors" index="1"]
+position = Vector2( 1811.65, 314.289 )
+
+[node name="Node2D3" type="Node2D" parent="Collectors" index="2"]
+position = Vector2( 1645.53, 1019.2 )
+
+[node name="Node2D4" type="Node2D" parent="Collectors" index="3"]
+position = Vector2( 294.085, 1039.4 )
+
+[node name="Node2D5" type="Node2D" parent="Collectors" index="4"]
+position = Vector2( 801.438, 377.147 )
+
+[node name="Node2D6" type="Node2D" parent="Collectors" index="5"]
+position = Vector2( 1241.44, 363.678 )
+
+[node name="Node2D7" type="Node2D" parent="Collectors" index="6"]
+position = Vector2( 978.787, 1001.24 )
+
+[node name="Node2D8" type="Node2D" parent="Collectors" index="7"]
+position = Vector2( 1290.83, 754.294 )
+
+[node name="Node2D" type="Node2D" parent="Dumplings" index="0"]
+position = Vector2( 321.024, 197.553 )
+
+[node name="Node2D2" type="Node2D" parent="Dumplings" index="1"]
+position = Vector2( 1719.61, 132.451 )
+
+[node name="Node2D3" type="Node2D" parent="Dumplings" index="2"]
+position = Vector2( 1030.42, 987.766 )
+
+[node name="CustomLogic" parent="." index="3"]
+script = ExtResource( 9 )
+
+[node name="Node2D" type="Node2D" parent="CustomLogic" index="0"]
+position = Vector2( 1250, 400 )

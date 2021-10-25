@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://scripts/main.gd" type="Script" id=1]
 [ext_resource path="res://scripts/players.gd" type="Script" id=2]
@@ -21,8 +21,13 @@
 [ext_resource path="res://scenes/area_shrink.gd" type="Script" id=19]
 [ext_resource path="res://scripts/navigation.gd" type="Script" id=20]
 [ext_resource path="res://scripts/start_delay.gd" type="Script" id=21]
-[ext_resource path="res://assets/fonts/im_fell_english.ttf" type="DynamicFontData" id=22]
+[ext_resource path="res://assets/fonts/main_huge.tres" type="DynamicFont" id=22]
 [ext_resource path="res://scripts/throwables.gd" type="Script" id=23]
+[ext_resource path="res://assets/ui/team_icons@4x.png" type="Texture" id=24]
+[ext_resource path="res://assets/fonts/main_large.tres" type="DynamicFont" id=25]
+[ext_resource path="res://assets/ui/settings/arenas_hover.png" type="Texture" id=26]
+[ext_resource path="res://assets/ui/settings/modes_hover.png" type="Texture" id=27]
+[ext_resource path="res://assets/ui/skip_reminders.png" type="Texture" id=28]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -57,14 +62,9 @@ void fragment() {
 shader = SubResource( 3 )
 shader_param/radius = 3000.0
 
-[sub_resource type="DynamicFont" id=7]
-size = 256
-outline_size = 10
-font_data = ExtResource( 22 )
-
 [sub_resource type="Animation" id=5]
 resource_name = "FadeIn"
-length = 2.0
+length = 8.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("StartDelay/ColorRect:color")
 tracks/0/interp = 1
@@ -72,10 +72,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 6, 7 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
+"values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("StartDelay/Label:scale")
@@ -84,10 +84,10 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.8, 0.9, 1 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 6, 6.8, 6.9, 7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("StartDelay/Label:modulate")
@@ -96,7 +96,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 1, 2 ),
+"times": PoolRealArray( 6, 7, 8 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
@@ -108,15 +108,78 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 1, 2 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 6, 7, 8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "values": [ {
+"args": [  ],
+"method": "play_game_sound"
+}, {
 "args": [  ],
 "method": "unpause"
 }, {
 "args": [  ],
 "method": "deactivate"
 } ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("StartDelay/PlayReminders/Mode:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("StartDelay/PlayReminders/Arena:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 3, 3.2, 3.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("StartDelay/PlayReminders/Arena:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 6, 6.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("StartDelay/PlayReminders/Mode:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 6, 6.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("StartDelay/PlayReminders/Skip:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0, 0.6, 0.9, 6, 6.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 1e-05, 1e-05 ) ]
 }
 
 [sub_resource type="Animation" id=6]
@@ -156,6 +219,168 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("StartDelay/Winners:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("StartDelay/Winners:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("StartDelay/PlayReminders/Mode:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("StartDelay/PlayReminders/Arena:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("StartDelay/PlayReminders/Arena:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("StartDelay/PlayReminders/Mode:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("StartDelay/PlayReminders/Skip:scale")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "TextFlash"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("StartDelay/Label:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("StartDelay/Label:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.6, 2.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("StartDelay/Winners:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 2.4, 2.5, 2.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("StartDelay/Winners:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 2.8, 4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath("StartDelay")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 4 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "self_destruct"
+} ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("StartDelay/ColorRect:color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.2, 3.63505, 4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.862745 ), Color( 0, 0, 0, 0.862745 ), Color( 0, 0, 0, 0 ) ]
 }
 
 [node name="Main" type="Node2D"]
@@ -324,31 +549,99 @@ script = ExtResource( 21 )
 [node name="ColorRect" type="ColorRect" parent="StartDelay"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 416.173, 2192.47 )
 color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Node2D" parent="StartDelay"]
-position = Vector2( 960, 540 )
+[node name="PlayReminders" type="Node2D" parent="StartDelay"]
 
-[node name="Label" type="Label" parent="StartDelay/Label"]
-margin_left = -200.013
-margin_top = -174.614
-margin_right = 208.987
-margin_bottom = 150.386
+[node name="Mode" type="Sprite" parent="StartDelay/PlayReminders"]
+position = Vector2( 577.302, 475 )
+texture = ExtResource( 27 )
+hframes = 4
+vframes = 4
+
+[node name="ModeLabel" type="Label" parent="StartDelay/PlayReminders/Mode"]
+margin_left = -306.469
+margin_top = 275.0
+margin_right = 281.531
+margin_bottom = 438.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 7 )
-text = "Go!"
+custom_fonts/font = ExtResource( 25 )
+text = "Your mode"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Arena" type="Sprite" parent="StartDelay/PlayReminders"]
+position = Vector2( 1331.25, 475 )
+scale = Vector2( 1e-05, 1e-05 )
+texture = ExtResource( 26 )
+hframes = 4
+vframes = 4
+
+[node name="ArenaLabel" type="Label" parent="StartDelay/PlayReminders/Arena"]
+margin_left = -294.42
+margin_top = 275.0
+margin_right = 320.58
+margin_bottom = 438.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 25 )
+text = "Your arena"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Skip" type="Sprite" parent="StartDelay/PlayReminders"]
+modulate = Color( 1, 1, 1, 0.67451 )
+position = Vector2( 945.552, 961.797 )
+texture = ExtResource( 28 )
+
+[node name="Label" type="Node2D" parent="StartDelay"]
+position = Vector2( 960, 540 )
+
+[node name="Label" type="Label" parent="StartDelay/Label"]
+margin_left = -955.35
+margin_top = -175.0
+margin_right = 953.65
+margin_bottom = 150.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 22 )
+text = "Game Over!"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Winners" type="Node2D" parent="StartDelay"]
+position = Vector2( 958.607, 545.23 )
+scale = Vector2( 1e-05, 1e-05 )
+
+[node name="Label" type="Label" parent="StartDelay/Winners"]
+margin_left = -51.7147
+margin_top = -152.008
+margin_right = 529.285
+margin_bottom = 172.992
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 22 )
+text = "Won!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="StartDelay/Winners"]
+position = Vector2( -310.033, -17.818 )
+texture = ExtResource( 24 )
+hframes = 8
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="StartDelay"]
 root_node = NodePath("../..")
-autoplay = "FadeIn"
 anims/FadeIn = SubResource( 5 )
 anims/RESET = SubResource( 6 )
+anims/TextFlash = SubResource( 8 )
 
 [connection signal="timeout" from="Powerups/Timer" to="Powerups" method="_on_Timer_timeout"]
 [connection signal="timeout" from="Powerups/AutoRevealTimer" to="Powerups" method="_on_AutoRevealTimer_timeout"]

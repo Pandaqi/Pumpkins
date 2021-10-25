@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/arenas/graveyard/light_texture.png" type="Texture" id=1]
+[ext_resource path="res://scripts/mode_modules/firefly.gd" type="Script" id=2]
+[ext_resource path="res://assets/arenas/dark_jungle/firefly.png" type="Texture" id=3]
+
+[sub_resource type="CircleShape2D" id=11]
+radius = 13.4305
+
+[node name="Firefly" type="KinematicBody2D" groups=[
+"Fireflies",
+]]
+position = Vector2( 320.02, 272.143 )
+collision_layer = 16
+collision_mask = 16
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 3 )
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 1 )
+texture_scale = 2.0
+energy = 1.5
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_item_cull_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 11 )
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

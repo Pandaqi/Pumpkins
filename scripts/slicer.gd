@@ -4,7 +4,7 @@ const SLICE_EXPLODE_FORCE : float = 1000.0
 const MIN_AREA_FOR_SHAPE : float = 350.0
 
 # NOTE: if player falls below this size, they die
-const PLAYER_MIN_AREA_FOR_SHAPE : float = 600.0
+const PLAYER_MIN_AREA_FOR_SHAPE : float = 950.0
 
 var player_part_scene = preload("res://scenes/player_part.tscn")
 
@@ -16,28 +16,6 @@ onready var mode = get_node("../ModeManager")
 
 var start_point
 var end_point
-
-# Debug drawing
-func _input(ev):
-	if ev is InputEventMouseMotion:
-		update()
-	
-	if (ev is InputEventMouseButton):
-		if ev.pressed:
-			start_point = get_global_mouse_position()
-			end_point = null
-		else:
-			end_point = get_global_mouse_position()
-			slice_bodies_hitting_line(start_point, end_point)
-
-func _draw():
-	if not start_point: return
-	
-	var a = start_point
-	var b = get_global_mouse_position()
-	if end_point: b = end_point
-	
-	draw_line(a, b, Color(0,0,0), 2)
 
 # Actual slicing functionality
 func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include = [], attacker = null):
@@ -207,10 +185,15 @@ func handle_old_body_death(b, params = {}):
 	if params.is_powerup:
 		b.reveal_powerup(params.attacker)
 		return
+		
 
 	# destroy the old body completely; we'll create new ones
 	# NOTE: this is actually the most common, basic way to deal with it
 	# 		everything above are just exceptions
+	if not b.modules.has('status'):
+		b.queue_free()
+		return
+	
 	b.modules.status.delete()
 
 func shoot_body_away_from_line(p1, p2, body):

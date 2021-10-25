@@ -7,6 +7,7 @@ const ROTATE_SPEED : float = 1.6
 
 const RADIUS : float = 48.0
 const LINE_THICKNESS : float = 5.0
+const DIVISION_LINE_COLOR : Color = Color(64/255.0, 4/255.0, 0.0)
 const POINT_BOUNDS = { 'min': -2, 'max': 5 }
 
 var division_angles = []
@@ -146,6 +147,6 @@ func _draw():
 	for ang in division_angles:
 		var conv_ang = ang
 		var to = from + Vector2(cos(conv_ang), sin(conv_ang))*RADIUS
-		draw_line(from, to, Color(1,1,1), LINE_THICKNESS, true)
+		draw_line(from, to, DIVISION_LINE_COLOR, LINE_THICKNESS, true)
 	
 	

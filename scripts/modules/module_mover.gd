@@ -1,6 +1,7 @@
 extends Node
 
-const MOVE_SPEED : float = 360.0
+const MOVE_SPEED : float = 320.0
+const SLIDY_MOVEMENT_DAMPING : float = 0.996
 var speed_multiplier : float = 1.0
 
 onready var body : KinematicBody2D = get_parent()
@@ -27,9 +28,7 @@ func _on_Input_move_vec(vec : Vector2, dt : float):
 	
 	if not moving_enabled or vec.length() <= 0.03: 
 		if state != "stopped":
-			if move_audio_player: 
-				move_audio_player.queue_free()
-				move_audio_player = null
+			remove_move_audio()
 			emit_signal("movement_stopped")
 		state = "stopped"
 		return
@@ -45,9 +44,19 @@ func _on_Input_move_vec(vec : Vector2, dt : float):
 	if not move_audio_player or not is_instance_valid(move_audio_player):
 		move_audio_player = GlobalAudio.play_dynamic_sound(body, "move", -9)
 
+func remove_move_audio():
+	if not move_audio_player: return
+	if not is_instance_valid(move_audio_player): 
+		move_audio_player = null
+		return
+	
+	move_audio_player.queue_free()
+	move_audio_player = null
+
 func continue_on_last_velocity():
 # warning-ignore:return_value_discarded
 	body.move_and_slide(last_velocity)
+	last_velocity *= SLIDY_MOVEMENT_DAMPING
 
 func move_regular(vec):
 	body.slowly_orient_towards_vec(vec)

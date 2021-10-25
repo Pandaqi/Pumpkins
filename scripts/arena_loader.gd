@@ -6,12 +6,7 @@ onready var main_node = get_node("/root/Main")
 onready var map = get_node("/root/Main/Map")
 onready var collectors = get_node("/root/Main/Collectors")
 
-export var debug_arena : String = "ghost_town"
-
 func activate():
-	if debug_arena != "":
-		GlobalDict.cfg.arena = debug_arena
-		
 	load_arena()
 
 func load_arena():
@@ -34,6 +29,6 @@ func load_arena():
 			child.get_parent().remove_child(child)
 			main_node.add_child(child)
 	
-	if custom_logic:
+	if custom_logic and custom_logic.script:
 		custom_logic.activate()
 	

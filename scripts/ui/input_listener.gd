@@ -1,6 +1,10 @@
 extends Node
 
 onready var main = get_parent()
+onready var particles = get_node("../Particles")
+onready var settings = get_node("../Settings")
+
+var screen_center = 0.5*Vector2(1920, 1080)
 
 func _input(ev):
 	check_new_controller(ev)
@@ -31,8 +35,15 @@ func start_game():
 	main.save_configuration()
 	
 	if main.count_total_players() <= 1:
-		print("Can't play solo!")
+		particles.general_feedback(screen_center, "Can't play solo!", main)
 		return
+	
+	var data = settings.get_mode_data()
+	var max_teams = 8
+	if data.has('max_teams'): max_teams = data.max_teams
+	var too_many_teams = (main.count_total_teams() > max_teams)
+	if too_many_teams:
+		particles.general_feedback(screen_center, "Max " + str(max_teams) + " teams!", main)
 	
 	Global.start_game()
 

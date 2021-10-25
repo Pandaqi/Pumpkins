@@ -3,7 +3,7 @@ extends Node
 var slash_particle = preload("res://scenes/particles/slash_sprite.tscn")
 var explosion_particle = preload("res://scenes/particles/explosion.tscn")
 var collectible_particle = preload("res://scenes/particles/collectible.tscn")
-var team_reminder # = preload("res://scenes/particles/team_reminder.tscn")
+var general_feedback_scene = preload("res://scenes/particles/general_feedback.tscn")
 
 onready var map = get_node("../Map")
 
@@ -26,3 +26,14 @@ func create_explosion_particles(pos):
 	p.set_position(pos)
 	
 	map.overlay.add_child(p)
+
+func general_feedback(pos, val, parent = null):
+	var fb = general_feedback_scene.instance()
+	fb.set_position(pos)
+	
+	fb.set_text(val)
+	
+	if not parent:
+		map.overlay.add_child(fb)
+	else:
+		parent.add_child(fb)

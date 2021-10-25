@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=2]
@@ -28,12 +28,64 @@
 [ext_resource path="res://scenes/mode_modules/module_tutorial.gd" type="Script" id=26]
 [ext_resource path="res://assets/gameover.png" type="Texture" id=27]
 [ext_resource path="res://scripts/module_statistics.gd" type="Script" id=28]
+[ext_resource path="res://assets/ui/throw_strength_indicator.png" type="Texture" id=29]
+
+[sub_resource type="Shader" id=13]
+code = "shader_type canvas_item;
+
+uniform float ratio = 0.0;
+
+void fragment() {
+	vec4 col = texture(TEXTURE, UV);
+	if(length(UV - vec2(0.5, 0.5)) > 0.5*ratio) {
+		col.a = 0.0;
+	}
+	COLOR = col;
+}"
+
+[sub_resource type="ShaderMaterial" id=14]
+shader = SubResource( 13 )
+shader_param/ratio = 0.0
+
+[sub_resource type="Animation" id=11]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "TutorialFlicker"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.682353 ) ]
+}
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 16.0
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 175.49
+
+[sub_resource type="CircleShape2D" id=10]
+radius = 125.28
 
 [sub_resource type="Gradient" id=6]
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
@@ -155,6 +207,12 @@ texture = ExtResource( 16 )
 hframes = 4
 vframes = 2
 
+[node name="ThrowStrength" type="Sprite" parent="Slasher"]
+modulate = Color( 1, 1, 1, 0.67451 )
+material = SubResource( 14 )
+scale = Vector2( 0.75, 0.75 )
+texture = ExtResource( 29 )
+
 [node name="IdleTimer" type="Timer" parent="Slasher"]
 wait_time = 8.0
 one_shot = true
@@ -193,15 +251,20 @@ script = ExtResource( 26 )
 [node name="Node2D" type="Node2D" parent="Tutorial"]
 
 [node name="BG" type="Sprite" parent="Tutorial/Node2D"]
-scale = Vector2( 0.35, 0.35 )
+scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 27 )
 hframes = 4
 
 [node name="Sprite" type="Sprite" parent="Tutorial/Node2D"]
-scale = Vector2( 0.35, 0.35 )
+scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 25 )
 hframes = 5
 vframes = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Tutorial/Node2D"]
+autoplay = "TutorialFlicker"
+anims/RESET = SubResource( 11 )
+anims/TutorialFlicker = SubResource( 12 )
 
 [node name="Topping" type="Node2D" parent="."]
 scale = Vector2( 0.25, 0.25 )
@@ -235,8 +298,15 @@ shape = SubResource( 2 )
 script = ExtResource( 18 )
 extents = Vector2( 100, 20 )
 
-[node name="Knockback" type="Node" parent="."]
+[node name="Knockback" type="Node2D" parent="."]
 script = ExtResource( 20 )
+
+[node name="Area2D" type="Area2D" parent="Knockback"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Knockback/Area2D"]
+shape = SubResource( 10 )
 
 [node name="Particles" type="Node2D" parent="."]
 show_behind_parent = true
@@ -259,18 +329,18 @@ autoplay = "LightFLicker"
 anims/LightFLicker = SubResource( 8 )
 anims/RESET = SubResource( 9 )
 
-[connection signal="button_press" from="Input" to="Mover" method="_on_Input_button_press"]
 [connection signal="button_press" from="Input" to="Slasher" method="_on_Input_button_press"]
-[connection signal="button_release" from="Input" to="Mover" method="_on_Input_button_release"]
+[connection signal="button_press" from="Input" to="Mover" method="_on_Input_button_press"]
 [connection signal="button_release" from="Input" to="Slasher" method="_on_Input_button_release"]
-[connection signal="move_vec" from="Input" to="Mover" method="_on_Input_move_vec"]
+[connection signal="button_release" from="Input" to="Mover" method="_on_Input_button_release"]
 [connection signal="move_vec" from="Input" to="Slasher" method="_on_Input_move_vec"]
-[connection signal="button_press" from="Bot" to="Mover" method="_on_Input_button_press"]
+[connection signal="move_vec" from="Input" to="Mover" method="_on_Input_move_vec"]
 [connection signal="button_press" from="Bot" to="Slasher" method="_on_Input_button_press"]
-[connection signal="button_release" from="Bot" to="Mover" method="_on_Input_button_release"]
+[connection signal="button_press" from="Bot" to="Mover" method="_on_Input_button_press"]
 [connection signal="button_release" from="Bot" to="Slasher" method="_on_Input_button_release"]
-[connection signal="move_vec" from="Bot" to="Mover" method="_on_Input_move_vec"]
+[connection signal="button_release" from="Bot" to="Mover" method="_on_Input_button_release"]
 [connection signal="move_vec" from="Bot" to="Slasher" method="_on_Input_move_vec"]
+[connection signal="move_vec" from="Bot" to="Mover" method="_on_Input_move_vec"]
 [connection signal="timeout" from="Bot/UnstuckTimer" to="Bot" method="_on_UnstuckTimer_timeout"]
 [connection signal="moved" from="Mover" to="Tutorial" method="_on_Mover_moved"]
 [connection signal="movement_started" from="Mover" to="Particles" method="_on_Mover_movement_started"]
@@ -281,10 +351,10 @@ anims/RESET = SubResource( 9 )
 [connection signal="slash_range_changed" from="Slasher" to="Knives" method="_on_Slasher_slash_range_changed"]
 [connection signal="thrown_slash" from="Slasher" to="Tutorial" method="_on_Slasher_thrown_slash"]
 [connection signal="timeout" from="Slasher/IdleTimer" to="Slasher" method="_on_IdleTimer_timeout"]
+[connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
 [connection signal="timeout" from="Shaper/StatTimer" to="Shaper" method="_on_StatTimer_timeout"]
 [connection signal="timeout" from="Grower/Timer" to="Grower" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Collector/Area2D" to="Collector" method="_on_Area2D_body_entered"]

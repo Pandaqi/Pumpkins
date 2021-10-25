@@ -56,13 +56,13 @@ func _on_Mover_moved(amount):
 func _on_Slasher_quick_slash():
 	num_slashes += 1
 	
-	if cur_slide == 1 and num_slashes > 3:
+	if cur_slide == 1 and num_slashes >= 3:
 		load_next_slide()
 	
 func _on_Slasher_thrown_slash():
 	num_slashes += 1
 	
-	if cur_slide == 1 and num_slashes > 3:
+	if cur_slide == 1 and num_slashes >= 3:
 		load_next_slide()
 
 func _on_Slasher_aim():

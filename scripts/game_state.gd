@@ -5,6 +5,8 @@ var interface_available : bool = false
 
 onready var player_manager = get_node("../Players")
 onready var mode = get_node("../ModeManager")
+onready var start_delay = get_node("../StartDelay")
+onready var particles = get_node("../Particles")
 
 var awards = {
 	"players_sliced": "Players Sliced",
@@ -64,6 +66,7 @@ func check_win_by_collection():
 	var players = get_tree().get_nodes_in_group("Players")
 	var count_per_team = {}
 	var required_count_per_team = {}
+	var players_per_team = {}
 
 	for p in players:
 		var team_num = p.modules.status.team_num
@@ -71,16 +74,29 @@ func check_win_by_collection():
 		if not count_per_team.has(team_num):
 			count_per_team[team_num] = 0
 			required_count_per_team[team_num] = 0
+			players_per_team[team_num] = []
 		
 		count_per_team[team_num] += p.modules.collector.count()
 		required_count_per_team[team_num] += mode.get_target_number()
+		players_per_team[team_num].append(p)
 	
 	for team_num in count_per_team:
 		var val = count_per_team[team_num]
-		if val < required_count_per_team[team_num]: continue
+		var target = required_count_per_team[team_num]
+		inform_players_of_almost_winning(val, target, players_per_team[team_num])
+		
+		if val < target: continue
 		
 		game_over(int(team_num))
 		break
+
+func inform_players_of_almost_winning(val, target, players_in_team):
+	var margin = 2
+	if val < (target - margin): return
+	if val >= target: return
+	
+	for p in players_in_team:
+		particles.general_feedback(p.global_position, "Almost won!")
 
 func game_over(team_num):
 	game_over_state = true
@@ -89,6 +105,7 @@ func game_over(team_num):
 	
 	handout_awards()
 	show_gameover_gui(team_num)
+	start_delay.game_over(team_num)
 
 func handout_awards():
 	# Step 1: create list of each statistic (val, player) and sort them

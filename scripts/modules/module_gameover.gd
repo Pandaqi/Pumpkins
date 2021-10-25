@@ -40,6 +40,7 @@ func add_instructions():
 	instruc_gui.set_scale(Vector2.ZERO)
 	instruc_gui.set_visible(true)
 	instruc_gui.get_node("Sprite").set_frame(1)
+	instruc_gui.get_node("Labels").set_visible(false)
 	
 	gui.tween_appearance(instruc_gui)
 
@@ -70,7 +71,7 @@ func position_gui(obj, offset_vec):
 	if not obj: return
 	
 	var pos = body.get_global_transform_with_canvas().origin
-	var offset = (gui_size + 18)
+	var offset = (gui_size + 14)
 	
 	obj.set_position(pos + offset_vec*offset)
 	
@@ -81,5 +82,5 @@ func position_gui(obj, offset_vec):
 	if obj.has_node("Labels"): obj.get_node("Labels").position.y = 0
 	
 	if obj.get_node("BG").flip_v:
-		obj.get_node("Sprite").position.y = 47
-		if obj.has_node("Labels"): obj.get_node("Labels").position.y = 47
+		obj.get_node("Sprite").position.y = 34
+		if obj.has_node("Labels"): obj.get_node("Labels").position.y = 34

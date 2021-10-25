@@ -17,7 +17,7 @@ bounce = 0.7
 collision_layer = 4
 collision_mask = 4
 physics_material_override = SubResource( 1 )
-linear_damp = 0.9
+linear_damp = 1.1
 script = ExtResource( 3 )
 
 [node name="Col" type="CollisionPolygon2D" parent="."]

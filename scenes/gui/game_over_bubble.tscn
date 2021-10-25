@@ -1,36 +1,40 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/gameover.png" type="Texture" id=1]
-[ext_resource path="res://assets/fonts/main_medium.ters.tres" type="DynamicFont" id=2]
-[ext_resource path="res://assets/fonts/main_medium_big.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/fonts/im_fell_english.ttf" type="DynamicFontData" id=4]
 
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+font_data = ExtResource( 4 )
+
 [sub_resource type="DynamicFont" id=1]
-size = 14
+size = 9
 font_data = ExtResource( 4 )
 
 [node name="Container" type="Node2D"]
 
 [node name="BG" type="Sprite" parent="."]
-scale = Vector2( 0.35, 0.35 )
+scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 1 )
 hframes = 4
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 0.35, 0.35 )
+scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 1 )
 hframes = 4
 frame = 3
 
 [node name="Labels" type="Node2D" parent="."]
-visible = false
 
 [node name="Title" type="Label" parent="Labels"]
-margin_left = -51.0149
-margin_top = -81.5763
-margin_right = 76.9851
-margin_bottom = -16.5763
-custom_fonts/font = ExtResource( 2 )
+margin_left = -54.9435
+margin_top = -67.5456
+margin_right = 73.0565
+margin_bottom = -2.54557
+custom_fonts/font = SubResource( 2 )
 text = "Distance Traveled"
 align = 1
 valign = 1
@@ -40,12 +44,12 @@ __meta__ = {
 }
 
 [node name="Number" type="Label" parent="Labels"]
-margin_left = -51.0149
-margin_top = -38.3615
-margin_right = 76.9851
-margin_bottom = 26.6385
+margin_left = -52.6986
+margin_top = -36.6778
+margin_right = 75.3014
+margin_bottom = 28.3222
 custom_colors/font_color = Color( 0.94902, 0.509804, 0.121569, 1 )
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = SubResource( 3 )
 text = "0.91"
 align = 1
 valign = 1
@@ -55,10 +59,10 @@ __meta__ = {
 }
 
 [node name="Type" type="Label" parent="Labels"]
-margin_left = -51.0
-margin_top = 13.0
-margin_right = 77.0
-margin_bottom = 38.0
+margin_left = -56.0511
+margin_top = 4.58153
+margin_right = 71.9489
+margin_bottom = 29.5815
 custom_colors/font_color = Color( 0.462745, 0.733333, 1, 0.694118 )
 custom_fonts/font = SubResource( 1 )
 text = "(highest)"

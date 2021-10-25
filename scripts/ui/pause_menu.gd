@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+onready var main = get_parent()
+onready var game_state = get_node("../GameState")
 onready var tween = $Tween
 var active : bool = false
 var bg_alpha : float = 0.8
@@ -9,6 +11,8 @@ func _ready():
 
 func _input(ev):
 	if tween.is_active(): return
+	if not main.game_officially_started: return
+	if game_state.game_over_state: return
 	
 	if not active:
 		if ev.is_action_released("pause_open"):

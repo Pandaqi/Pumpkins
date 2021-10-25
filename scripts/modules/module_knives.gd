@@ -1,8 +1,8 @@
 extends Node2D
 
-const MAX_KNIVES : int = 4
 const AUTO_THROW_INTERVAL : float = 5.0
 
+var max_knives : int
 var knives_held = []
 
 var pickup_disabled : bool = false
@@ -20,6 +20,7 @@ var use_curve : bool = false
 onready var body = get_parent()
 onready var map = get_node("/root/Main/Map")
 onready var throwables = get_node("/root/Main/Throwables")
+onready var mode = get_node("/root/Main/ModeManager")
 onready var guide = $Guide
 onready var timer = $Timer
 
@@ -33,6 +34,7 @@ func activate():
 		guide.queue_free()
 		guide = null
 	
+	max_knives = mode.get_max_knife_capacity()
 	create_starting_knives()
 
 func _on_Timer_timeout():
@@ -116,7 +118,7 @@ func count():
 	return knives_held.size()
 
 func at_max_capacity():
-	return (knives_held.size() >= MAX_KNIVES)
+	return (knives_held.size() >= max_knives)
 
 func grab_knife(knife):
 	if at_max_capacity(): return

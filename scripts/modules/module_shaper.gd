@@ -10,6 +10,7 @@ var shape_list : Array = []
 onready var body = get_parent()
 onready var slicer = get_node("/root/Main/Slicer")
 onready var shape_manager = get_node("/root/Main/ShapeManager")
+onready var particles = get_node("/root/Main/Particles")
 
 signal shape_updated()
 
@@ -58,7 +59,15 @@ func on_shape_updated():
 	recalculate_shape_list()
 	recalculate_area()
 	recalculate_bounding_box()
+	check_death()
 	emit_signal("shape_updated")
+
+func check_death():
+	if not body.modules.status.can_die(): return
+	
+	var area_getting_dangerously_small = (area < (slicer.PLAYER_MIN_AREA_FOR_SHAPE + 900.0))
+	if area_getting_dangerously_small:
+		particles.general_feedback(body.global_position, "Almost dead!")
 
 # Area calculation
 func at_max_size():

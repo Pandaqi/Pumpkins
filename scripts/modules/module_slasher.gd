@@ -27,6 +27,7 @@ onready var range_sprite = $Sprite
 const MAX_TIME_HELD : float = 700.0 # holding longer than this changing nothing anymore
 const THROW_STRENGTH_BOUNDS = { 'min': 1300, 'max': 2200 }
 var strength_multiplier : float = 1.0
+onready var throw_strength_sprite = $ThrowStrength
 
 const IDLE_PENALTY_INTERVAL : float = 8.0
 onready var idle_timer = $IdleTimer
@@ -44,6 +45,13 @@ func _ready():
 	if (not GlobalDict.cfg.show_guides) or (not GlobalDict.cfg.allow_quick_slash):
 		range_sprite.queue_free()
 		range_sprite = null
+	
+	remove_child(throw_strength_sprite)
+	map.ground.add_child(throw_strength_sprite)
+	
+	throw_strength_sprite.material = throw_strength_sprite.material.duplicate(true)
+	throw_strength_sprite.material.set_shader_param("ratio", 0.0)
+	throw_strength_sprite.set_visible(false)
 
 func set_player_num(num):
 	player_num = num
@@ -60,6 +68,7 @@ func show_range_sprite():
 	range_sprite.set_visible(true)
 
 func _physics_process(_dt):
+	grow_strength_sprite()
 	position_range_sprite()
 
 func position_range_sprite():
@@ -69,6 +78,14 @@ func position_range_sprite():
 	if waiting_is_over:
 		show_range_sprite()
 	range_sprite.set_position(body.get_global_position())
+
+func grow_strength_sprite():
+	throw_strength_sprite.set_position(body.get_global_transform_with_canvas().origin)
+	
+	# NOTE: taking a square root (or more) means it _starts_ growing really quickly, but _slows down_ near 1.0
+	# Which looks really smooth and I should probably use it more ... 
+	var strength_ratio = clamp(pow(get_time_held() / MAX_TIME_HELD, 0.25), 0.0, 1.0)
+	throw_strength_sprite.material.set_shader_param("ratio", strength_ratio)
 
 func _on_Input_button_press():
 	start_slash()
@@ -131,6 +148,7 @@ func start_slash():
 	if body.modules.knives.has_no_knives(): return
 	
 	GlobalAudio.play_dynamic_sound(body, "windup_throw")
+	throw_strength_sprite.set_visible(true)
 	
 	slash_start_time = OS.get_ticks_msec()
 	slashing_enabled = true
@@ -139,6 +157,7 @@ func finish_slash():
 	if not slashing_enabled: return
 	
 	execute_slash()
+	throw_strength_sprite.set_visible(false)
 	slashing_enabled = false
 
 func execute_slash():

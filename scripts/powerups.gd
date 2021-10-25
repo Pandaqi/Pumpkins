@@ -74,7 +74,13 @@ func get_random_type():
 
 func place_powerup():
 	var p = powerup_scene.instance()
-	p.set_position(spawner.get_valid_pos(placement_params))
+	
+	var pos = spawner.get_valid_pos(placement_params)
+	var pre_locs = GlobalDict.cfg.predefined_powerup_locations
+	if pre_locs:
+		pos = pre_locs[randi() % pre_locs.size()]
+	
+	p.set_position(pos)
 	p.set_rotation(randf() * 2 * PI)
 	map.knives.add_child(p)
 	
@@ -121,5 +127,7 @@ func tween_revealed_powerup(obj):
 func _on_AutoRevealTimer_timeout():
 	var ps = get_tree().get_nodes_in_group("PowerupsUnrevealed")
 	if ps.size() <= 0: return
+	if not GlobalDict.cfg.auto_slice_powerups: return
+	
 	var rand_powerup = ps[randi() % ps.size()]
 	rand_powerup.auto_slice()

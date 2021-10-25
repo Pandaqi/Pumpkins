@@ -87,6 +87,7 @@ func delete():
 	body.queue_free()
 
 func can_die():
+	if not is_from_a_player(): return false
 	return mode.players_can_die()
 
 func die():
@@ -99,6 +100,10 @@ func die():
 	
 	particles.create_explosion_particles(body.global_position)
 	GlobalAudio.play_dynamic_sound(body, "death")
+
+func hide_completely():
+	body.modulate.a = 0.0
+	body.modules.topping.hide_completely()
 
 func make_ghost():
 	body.modulate.a = 0.6

@@ -1,5 +1,7 @@
 extends Node
 
+const DEFAULT_MAX_KNIVES : int = 4
+
 var game_mode : String
 var mode_data 
 var min_collections_needed_to_win : int = 5
@@ -53,3 +55,7 @@ func get_targets():
 func get_collectibles():
 	if not mode_data.has("collectible_group"): return []
 	return get_tree().get_nodes_in_group(mode_data.collectible_group)
+
+func get_max_knife_capacity():
+	if not mode_data.has("max_knife_capacity"): return DEFAULT_MAX_KNIVES
+	return mode_data.max_knife_capacity

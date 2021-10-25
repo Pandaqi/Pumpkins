@@ -5,6 +5,9 @@ onready var settings = $Settings
 
 onready var tween = $Tween
 
+onready var settings_hint_text = $Settings/HintLabel
+onready var settings_anim_player = $Settings/AnimationPlayer
+
 var player_add_scene = preload("res://scenes/gui/player_add.tscn")
 var max_players = GlobalDict.base_cfg.max_players
 var interfaces = []
@@ -12,12 +15,30 @@ var interfaces = []
 var num_bots = 0
 
 func _ready():
+	update_times_opened()
 	fill_container()
+
+func update_times_opened():
+	if GlobalConfig.get_config_val("data", "times_opened") == 0:
+		GlobalConfig.update_config_val({ "sec": "data", "name": "times_opened"}, 1)
+		
+		settings_hint_text.set_visible(false)
+		settings_anim_player.stop()
 
 func save_configuration():
 	for i in range(max_players):
 		var interface = interfaces[i]
 		GlobalDict.player_data[i] = interface.get_data()
+
+func count_total_teams():
+	var teams = []
+	for i in range(max_players):
+		if not GlobalDict.player_data[i].active: break
+		var team_num = GlobalDict.player_data[i].team
+		if team_num in teams: continue
+		teams.append(team_num)
+	
+	return teams.size()
 
 func count_total_players():
 	var sum = 0

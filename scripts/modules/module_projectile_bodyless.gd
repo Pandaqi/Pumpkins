@@ -28,6 +28,7 @@ func poll_front_raycast():
 	if not result: return
 	
 	var hit_body = result.collider
+	if not hit_body or not is_instance_valid(hit_body): return
 	var succesful_grab = body.modules.grabber.try_grabbing(hit_body)
 	if succesful_grab: return
 	
@@ -65,7 +66,9 @@ func poll_back_raycast():
 	var result = body.modules.fakebody.back_raycast
 	if not result: return
 	
-	body.modules.grabber.try_grabbing(result.collider)
+	var hit_body = result.collider
+	if not hit_body or not is_instance_valid(hit_body): return
+	body.modules.grabber.try_grabbing(hit_body)
 
 func poll_special_hits():
 	for ghost in body.modules.fakebody.ghosts_hit:

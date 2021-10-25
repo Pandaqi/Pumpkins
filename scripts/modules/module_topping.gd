@@ -6,6 +6,9 @@ var original_size : float = 256.0
 var ghost_scale : float = 0.25
 var is_ghost : bool = false
 
+func hide_completely():
+	pass
+
 func make_ghost():
 	set_frame(body.modules.status.player_num + 8)
 	

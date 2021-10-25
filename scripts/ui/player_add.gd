@@ -28,7 +28,6 @@ func set_player_num(num):
 	
 	update_bg()
 	update_team_icon()
-	update_bot_status()
 
 func update_bg():
 	var frame = 2 + player_num
@@ -40,7 +39,14 @@ func update_bg():
 	bg.set_frame(frame)
 
 func update_bot_status():
-	var frame = 0 if is_bot else 1
+	var frame = -1
+	if is_bot:
+		frame = 0
+	elif GlobalInput.is_keyboard_player(player_num):
+		frame = 1
+	else:
+		frame = 2
+	
 	bot.set_frame(frame)
 
 func make_human():

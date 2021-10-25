@@ -8,15 +8,18 @@ var base_cfg = {
 	
 	'max_players': 6,
 	'auto_pickup_powerups': false,
+	'auto_slice_powerups': true,
 	'num_starting_knives': 1,
 	'starting_throwable_type': 'knife',
 
-	'use_slidy_throwing': false,
+	'use_slidy_throwing': true,
 	'auto_throw_knives': false,
 	'allow_quick_slash': false,
 	
 	'navigate_settings_with_joystick': true,
 	'add_default_settings_buttons': true,
+	
+	'predefined_powerup_locations': null,
 }
 
 var cfg = {}
@@ -25,12 +28,12 @@ var modes = {
 	"dicey_slicey": { "frame": 0, "win": "survival", "fade_rubble": true, "players_can_die": true, "def": true },
 	
 	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 5, "auto_grow": true, "collectible_group": "PlayerParts" },
+
+	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 10, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3, "max_teams": 4 },
 	
-	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 10, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3 },
+	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 5, "max_knife_capacity": 5, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
 	
-	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 6, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
-	
-	"dwarfing_dumplings": { "frame": 4,"win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true },
+	"dwarfing_dumplings": { "frame": 4,"win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true, "max_teams": 3 },
 	
 	"ropeless_race": { "frame": 5, "win": "survival", "forbid_slicing_players": true, "fade_rubble": true, "players_can_die": true }
 }
@@ -120,8 +123,8 @@ var powerups = {
 	"ghost": { "frame": 3, "temporary": true, "category": "shape" },
 	"hungry": { "frame": 4, "temporary": true, "category": "shape" },
 	
-	"grow_range": { "frame": 5, "category": "slashing" },
-	"shrink_range": { "frame": 6, "category": "slashing" },
+	#"grow_range": { "frame": 5, "category": "slashing" },
+	#"shrink_range": { "frame": 6, "category": "slashing" },
 	"repel_knives": { "frame": 7, "temporary": true, "category": "slashing", "prob": 3 },
 	"lose_knife": { "frame": 8, "category": "slashing" },
 	"faster_throw": { "frame": 11, "category": "slashing" },

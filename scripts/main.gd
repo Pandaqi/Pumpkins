@@ -9,6 +9,8 @@ onready var mode = $ModeManager
 onready var navigation = $Navigation
 onready var start_delay = $StartDelay
 
+var game_officially_started : bool = false
+
 func _ready():
 	randomize()
 	
@@ -26,6 +28,9 @@ func _ready():
 	start_delay.activate()
 	
 	#debug_game_over()
+
+func start_game():
+	game_officially_started = true
 
 func debug_game_over():
 	var winner = get_tree().get_nodes_in_group("Players")[0].modules.status.team_num

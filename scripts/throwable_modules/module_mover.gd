@@ -1,7 +1,7 @@
 extends Node2D
 
 const LINEAR_DAMPING : float = 0.995
-const MIN_SIGNIFICANT_VELOCITY : float = 20.0
+const MIN_SIGNIFICANT_VELOCITY : float = 90.0
 const MIN_BOOMERANG_VELOCITY : float = 500.0
 const GHOST_KNIFE_VELOCITY : float = 200.0
 
