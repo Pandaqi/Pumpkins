@@ -2,6 +2,9 @@ extends Node2D
 
 onready var part : Particles2D = $Particles2D
 
+func disable():
+	self.queue_free()
+
 func update_team_num(num):
 	part.texture = load("res://assets/ui/TeamIcon-" + str(num+1) + ".png")
 

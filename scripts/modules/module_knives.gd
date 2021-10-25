@@ -24,6 +24,8 @@ onready var mode = get_node("/root/Main/ModeManager")
 onready var guide = $Guide
 onready var timer = $Timer
 
+var disabled : bool = false
+
 func activate():
 	if GlobalDict.cfg.auto_throw_knives:
 		_on_Timer_timeout()
@@ -38,6 +40,8 @@ func activate():
 	create_starting_knives()
 
 func _on_Timer_timeout():
+	if disabled: return
+	
 	# mostly to prevent throwing knife immediately on game start
 	if knives_held.size() > 0:
 		throw_first_knife()
@@ -83,7 +87,9 @@ func get_random_throw_interval():
 
 func create_starting_knives():
 	var starting_type = GlobalDict.cfg.starting_throwable_type
-	for _i in range(GlobalDict.cfg.num_starting_knives):
+	var num_starting_knives = GlobalDict.cfg.num_starting_knives
+	
+	for _i in range(num_starting_knives):
 		throwables.create_new_for(body, starting_type)
 	
 	loading_done = true
@@ -123,6 +129,7 @@ func at_max_capacity():
 func grab_knife(knife):
 	if at_max_capacity(): return
 	if pickup_disabled: return
+	if disabled: return
 	
 	knives_held.append(knife)
 	
@@ -170,6 +177,7 @@ func move_first_knife_to_back():
 	highlight_first_knife()
 
 func throw_knife(knife):
+	if disabled: return
 	if knife_overlaps_problematic_body(knife): return
 
 	knives_held.erase(knife)
@@ -293,6 +301,8 @@ func get_radius():
 	return 1.25 * body.modules.shaper.approximate_radius()
 
 func is_mine(other_body):
+	if disabled: return false
+	
 	if other_body.modules.owner.is_hostile(): return false
 	if other_body.modules.owner.is_friendly(): return true
 	if other_body.modules.owner.has_none(): return true
@@ -315,6 +325,9 @@ func destroy_knives():
 		knife.queue_free()
 	
 	knives_held = []
+
+func disable():
+	disabled = true
 
 func disable_pickup():
 	pickup_disabled = true

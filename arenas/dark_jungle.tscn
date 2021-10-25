@@ -177,7 +177,6 @@ light_mask = 2
 [node name="Vines" type="Node2D" parent="Map/Entities" index="4"]
 
 [node name="Vine" parent="Map/Entities/Vines" index="0" instance=ExtResource( 6 )]
-scale = Vector2( 1, 1 )
 
 [node name="Vine2" parent="Map/Entities/Vines" index="1" instance=ExtResource( 6 )]
 position = Vector2( 165.515, 567.796 )
@@ -206,7 +205,6 @@ rotation = 0.933877
 [node name="Vine8" parent="Map/Entities/Vines" index="7" instance=ExtResource( 6 )]
 position = Vector2( 25.1922, 488.767 )
 rotation = 1.20644
-scale = Vector2( 1, 1 )
 
 [node name="Vine9" parent="Map/Entities/Vines" index="8" instance=ExtResource( 6 )]
 position = Vector2( 521.489, 595.057 )
@@ -387,7 +385,6 @@ rotation = -0.00474823
 [node name="Vine53" parent="Map/Entities/Vines" index="52" instance=ExtResource( 6 )]
 position = Vector2( 1449.09, 306.079 )
 rotation = -0.553721
-scale = Vector2( 1, 1 )
 
 [node name="Vine54" parent="Map/Entities/Vines" index="53" instance=ExtResource( 6 )]
 position = Vector2( 1399.9, 247.216 )
@@ -447,7 +444,6 @@ position = Vector2( 378.621, 124.5 )
 polygon = PoolVector2Array( 234.938, -15.8828, 186.181, -90.8029, 176.667, -150.263, 43.4758, -141.939, 106.504, -72.9648, 150.504, -44.4238, 177.856, -46.8022, 217.1, -11.126 )
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Map/Overlay" index="5"]
-visible = false
 color = Color( 0.0941176, 0.184314, 0.145098, 1 )
 
 [node name="Fireflies" type="Node2D" parent="Map/Overlay" index="6"]

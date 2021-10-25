@@ -8,20 +8,22 @@
 
 [node name="HugeDumpling" type="StaticBody2D" groups=[
 "Dumplings",
+"KeepAlives",
+"Sliceables",
 ]]
 script = ExtResource( 4 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PoolVector2Array( 7.22595, -232.065, -78.397, -232.065, -154.506, -198.768, -206.831, -139.307, -228.237, -44.1708, -225.859, 60.4794, -213.967, 138.967, -183.047, 184.157, -128.344, 226.968, -73.6401, 236.482, 26.2533, 234.104, 107.119, 224.59, 171.337, 181.779, 218.905, 122.318, 233.175, 20.0464, 226.04, -48.9276, 209.391, -129.794, 166.58, -184.497, 92.8489, -232.065 )
+polygon = PoolVector2Array( -0.505432, -117.307, 30.4139, -118.496, 64.9009, -110.171, 98.1988, -82.8196, 111.28, -50.711, 114.848, 0.424927, 113.658, 40.8579, 99.3879, 80.1018, 75.6038, 97.9399, 50.6305, 114.589, -0.505432, 114.589, -44.5061, 119.346, -80.1823, 103.886, -103.966, 72.9665, -113.48, 37.2903, -114.669, -1.95349, -114.669, -38.8189, -102.777, -76.8735, -76.6147, -106.604, -26.668, -120.874 )
 
 [node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 
 [node name="Status" type="Node" parent="."]
 script = ExtResource( 1 )
 
 [node name="Team" type="Sprite" parent="Status"]
-scale = Vector2( 2, 2 )
 texture = ExtResource( 3 )
 hframes = 8
 

@@ -1,6 +1,7 @@
 extends Node
 
 var team_num : int = -1
+var player_num : int = -1
 
 onready var body = get_parent()
 onready var players = get_node("/root/Main/Players")

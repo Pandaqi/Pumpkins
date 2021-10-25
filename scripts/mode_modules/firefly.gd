@@ -8,6 +8,8 @@ onready var timer : Timer = $Timer
 onready var light : Light2D = $Light2D
 var vec : Vector2 = Vector2.ZERO
 
+onready var light_timer : Timer = $LightTimer
+
 var owned : bool = false
 var my_owner
 
@@ -17,7 +19,11 @@ func _ready():
 func _physics_process(_dt):
 # warning-ignore:return_value_discarded
 	move_and_slide(vec * SPEED)
+	set_rotation(vec.angle())
 	light.energy = 1.2 + (randf()-0.5)*0.14
+
+func on_throwable_hit():
+	lights_out()
 
 func is_owned():
 	return owned
@@ -29,8 +35,12 @@ func set_owner(body):
 	body.modules.status.hide_completely()
 	body.modules.input.connect("move_vec", self, "receive_vec")
 
-func receive_vec(new_vec, dt = 0.016):
+func receive_vec(new_vec, _dt = 0.016):
 	vec = new_vec
+
+func lights_out():
+	light.set_visible(false)
+	light_timer.start()
 
 func _on_Timer_timeout():
 	change_direction()
@@ -55,7 +65,9 @@ func change_direction():
 		vec.y = -1
 	
 	vec = vec.normalized()
-	set_rotation(vec.angle())
 	
 	if randf() <= PAUSE_PROBABILITY:
 		vec = Vector2.ZERO
+
+func _on_LightTimer_timeout():
+	light.set_visible(true)

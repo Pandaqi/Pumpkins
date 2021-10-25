@@ -6,6 +6,8 @@ var game_mode : String
 var mode_data 
 var min_collections_needed_to_win : int = 5
 
+onready var arena = get_node("../ArenaLoader")
+
 func activate():
 	game_mode = GlobalDict.cfg.game_mode 
 	mode_data = GlobalDict.modes[game_mode]
@@ -59,3 +61,7 @@ func get_collectibles():
 func get_max_knife_capacity():
 	if not mode_data.has("max_knife_capacity"): return DEFAULT_MAX_KNIVES
 	return mode_data.max_knife_capacity
+
+func get_starting_knives():
+	if not mode_data.has('num_starting_knives'): return GlobalDict.cfg.num_starting_knives
+	return mode_data.num_starting_knives

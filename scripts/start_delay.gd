@@ -17,8 +17,11 @@ func _input(ev):
 	if not active: return
 	if not ev.is_action_pressed("skip_reminders"): return
 	
-	# skip animation to the part AFTER the reminders
-	# (though not completely, as that is jarring and misses some of the other fade in
+	skip()
+
+# skip animation to the part AFTER the reminders
+# (though not completely, as that is jarring and misses some of the other fade in
+func skip():
 	$AnimationPlayer.seek(6.0, true)
 
 func play_game_sound():
@@ -34,6 +37,8 @@ func activate():
 	arena.set_frame(GlobalDict.arenas[GlobalDict.cfg.arena].frame)
 	
 	active = true
+	
+	if Global.is_restart: skip()
 
 func unpause():
 	get_tree().paused = false

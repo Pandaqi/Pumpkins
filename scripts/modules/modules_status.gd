@@ -10,9 +10,16 @@ var is_ghost : bool = false
 onready var body = get_parent()
 onready var particles = get_node("/root/Main/Particles")
 onready var mode = get_node("/root/Main/ModeManager")
+onready var arena = get_node("/root/Main/ArenaLoader")
 
 var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
 var dumpling_part_color : Color = Color(1.0, 207/255.0, 112/255.0)
+
+# DEBUGGING (quick death checks, SURELY remove on publish)
+#func _input(ev):
+#	if not is_from_a_player(): return
+#	if ev.is_action_released("ui_up"):
+#		die()
 
 func set_player_num(num):
 	player_num = num
@@ -91,21 +98,39 @@ func can_die():
 	return mode.players_can_die()
 
 func die():
+	if is_dead: return
+	
 	is_dead = true
 	make_ghost()
 	
+	particles.create_explosion_particles(body.global_position)
+	GlobalAudio.play_dynamic_sound(body, "death")
+	
+	var params = arena.on_player_death(body)
+
 	body.modules.knives.destroy_knives()
 	body.modules.collector.disable_collection()
 	body.modules.powerups.disable()
 	
-	particles.create_explosion_particles(body.global_position)
-	GlobalAudio.play_dynamic_sound(body, "death")
+	body.modules.particles.disable()
+	body.modules.knockback.disable()
+	
+	if body.modules.has('tutorial'):
+		body.modules.tutorial.self_destruct()
+	
+	if not params.has('keep_throwing_ability'):
+		body.modules.slasher.disable()
+		body.modules.knives.disable()
 
 func hide_completely():
 	body.modulate.a = 0.0
 	body.modules.topping.hide_completely()
+	body.modules.light2d.queue_free()
+	body.modules.shadowlocation.queue_free()
 
 func make_ghost():
+	if is_dead: return
+	
 	body.modulate.a = 0.6
 	
 	is_ghost = true
@@ -115,6 +140,8 @@ func make_ghost():
 	
 	body.modules.topping.make_ghost()
 	body.modules.drawer.disable()
+	
+	body.add_to_group("NonSolids")
 
 func undo_ghost():
 	if is_dead: return
@@ -128,3 +155,5 @@ func undo_ghost():
 	
 	body.modules.topping.set_frame(player_num)
 	body.modules.drawer.enable()
+	
+	body.remove_from_group("NonSolids")

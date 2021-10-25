@@ -75,6 +75,16 @@ func add_exceptions_between_team_members():
 #		for p in players:
 #			particles.place_team_reminder(p.get_global_position(), i)
 
+func count_num_teams():
+	var teams = []
+	for i in range(8):
+		if not GlobalDict.player_data[i].active: continue
+		var team = GlobalDict.player_data[i].team
+		if team in teams: continue
+		teams.append(team)
+	
+	return teams.size()
+
 func get_players_in_team(team_num):
 	var players = get_tree().get_nodes_in_group("Players")
 	var arr = []
@@ -91,6 +101,7 @@ func get_closest_to(pos, ignore = []):
 	for p in players:
 		var dist = (p.get_global_position() - pos).length()
 		if dist > best_dist: continue
+		if p.modules.status.is_dead: continue
 		if p in ignore: continue
 		
 		best_dist = dist

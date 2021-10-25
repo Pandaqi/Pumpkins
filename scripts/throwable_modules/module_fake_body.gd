@@ -7,7 +7,7 @@ var has_real_body : bool = false
 var knife_half_size = 0.5 * (0.25*256)
 var back_raycast = null
 var front_raycast = null
-var ghosts_hit = []
+var nonsolids_hit = []
 
 var collision_exceptions = []
 
@@ -20,16 +20,16 @@ func disable_real_collisions():
 	body.collision_layer = 0 
 	body.collision_mask = 0
 
-func _physics_process(_dt):
+func _physics_process(dt):
 	reset_all()
 	
 	if body.modules.status.being_held: return
 	
-	shoot_raycast()
+	shoot_raycast(dt)
 	shoot_back_raycast()
 
 func reset_all():
-	ghosts_hit = []
+	nonsolids_hit = []
 	back_raycast = null
 	front_raycast = null
 
@@ -61,7 +61,7 @@ func build_exclude_array():
 	
 	return exclude
 
-func shoot_raycast():
+func shoot_raycast(dt):
 	if body.modules.status.is_stuck: return
 	
 	var space_state = get_world_2d().direct_space_state
@@ -69,7 +69,7 @@ func shoot_raycast():
 	var margin = 6
 	var vel = body.modules.mover.velocity
 	var rot = body.rotation
-	var raycast_length = 2*knife_half_size + vel.length() * 0.016 + margin
+	var raycast_length = 2*knife_half_size + 3 * vel.length() * dt + margin
 
 	var normal = vel.normalized()
 	if vel.length() <= 0.1: normal = Vector2(cos(rot), sin(rot))
@@ -83,21 +83,22 @@ func shoot_raycast():
 	var collision_layer = 1 + 4 + 8 + 16 # layer 1 (all; 2^0), 3 (loose parts; 2^2) and 4 (powerups; 2^3) and 5 (ghosts; 2^4)
 	
 	var result = null
-	var hit_a_ghost : bool = true
+	var hit_a_nonsolid : bool = true
 	
-	ghosts_hit = []
-	while hit_a_ghost:
-		hit_a_ghost = false
+	nonsolids_hit = []
+	while hit_a_nonsolid:
+		hit_a_nonsolid = false
 		
 		result = space_state.intersect_ray(start, end, exclude, collision_layer)
 		
 		if not result: break
-		if not result.collider.is_in_group("Players"): break
-		if not result.collider.modules.status.is_ghost: break
 		
-		hit_a_ghost = true
-		exclude += [result.collider]
-		ghosts_hit.append(result.collider)
+		var hit_body = result.collider
+		if not hit_body.is_in_group("NonSolids"): break
+		
+		hit_a_nonsolid = true
+		exclude += [hit_body]
+		nonsolids_hit.append(hit_body)
 	
 	front_raycast = result
 

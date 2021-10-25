@@ -19,6 +19,7 @@ var powerup_scene = preload("res://scenes/powerup.tscn")
 
 var available_powerups = []
 var full_list = []
+var pre_locs = null
 var placement_params
 
 func activate():
@@ -29,8 +30,11 @@ func activate():
 		"avoid_powerups": MIN_DIST_TO_OTHER_POWERUP
 	}
 	
+	pre_locs = GlobalDict.cfg.predefined_powerup_locations
+	
 	precalculate_powerup_probabilities()
 	_on_Timer_timeout()
+
 
 func precalculate_powerup_probabilities():
 	var ps = GlobalDict.powerups
@@ -59,8 +63,9 @@ func _on_Timer_timeout():
 	timer.start()
 
 func check_powerup_placement():
-	var num_powerups = get_tree().get_nodes_in_group("Powerups")
-	if num_powerups.size() >= NUMBERS.max: return
+	var num_powerups = get_tree().get_nodes_in_group("Powerups").size()
+	if num_powerups >= NUMBERS.max: return
+	if pre_locs and num_powerups >= pre_locs.size(): return
 	
 	place_powerup()
 
@@ -76,9 +81,7 @@ func place_powerup():
 	var p = powerup_scene.instance()
 	
 	var pos = spawner.get_valid_pos(placement_params)
-	var pre_locs = GlobalDict.cfg.predefined_powerup_locations
-	if pre_locs:
-		pos = pre_locs[randi() % pre_locs.size()]
+	if pre_locs: pos = pre_locs[randi() % pre_locs.size()]
 	
 	p.set_position(pos)
 	p.set_rotation(randf() * 2 * PI)

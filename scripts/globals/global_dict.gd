@@ -9,7 +9,9 @@ var base_cfg = {
 	'max_players': 6,
 	'auto_pickup_powerups': false,
 	'auto_slice_powerups': true,
+	
 	'num_starting_knives': 1,
+	
 	'starting_throwable_type': 'knife',
 
 	'use_slidy_throwing': true,
@@ -33,13 +35,13 @@ var modes = {
 	
 	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 5, "max_knife_capacity": 5, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
 	
-	"dwarfing_dumplings": { "frame": 4,"win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true, "max_teams": 3 },
+	"dwarfing_dumplings": { "frame": 4, "win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true, "max_teams": 3 },
 	
 	"ropeless_race": { "frame": 5, "win": "survival", "forbid_slicing_players": true, "fade_rubble": true, "players_can_die": true }
 }
 
 var arenas = {
-	"dark_jungle": { "frame": 3, "def": true },
+	"dark_jungle": { "frame": 3, "num_starting_knives": 3, "def": true },
 	"ghost_town": { "frame": 2 },
 	"spooky_forest": { "frame": 0 },
 	"graveyard": { "frame": 1 },

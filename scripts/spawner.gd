@@ -4,6 +4,7 @@ func get_valid_pos(params):
 	var pos
 	var bad_choice = true
 	var num_tries = 0
+	var max_tries = 600
 	
 	while bad_choice:
 		pos = get_random_inner_position()
@@ -21,8 +22,9 @@ func get_valid_pos(params):
 		if params.has('avoid_targets'):
 			if num_tries < 300 and too_close_to_group(pos, params.avoid_targets, "Targets"): continue
 		
-		
 		bad_choice = false
+		
+		if num_tries >= max_tries: break
 	
 	return pos
 

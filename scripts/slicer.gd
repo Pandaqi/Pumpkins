@@ -62,8 +62,12 @@ func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include
 
 func slice_body(b, p1, p2, attacker):
 	var original_player_num = -1
+	var original_color = Color(1,1,1)
 	if b.modules.has("status"):
 		original_player_num = b.modules.status.player_num
+	
+	if b.modules.has("drawer"):
+		original_color = b.modules.drawer.color
 	
 	var num_shapes = b.shape_owner_get_shape_count(0)
 	var cur_shapes = []
@@ -117,12 +121,19 @@ func slice_body(b, p1, p2, attacker):
 	
 	# create bodies for each set of points left over
 	var new_bodies = []
+	var new_body_params = { 
+			'player_num': original_player_num, 
+			'is_powerup': params.is_powerup, 
+			'is_dumpling': params.is_dumpling,
+			'color': original_color
+		}
+		
 	for key in shape_layers:
 		var shp = shape_layers[key]
 
 		if shape_manager.calculate_area(shp) < MIN_AREA_FOR_SHAPE: continue
-		
-		var body = create_body_from_shape_list(shp, { 'player_num': original_player_num, 'is_powerup': params.is_powerup, 'is_dumpling': params.is_dumpling })
+
+		var body = create_body_from_shape_list(shp, new_body_params)
 		new_bodies.append(body)
 		
 		shoot_body_away_from_line(p1, p2, body)
@@ -185,7 +196,6 @@ func handle_old_body_death(b, params = {}):
 	if params.is_powerup:
 		b.reveal_powerup(params.attacker)
 		return
-		
 
 	# destroy the old body completely; we'll create new ones
 	# NOTE: this is actually the most common, basic way to deal with it
@@ -329,6 +339,8 @@ func create_body_from_shape_list(shapes : Array, params = {}) -> RigidBody2D:
 	body.modules.shaper.create_from_shape_list(shapes)
 	
 	body.modules.status.set_player_num(params.player_num)
+	body.modules.drawer.set_color(params.color)
+	
 	if params.has('is_powerup') and params.is_powerup:
 		body.modules.status.make_powerup_leftover()
 	

@@ -13,7 +13,9 @@ func activate():
 # Required function
 func on_player_death(p):
 	var fireflies = get_tree().get_nodes_in_group("Fireflies")
-	if fireflies.size() <= 0: return
+	if fireflies.size() <= 0: return { }
 	
 	fireflies.shuffle()
 	fireflies[0].set_owner(p)
+	
+	return { }

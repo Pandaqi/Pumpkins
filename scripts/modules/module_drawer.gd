@@ -38,7 +38,7 @@ func _draw():
 		middle_layer_2.append(shape_manager.scale_shape(points, 0.65))
 		top_layer.append(shape_manager.scale_shape(points, 0.3))
 	
-	var outline_color = Color(0.0, 0.0, 0.0)
+	var outline_color = Color(0.0, 0.0, 0.0, 1.0)
 	for i in range(num_shapes):
 		draw_polygon(outline_layer[i], [outline_color])
 	

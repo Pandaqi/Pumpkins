@@ -4,7 +4,7 @@ var is_day : bool = true
 var lights = []
 
 var night_color : Color = Color(10/255.0, 60/255.0, 10/255.0)
-var ghost_knife = null
+var ghost_knives = []
 
 var cave_positions = [Vector2(150,50), Vector2(1750, 1025)]
 
@@ -12,6 +12,8 @@ onready var canvas_mod = $CanvasModulate
 onready var throwables = get_node("/root/Main/Throwables")
 onready var timer = $Timer
 onready var tween = $Tween
+
+var dead_players = []
 
 func activate():
 	for child in get_children():
@@ -22,6 +24,13 @@ func activate():
 	change_mode()
 	
 	timer.start()
+
+func on_player_death(p) -> Dictionary:
+	dead_players.append(p)
+	
+	p.modules.status.hide_completely()
+	
+	return { }
 
 func change_mode():
 	is_day = not is_day
@@ -65,9 +74,23 @@ func unmake_all_ghosts():
 		p.modules.status.undo_ghost()
 
 func make_ghost_knives_appear():
+	ghost_knives = []
+	
+	# make them appear
 	for pos in cave_positions:
-		ghost_knife = throwables.create("ghost_knife")
-		ghost_knife.set_position(pos)
+		var gk = throwables.create("ghost_knife")
+		gk.set_position(pos)
+		ghost_knives.append(gk)
+	
+	# now assign dead players (alternating) to control them
+	var counter : int = 0
+	for p in dead_players:
+		var index = (counter % 2)
+		var target_module = ghost_knives[index].modules.mover
+		
+		p.modules.input.connect("move_vec", target_module, "add_to_override_vec")
+		
+		counter += 1
 
 func _on_Timer_timeout():
 	change_mode()

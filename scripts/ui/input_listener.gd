@@ -105,6 +105,7 @@ func check_new_keyboard(ev):
 
 func check_remove_keyboard(ev):
 	if not ev.is_action_released("remove_keyboard_player"): return
+	if GlobalInput.get_num_keyboard_players() <= 0: return
 	
 	GlobalAudio.play_static_sound("ui_player_remove")
 	main.player_removed(GlobalInput.remove_player('keyboard'))

@@ -18,6 +18,9 @@ onready var players = get_node("/root/Main/Players")
 var velocity : Vector2 = Vector2.ZERO
 var curve_force : Vector3 = Vector3.ZERO # NOTE: fake 3D vector makes calculating forces easier for 2D
 
+var total_override_vec : Vector2
+var total_override_influencers : int
+
 var has_real_body : bool = false
 var use_curve : bool = false
 var boomerang_state : String = "flying"
@@ -39,6 +42,14 @@ func set_random_velocity():
 	var rand_rot = 2*PI*randf()
 	velocity = Vector2(cos(rand_rot), sin(rand_rot))*150
 
+func add_to_override_vec(vec, dt, size = GHOST_KNIFE_VELOCITY):
+	total_override_vec += vec * size
+	total_override_influencers += 1
+
+func reset_override_vec():
+	total_override_vec = Vector2.ZERO
+	total_override_influencers = 0
+
 func _physics_process(dt):
 	if body.modules.status.being_held: return
 	
@@ -46,6 +57,8 @@ func _physics_process(dt):
 	apply_boomerang(dt)
 	apply_ghost_knife(dt)
 	move(dt)
+	
+	reset_override_vec()
 
 func stop():
 	velocity = Vector2.ZERO
@@ -58,6 +71,15 @@ func came_to_standstill():
 func move(dt):
 	if body.modules.status.is_stuck: return
 	if body.modules.status.being_held: return
+	
+	var we_are_overridden = (total_override_vec.length() >= 0.03)
+	if we_are_overridden:
+		var avg = total_override_vec / float(total_override_influencers)
+		velocity = avg
+		
+		print("OVERRIDEN VEC")
+		print(total_override_vec)
+		print(velocity)
 	
 	if velocity.length() <= MIN_SIGNIFICANT_VELOCITY:
 		came_to_standstill()
@@ -80,6 +102,8 @@ func apply_ghost_knife(dt):
 	
 	var speed = GHOST_KNIFE_VELOCITY
 	var closest = players.get_closest_to(body.global_position)
+	if not closest: return
+	
 	var cur_vec = velocity.normalized()
 	if cur_vec.length() <= 0.03: cur_vec = Vector2.RIGHT
 	

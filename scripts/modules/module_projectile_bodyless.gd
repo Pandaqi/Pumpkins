@@ -70,9 +70,11 @@ func poll_back_raycast():
 	if not hit_body or not is_instance_valid(hit_body): return
 	body.modules.grabber.try_grabbing(hit_body)
 
+# TO DO: Not doing anything special with _ghosts_ anymore, as it doesn't seem worth it?
 func poll_special_hits():
-	for ghost in body.modules.fakebody.ghosts_hit:
-		apply_ghost_effect(ghost)
+	for nonsolid in body.modules.fakebody.nonsolids_hit:
+		if nonsolid.script and nonsolid.has_method("on_throwable_hit"):
+			nonsolid.on_throwable_hit()
 
 #
 # Calculating the interactions we have

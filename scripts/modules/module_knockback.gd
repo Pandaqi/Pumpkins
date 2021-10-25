@@ -7,9 +7,16 @@ var knockback_force : Vector2 = Vector2.ZERO
 onready var body = get_parent()
 onready var area = $Area2D
 
+var disabled : bool = false
+
 func _physics_process(_dt):
+	if disabled: return
+	
 	check_force()
 	repel_hostile_entities()
+
+func disable():
+	disabled = true
 
 func apply(force):
 	knockback_force = force

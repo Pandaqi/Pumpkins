@@ -9,6 +9,7 @@ radius = 13.4305
 
 [node name="Firefly" type="KinematicBody2D" groups=[
 "Fireflies",
+"NonSolids",
 ]]
 position = Vector2( 320.02, 272.143 )
 collision_layer = 16
@@ -32,4 +33,9 @@ shape = SubResource( 11 )
 
 [node name="Timer" type="Timer" parent="."]
 
+[node name="LightTimer" type="Timer" parent="."]
+wait_time = 6.0
+one_shot = true
+
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="LightTimer" to="." method="_on_LightTimer_timeout"]

@@ -32,6 +32,8 @@ onready var throw_strength_sprite = $ThrowStrength
 const IDLE_PENALTY_INTERVAL : float = 8.0
 onready var idle_timer = $IdleTimer
 
+var disabled : bool = false
+
 signal slash_range_changed(new_scale)
 signal quick_slash()
 signal thrown_slash()
@@ -53,6 +55,9 @@ func _ready():
 	throw_strength_sprite.material.set_shader_param("ratio", 0.0)
 	throw_strength_sprite.set_visible(false)
 
+func disable():
+	disabled = true
+
 func set_player_num(num):
 	player_num = num
 	
@@ -68,6 +73,8 @@ func show_range_sprite():
 	range_sprite.set_visible(true)
 
 func _physics_process(_dt):
+	if disabled: return
+	
 	grow_strength_sprite()
 	position_range_sprite()
 
@@ -88,12 +95,15 @@ func grow_strength_sprite():
 	throw_strength_sprite.material.set_shader_param("ratio", strength_ratio)
 
 func _on_Input_button_press():
+	if disabled: return
 	start_slash()
 
 func _on_Input_button_release():
+	if disabled: return
 	finish_slash()
 
 func _on_Input_move_vec(vec : Vector2, dt : float):
+	if disabled: return
 	if not slashing_enabled: return
 	if vec.length() <= 0.1: return
 	
