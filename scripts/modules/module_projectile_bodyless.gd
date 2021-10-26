@@ -35,6 +35,12 @@ func poll_front_raycast():
 	if hit_body.is_in_group("Dumplings"):
 		handle_dumpling(hit_body)
 	
+	if hit_body.is_in_group("Customs"):
+		if hit_body.script and hit_body.has_method("on_throwable_hit"):
+			hit_body.on_throwable_hit(body)
+		else:
+			print("Tried to call custom function, but not possible.")
+	
 	# a boomerang always returns after any hit
 	body.modules.mover.boomerang_state = "returning"
 

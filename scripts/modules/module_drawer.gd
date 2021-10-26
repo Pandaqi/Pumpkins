@@ -2,7 +2,9 @@ extends Node2D
 
 onready var body = get_parent()
 
-var color : Color = Color(1.0, 1.0, 0.0)
+export var color : Color = Color(1.0, 1.0, 0.0)
+export var use_multi_color : bool = true
+
 var pumpkin_orange = Color(1.0, 93/255.0, 32/255.0)
 var disabled : bool = false
 var is_huge : bool = false
@@ -11,6 +13,9 @@ onready var shape_manager = get_node("/root/Main/ShapeManager")
 
 func set_color(col):
 	color = col
+
+func set_multi_color(val):
+	use_multi_color = val
 
 func use_huge_coloring():
 	is_huge = true
@@ -50,8 +55,12 @@ func _draw():
 		top_layer.append(shape_manager.scale_shape(points, thresholds[3]))
 	
 	var outline_color = Color(0.0, 0.0, 0.0, 1.0)
+	if not use_multi_color: outline_color = color
+	
 	for i in range(num_shapes):
 		draw_polygon(outline_layer[i], [outline_color])
+	
+	if not use_multi_color: return
 	
 	for i in range(num_shapes):
 		draw_polygon(bottom_layer[i], [color.darkened(0.7)])

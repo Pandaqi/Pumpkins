@@ -1,0 +1,226 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://arenas/arena_skeleton.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/arenas/bogus_blackouts/bg.png" type="Texture" id=2]
+[ext_resource path="res://assets/arenas/bogus_blackouts/entities.png" type="Texture" id=3]
+[ext_resource path="res://assets/arenas/bogus_blackouts/overlay_3.png" type="Texture" id=4]
+[ext_resource path="res://assets/arenas/bogus_blackouts/overlay_7.png" type="Texture" id=5]
+[ext_resource path="res://assets/arenas/bogus_blackouts/overlay_2.png" type="Texture" id=6]
+[ext_resource path="res://assets/arenas/bogus_blackouts/overlay_4.png" type="Texture" id=7]
+[ext_resource path="res://assets/arenas/bogus_blackouts/overlay_5.png" type="Texture" id=8]
+[ext_resource path="res://assets/arenas/bogus_blackouts/overlay_6.png" type="Texture" id=9]
+[ext_resource path="res://assets/arenas/bogus_blackouts/overlay_1.png" type="Texture" id=10]
+[ext_resource path="res://arenas/light_button.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scripts/arenas/bogus_blackouts/custom_logic.gd" type="Script" id=12]
+[ext_resource path="res://arenas/window.tscn" type="PackedScene" id=13]
+[ext_resource path="res://scripts/mode_modules/stairs.gd" type="Script" id=14]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 27.7839
+
+[node name="BogusBlackouts" instance=ExtResource( 1 )]
+
+[node name="Bg" type="Sprite" parent="Map/BG" index="0"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Window" parent="Map/Entities" index="0" instance=ExtResource( 13 )]
+position = Vector2( 566.124, 459.843 )
+
+[node name="Window2" parent="Map/Entities" index="1" instance=ExtResource( 13 )]
+position = Vector2( 768.228, 457.845 )
+
+[node name="Window3" parent="Map/Entities" index="2" instance=ExtResource( 13 )]
+position = Vector2( 1110.72, 772.617 )
+
+[node name="Window4" parent="Map/Entities" index="3" instance=ExtResource( 13 )]
+position = Vector2( 1733.05, 625.031 )
+rotation = 1.5708
+
+[node name="LightButton" parent="Map/Entities" index="4" instance=ExtResource( 11 )]
+position = Vector2( 789.633, 292.545 )
+room_num = 4
+
+[node name="LightButton2" parent="Map/Entities" index="5" instance=ExtResource( 11 )]
+position = Vector2( 535.143, 726.605 )
+rotation = 3.14159
+room_num = 6
+
+[node name="LightButton3" parent="Map/Entities" index="6" instance=ExtResource( 11 )]
+position = Vector2( 1904.7, 265.193 )
+rotation = 3.14159
+room_num = 2
+
+[node name="LightButton4" parent="Map/Entities" index="7" instance=ExtResource( 11 )]
+position = Vector2( 661.857, 16.2878 )
+rotation = 1.5708
+room_num = 7
+
+[node name="LightButton5" parent="Map/Entities" index="8" instance=ExtResource( 11 )]
+position = Vector2( 1225.26, 658.733 )
+rotation = 1.5708
+room_num = 1
+
+[node name="LightButton6" parent="Map/Entities" index="9" instance=ExtResource( 11 )]
+position = Vector2( 826.672, 174.376 )
+rotation = -1.5708
+room_num = 3
+
+[node name="LightButton7" parent="Map/Entities" index="10" instance=ExtResource( 11 )]
+position = Vector2( 226.272, 317.329 )
+rotation = -1.5708
+room_num = 5
+
+[node name="Entities" type="Sprite" parent="Map/Entities" index="11"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Stairs" type="Area2D" parent="Map/Entities" index="12"]
+position = Vector2( 55, 1025 )
+collision_layer = 2
+collision_mask = 2
+script = ExtResource( 14 )
+other_stairs = Vector2( 1860, 60 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Stairs" index="0"]
+shape = SubResource( 1 )
+
+[node name="Stairs2" type="Area2D" parent="Map/Entities" index="13"]
+position = Vector2( 1860, 60 )
+collision_layer = 2
+collision_mask = 2
+script = ExtResource( 14 )
+other_stairs = Vector2( 55, 1025 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Stairs2" index="0"]
+shape = SubResource( 1 )
+
+[node name="Walls" type="StaticBody2D" parent="Map/Entities" index="14" groups=[
+"Deflectables",
+]]
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="0"]
+position = Vector2( 491.591, 336.909 )
+polygon = PoolVector2Array( 57.8835, -91.0746, 91.8247, -91.0746, 91.8247, 56.0037, 59.2977, 56.0037, 57.8835, 19.2341, -311.226, 20.6483, -311.226, -11.8786, 57.8835, -11.8786 )
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="1"]
+position = Vector2( 557.591, 858.909 )
+polygon = PoolVector2Array( -8.11646, -318.918, 22.9963, -321.747, 22.9963, -55.8744, 65.4227, -2.13428, 356.751, -3.54846, 356.751, 26.15, -166.508, 28.9785, -165.094, -0.720032, -51.9571, -2.13428, -6.70221, -62.9455 )
+
+[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="2"]
+position = Vector2( 55.5908, 892.909 )
+polygon = PoolVector2Array( 123.631, -35.8069, -8.3692, -37.8069, -100.369, -163.807, -88.3692, 112.193, -6.3692, -3.80695, 125.409, -4.90924 )
+
+[node name="CollisionPolygon2D4" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="3"]
+position = Vector2( 819.917, 55.4879 )
+polygon = PoolVector2Array( -269.698, 4.58513, -269.698, -64.7113, 24.4589, -68.954, -40.595, 8.82777, -39.1807, 134.693, 49.9147, 134.693, 52.7432, 165.805, -40.595, 164.391, -39.1807, 338.34, -70.2935, 336.925, -70.2935, -12.3855, -129.69, -60.4687, -180.602, -57.6403, -237.171, -15.2139, -235.756, 3.17091 )
+
+[node name="CollisionPolygon2D5" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="4"]
+position = Vector2( 827.917, 555.488 )
+polygon = PoolVector2Array( -78.9167, -15.4879, -45.9167, -16.4879, -48.9167, 140.512, -79.9167, 141.512 )
+
+[node name="CollisionPolygon2D6" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="5"]
+position = Vector2( 1183.92, 579.488 )
+polygon = PoolVector2Array( -148.515, 94.7264, -148.515, 117.354, -60.8335, 117.354, -15.5786, 59.371, 469.497, 57.9568, 470.911, 26.8441, -56.5908, 26.8441, -55.1765, -9.92548, -89.1177, -9.92548, -87.7035, 39.572, -128.716, 93.3121 )
+
+[node name="CollisionPolygon2D7" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="6"]
+position = Vector2( 1694.45, 579.488 )
+polygon = PoolVector2Array( 241.808, 25.4299, 94.73, 28.2583, 94.73, 59.371, 257.365, 59.371 )
+
+[node name="CollisionPolygon2D8" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="7"]
+position = Vector2( 982.448, 235.488 )
+polygon = PoolVector2Array( 100.552, -44.4879, 152.552, -45.4879, 151.552, 111.512, 118.552, 111.512, 117.552, -18.4879, 99.552, -16.4879 )
+
+[node name="CollisionPolygon2D9" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="8"]
+position = Vector2( 979.448, 9.48792 )
+polygon = PoolVector2Array( 119.552, 28.5121, 152.552, 29.5121, 153.552, -28.4879, 120.552, -26.4879 )
+
+[node name="CollisionPolygon2D10" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="9"]
+position = Vector2( 971.21, 903.443 )
+polygon = PoolVector2Array( 123.441, -54.6633, 154.143, -54.6633, 151.473, 73.4814, 124.776, 73.4814 )
+
+[node name="CollisionPolygon2D11" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="10"]
+position = Vector2( 1761.44, 1040.93 )
+polygon = PoolVector2Array( 100.749, 53.4587, 168.826, -39.98, 170.161, 50.7891 )
+
+[node name="CollisionPolygon2D12" type="CollisionPolygon2D" parent="Map/Entities/Walls" index="11"]
+position = Vector2( -120.252, 9.75659 )
+polygon = PoolVector2Array( 98.2521, 63.2434, 217.252, -27.7566, 101.752, -29.2566 )
+
+[node name="Overlay" parent="Map" index="2"]
+visible = false
+
+[node name="Overlay1" type="Sprite" parent="Map/Overlay" index="0"]
+texture = ExtResource( 10 )
+centered = false
+
+[node name="Overlay2" type="Sprite" parent="Map/Overlay" index="1"]
+texture = ExtResource( 6 )
+centered = false
+
+[node name="Overlay3" type="Sprite" parent="Map/Overlay" index="2"]
+texture = ExtResource( 4 )
+centered = false
+
+[node name="Overlay4" type="Sprite" parent="Map/Overlay" index="3"]
+texture = ExtResource( 7 )
+centered = false
+
+[node name="Overlay5" type="Sprite" parent="Map/Overlay" index="4"]
+texture = ExtResource( 8 )
+centered = false
+
+[node name="Overlay6" type="Sprite" parent="Map/Overlay" index="5"]
+texture = ExtResource( 9 )
+centered = false
+
+[node name="Overlay7" type="Sprite" parent="Map/Overlay" index="6"]
+texture = ExtResource( 5 )
+centered = false
+
+[node name="Node2D" type="Node2D" parent="Collectors" index="0"]
+position = Vector2( 1374.24, 288.532 )
+
+[node name="Node2D2" type="Node2D" parent="Collectors" index="1"]
+position = Vector2( 223.092, 621.682 )
+
+[node name="Node2D3" type="Node2D" parent="Collectors" index="2"]
+position = Vector2( 1418.86, 832.875 )
+
+[node name="Node2D4" type="Node2D" parent="Collectors" index="3"]
+position = Vector2( 336.125, 151.702 )
+
+[node name="Node2D5" type="Node2D" parent="Collectors" index="4"]
+position = Vector2( 978.629, 1014.32 )
+
+[node name="Node2D6" type="Node2D" parent="Collectors" index="5"]
+position = Vector2( 898.316, 422.387 )
+
+[node name="Node2D7" type="Node2D" parent="Collectors" index="6"]
+position = Vector2( 954.832, 95.1856 )
+
+[node name="Node2D8" type="Node2D" parent="Collectors" index="7"]
+position = Vector2( 202.27, 1011.35 )
+
+[node name="Node2D" type="Node2D" parent="Dumplings" index="0"]
+position = Vector2( 1442.66, 223.092 )
+
+[node name="Node2D2" type="Node2D" parent="Dumplings" index="1"]
+position = Vector2( 288.532, 624.656 )
+
+[node name="Node2D3" type="Node2D" parent="Dumplings" index="2"]
+position = Vector2( 1484.3, 895.341 )
+
+[node name="CustomLogic" parent="." index="3"]
+script = ExtResource( 12 )
+
+[node name="AutoLightsoffTimer" type="Timer" parent="CustomLogic" index="0"]
+wait_time = 25.0
+
+[connection signal="body_entered" from="Map/Entities/Stairs" to="Map/Entities/Stairs" method="_on_Stairs_body_entered"]
+[connection signal="body_exited" from="Map/Entities/Stairs" to="Map/Entities/Stairs" method="_on_Stairs_body_exited"]
+[connection signal="body_entered" from="Map/Entities/Stairs2" to="Map/Entities/Stairs2" method="_on_Stairs_body_entered"]
+[connection signal="body_exited" from="Map/Entities/Stairs2" to="Map/Entities/Stairs2" method="_on_Stairs_body_exited"]
+[connection signal="timeout" from="CustomLogic/AutoLightsoffTimer" to="CustomLogic" method="_on_AutoLightsoffTimer_timeout"]

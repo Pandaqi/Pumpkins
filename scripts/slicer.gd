@@ -64,11 +64,13 @@ func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include
 func slice_body(b, p1, p2, attacker):
 	var original_player_num = -1
 	var original_color = Color(1,1,1)
+	var use_multi_color = true
 	if b.modules.has("status"):
 		original_player_num = b.modules.status.player_num
 	
 	if b.modules.has("drawer"):
 		original_color = b.modules.drawer.color
+		use_multi_color = b.modules.drawer.use_multi_color
 	
 	var num_shapes = b.shape_owner_get_shape_count(0)
 	var cur_shapes = []
@@ -125,7 +127,8 @@ func slice_body(b, p1, p2, attacker):
 			'player_num': original_player_num, 
 			'is_powerup': params.is_powerup, 
 			'is_dumpling': params.is_dumpling,
-			'color': original_color
+			'color': original_color,
+			'multi_color': use_multi_color
 		}
 		
 	for key in shape_layers:
@@ -340,6 +343,7 @@ func create_body_from_shape_list(shapes : Array, params = {}) -> RigidBody2D:
 	
 	body.modules.status.set_player_num(params.player_num)
 	body.modules.drawer.set_color(params.color)
+	body.modules.drawer.set_multi_color(params.multi_color)
 	
 	if params.has('is_powerup') and params.is_powerup:
 		body.modules.status.make_powerup_leftover()

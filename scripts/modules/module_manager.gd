@@ -11,6 +11,8 @@ var teleport_pos : Vector2 = Vector2.ZERO
 var last_velocity : Vector2 = Vector2.ZERO
 var last_rotation : float = 0.0
 
+var forced_teleport_allowed : bool = true
+
 func _ready():
 	register_modules()
 
@@ -34,6 +36,9 @@ func plan_shoot_away(vec):
 
 func plan_teleport(pos):
 	teleport_pos = pos
+	
+	if self.is_in_group("Players"):
+		set_position(teleport_pos)
 
 func _integrate_forces(state):
 	#state.angular_velocity = 0.0

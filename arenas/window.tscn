@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
+[ext_resource path="res://scripts/modules/module_status_regrowable.gd" type="Script" id=2]
+[ext_resource path="res://scripts/module_manager_sliceable.gd" type="Script" id=3]
+
+[node name="Window" type="StaticBody2D" groups=[
+"Sliceables",
+]]
+position = Vector2( 566.063, 457.845 )
+collision_layer = 5
+collision_mask = 5
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -8.87311, -78.1904, 7.18121, -78.785, 7.18121, 80.5688, -10.0623, 80.5688 )
+
+[node name="Status" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="RegrowTimer" type="Timer" parent="Status"]
+one_shot = true
+
+[node name="Tween" type="Tween" parent="Status"]
+
+[node name="Drawer" type="Node2D" parent="."]
+script = ExtResource( 1 )
+color = Color( 1, 1, 1, 1 )
+use_multi_color = false
+
+[connection signal="timeout" from="Status/RegrowTimer" to="Status" method="_on_RegrowTimer_timeout"]

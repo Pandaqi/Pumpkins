@@ -109,13 +109,13 @@ func place_powerup():
 	tween_bounce_appear(p)
 
 func check_required_type(rand_type, is_throwable):
-	var req_type = mode.required_throwable_type()
-	if not req_type: return
-	
 	var params = {
 		'rand_type': rand_type,
 		'is_throwable': is_throwable,
 	}
+	
+	var req_type = mode.required_throwable_type()
+	if not req_type: return params
 	
 	if spawns_since_last_req_type > 3:
 		spawns_since_last_req_type = 0

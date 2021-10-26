@@ -38,7 +38,7 @@ var settings = [
 		"label": "Fullscreen",
 		"name": "Fullscreen", 
 		"comp": "Checkbox", 
-		"def": false 
+		"def": true 
 	},
 ]
 

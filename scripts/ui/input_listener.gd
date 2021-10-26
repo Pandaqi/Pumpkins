@@ -3,10 +3,11 @@ extends Node
 onready var main = get_parent()
 onready var particles = get_node("../Particles")
 onready var settings = get_node("../Settings")
+onready var technical_settings = get_node("../TechnicalSettings")
 
 var screen_center = 0.5*Vector2(1920, 1080)
 
-func _input(ev):
+func _unhandled_input(ev):
 	check_new_controller(ev)
 	check_new_keyboard(ev)
 	
@@ -49,6 +50,9 @@ func start_game():
 
 func open_settings():
 	Global.load_settings()
+
+func open_technical_settings():
+	technical_settings.show()
 
 func exit():
 	get_tree().quit()

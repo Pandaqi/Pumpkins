@@ -18,6 +18,11 @@ func _ready():
 	update_times_opened()
 	fill_container()
 
+# Called when we close the technical settings (and thus show this main screen again)
+# Does nothing for now
+func show():
+	pass
+
 func update_times_opened():
 	if GlobalConfig.get_config_val("data", "times_opened") == 0:
 		GlobalConfig.update_config_val({ "sec": "data", "name": "times_opened"}, 1)
