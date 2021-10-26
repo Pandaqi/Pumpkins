@@ -13,6 +13,7 @@ onready var dramatic_slice = get_node("../DramaticSlice")
 onready var map = get_node("../Map")
 onready var shape_manager = get_node("../ShapeManager")
 onready var mode = get_node("../ModeManager")
+onready var particles = get_node("../Particles")
 
 var start_point
 var end_point
@@ -88,10 +89,9 @@ func slice_body(b, p1, p2, attacker):
 		
 		if res.result == "half":
 			half_slices_happened = true
-	
-	# TO DO: show feedback for this in-game
+
 	if half_slices_happened:
-		print("HALF SLICE")
+		particles.general_feedback(b.global_position, "Almost!")
 	
 	# shape lists are the same? nothing happened, abort mission
 	if cur_shapes.size() == new_shapes.size():

@@ -13,6 +13,7 @@ var base_cfg = {
 	'num_starting_knives': 1,
 	
 	'starting_throwable_type': 'knife',
+	'auto_throw_if_idle': false,
 
 	'use_slidy_throwing': true,
 	'auto_throw_knives': false,
@@ -33,9 +34,9 @@ var modes = {
 
 	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 10, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3, "max_teams": 4 },
 	
-	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 5, "max_knife_capacity": 5, "auto_spawns": "dumplings", "collectible_group": "Dumplings" },
+	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 5, "max_knife_capacity": 5, "collectible_group": "Dumplings", "inverse_dumpling_behaviour": true, "required_throwable_type": "dumpling" },
 	
-	"dwarfing_dumplings": { "frame": 4, "win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true, "max_teams": 3 },
+	"dwarfing_dumplings": { "frame": 4, "win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true, "max_teams": 3, "starting_shape_scale": 0.66, "required_throwable_type": "dumpling" },
 	
 	"ropeless_race": { "frame": 5, "win": "survival", "forbid_slicing_players": true, "fade_rubble": true, "players_can_die": true }
 }
@@ -55,15 +56,22 @@ var configurable_settings = {
 	"shrink_area": { "frame": 4, "def": false },
 	"show_guides": { "frame": 5, "def": true },
 	"everyone_starts_pumpkin": { "frame": 6, "def": false },
-	"stuck_reset": { "frame": 7, "def": true }
+	"stuck_reset": { "frame": 7, "def": true },
+	"light_effects": { "frame": 8, "def": true }
 }
 
 var throwables = {
-	"knife": { "body": false, "owner": "auto", "base_frame": 0, "frame": 0, "def": true, "prob": 5 },
-	"boomerang": { "body": false, "owner": "auto", "base_frame": 9, "frame": 1, "prob": 3, "def": true },
-	"curve": { "body": false, "owner": "auto", "base_frame": 18, "frame": 2, "prob": 2 },
-	"ghost_knife": { "body": false, "owner": "hostile", "base_frame": 27, "frame": 3 },
-	"dumpling": { "body": true, "owner": "friendly", "base_frame": 28, "prob": 4, "frame": 4 } 
+	"knife": { "body": false, "owner": "auto", "base_frame": 0, "frame": 0, "def": true, "prob": 5, "category": "knife" },
+	"boomerang": { "body": false, "owner": "auto", "base_frame": 9, "frame": 1, "prob": 3, "def": true, "category": "knife" },
+	"curve": { "body": false, "owner": "auto", "base_frame": 18, "frame": 2, "prob": 2, "category": "knife" },
+	"ghost_knife": { "body": false, "owner": "hostile", "base_frame": 27, "frame": 3, "category": "knife" },
+	
+	"dumpling": { "body": true, "owner": "friendly", "base_frame": 28, "prob": 4, "frame": 4, "category": "dumpling", "def": true }, 
+	"dumpling_poisoned": { "body": true, "owner": "friendly", "base_frame": 29, "prob": 2, "frame": 5, "category": "dumpling" },
+	"dumpling_double": { "body": true, "owner": "friendly", "base_frame": 30, "frame": 6, "category": "dumpling" },
+	"dumpling_downgrade": { "body": true, "owner": "friendly", "base_frame": 31, "frame": 7, "category": "dumpling" },
+	"dumpling_timebomb": { "body": true, "owner": "friendly", "base_frame": 32, "prob": 2, "frame": 8, "category": "dumpling" },
+	
 }
 
 var nav_data = {

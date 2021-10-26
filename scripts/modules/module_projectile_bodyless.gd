@@ -32,6 +32,9 @@ func poll_front_raycast():
 	var succesful_grab = body.modules.grabber.try_grabbing(hit_body)
 	if succesful_grab: return
 	
+	if hit_body.is_in_group("Dumplings"):
+		handle_dumpling(hit_body)
+	
 	# a boomerang always returns after any hit
 	body.modules.mover.boomerang_state = "returning"
 
@@ -79,7 +82,15 @@ func poll_special_hits():
 #
 # Calculating the interactions we have
 #
+
+# TO DO: Check if the attacking object (ourselves, "body") is an actual knife?
+func handle_dumpling(obj):
+	var victim = obj.modules.owner.get_owner()
+	var attacker = body.modules.owner.get_owner()
+	victim.modules.knives.check_dumpling_hit(obj, attacker)
+
 func get_stuck(result):
+	if body.modules.status.is_stuck: return true
 	if body.modules.status.type == "boomerang": return false
 	
 	body.modules.mover.set_velocity(Vector2.ZERO)
@@ -92,6 +103,7 @@ func get_stuck(result):
 	particles.create_explosion_particles(body.global_position)
 	
 	body.modules.fakebody.reset_all()
+	body.modules.fakebody.reset_collision_exceptions()
 	
 	return true
 
@@ -100,20 +112,11 @@ func check_repellant_powerup(obj):
 	if not obj.modules.powerups.repel_knives: return false
 	return true
 
-func check_dumpling(obj):
-	if not obj.is_in_group("Players"): return false
-	if not obj.modules.knives.has_type("dumpling"): return false
-	if not obj.modules.knives.has_dumpling_on_income_vec(body): return false
-	return true
-
 func slice_through_body(obj):
 	# projectiles with a real body can NEVER slice something
 	if body.modules.fakebody.has_real_body: return false
 	
 	var res = check_repellant_powerup(obj)
-	if res: return false
-	
-	res = check_dumpling(obj)
 	if res: return false
 	
 	var normal = body.modules.mover.velocity.normalized()

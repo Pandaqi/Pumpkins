@@ -12,6 +12,7 @@ var huge_dumpling_scene = preload("res://scenes/mode_modules/huge_dumpling.tscn"
 
 var custom_logic = null
 var dumpling_locations = []
+var huge_dumplings = []
 
 func activate():
 	load_arena()
@@ -64,6 +65,9 @@ func place_huge_dumplings():
 		var d = huge_dumpling_scene.instance()
 		d.set_position(dumpling_locations[i])
 		map.entities.add_child(d)
+		
+		d.modules.status.set_team_num(i)
+		huge_dumplings.append(d)
 	
 	
 	

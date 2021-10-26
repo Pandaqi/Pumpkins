@@ -11,6 +11,9 @@ func throw(thrower, vel):
 	
 	body.remove_collision_exception_with(thrower)
 	
+#	if body.modules.fakebody.has_real_body:
+#		body.modules.fakebody.enable_real_collisions()
+	
 	var type = body.modules.status.type
 	if type == "curve":
 		body.modules.mover.make_curving(thrower.modules.slasher.get_curve_strength())

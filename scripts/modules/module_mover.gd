@@ -31,6 +31,7 @@ func _on_Input_move_vec(vec : Vector2, dt : float):
 			remove_move_audio()
 			emit_signal("movement_stopped")
 		state = "stopped"
+		last_velocity = Vector2.ZERO
 		return
 	
 	if state == "stopped":

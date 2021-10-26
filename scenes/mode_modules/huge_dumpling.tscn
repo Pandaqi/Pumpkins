@@ -1,13 +1,72 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scripts/mode_modules/huge_dumpling_status.gd" type="Script" id=1]
 [ext_resource path="res://assets/huge_dumpling.png" type="Texture" id=2]
 [ext_resource path="res://assets/ui/team_icons.png" type="Texture" id=3]
 [ext_resource path="res://scripts/mode_modules/huge_dumpling_container.gd" type="Script" id=4]
 [ext_resource path="res://scripts/modules/module_shaper.gd" type="Script" id=5]
+[ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=6]
+[ext_resource path="res://animations/dumpling_flicker.tres" type="Animation" id=7]
+[ext_resource path="res://animations/dumpling_flicker_bad.tres" type="Animation" id=8]
+[ext_resource path="res://scripts/modules/module_grower.gd" type="Script" id=9]
+[ext_resource path="res://scripts/mode_modules/huge_dumpling_area.gd" type="Script" id=10]
+[ext_resource path="res://scripts/mode_modules/huge_dumpling_invincibility.gd" type="Script" id=11]
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 136.14
+
+[sub_resource type="Animation" id=4]
+resource_name = "Invincible"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.466667 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 307.593
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Drawer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
 
 [node name="HugeDumpling" type="StaticBody2D" groups=[
-"Dumplings",
+"HugeDumplings",
 "KeepAlives",
 "Sliceables",
 ]]
@@ -17,17 +76,65 @@ script = ExtResource( 4 )
 polygon = PoolVector2Array( -0.505432, -117.307, 30.4139, -118.496, 64.9009, -110.171, 98.1988, -82.8196, 111.28, -50.711, 114.848, 0.424927, 113.658, 40.8579, 99.3879, 80.1018, 75.6038, 97.9399, 50.6305, 114.589, -0.505432, 114.589, -44.5061, 119.346, -80.1823, 103.886, -103.966, 72.9665, -113.48, 37.2903, -114.669, -1.95349, -114.669, -38.8189, -102.777, -76.8735, -76.6147, -106.604, -26.668, -120.874 )
 
 [node name="Sprite" type="Sprite" parent="."]
+visible = false
 scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 
 [node name="Status" type="Node" parent="."]
 script = ExtResource( 1 )
+dumpling_part_color = Color( 1, 0.752941, 0.435294, 1 )
 
-[node name="Team" type="Sprite" parent="Status"]
+[node name="Drawer" type="Node2D" parent="."]
+position = Vector2( 0, -1 )
+script = ExtResource( 6 )
+
+[node name="Team" type="Sprite" parent="Drawer"]
+position = Vector2( 0, 1 )
 texture = ExtResource( 3 )
 hframes = 8
 
 [node name="Shaper" type="Node2D" parent="."]
 script = ExtResource( 5 )
 
+[node name="Grower" type="Node2D" parent="."]
+script = ExtResource( 9 )
+
+[node name="Timer" type="Timer" parent="Grower"]
+
+[node name="Area" type="Node2D" parent="."]
+script = ExtResource( 10 )
+
+[node name="Area2D" type="Area2D" parent="Area"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area/Area2D"]
+shape = SubResource( 3 )
+
+[node name="Invincibility" type="Node2D" parent="."]
+script = ExtResource( 11 )
+
+[node name="Timer" type="Timer" parent="Invincibility"]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Invincibility"]
+anims/Invincible = SubResource( 4 )
+anims/RESET = SubResource( 5 )
+
+[node name="Area2D" type="Area2D" parent="Invincibility"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Invincibility/Area2D"]
+shape = SubResource( 6 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "DumplingFlicker"
+anims/DumplingFlicker = ExtResource( 7 )
+anims/DumplingFlickerBad = ExtResource( 8 )
+anims/RESET = SubResource( 2 )
+
 [connection signal="shape_updated" from="Shaper" to="Status" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Area" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Invincibility" method="_on_Shaper_shape_updated"]
+[connection signal="body_entered" from="Area/Area2D" to="Area" method="_on_Area2D_body_entered"]
+[connection signal="timeout" from="Invincibility/Timer" to="Invincibility" method="_on_Timer_timeout"]

@@ -7,9 +7,9 @@ var knives_held = []
 
 var pickup_disabled : bool = false
 
-var num_snap_angles : int = 8
+var num_snap_angles : int = 6
 var snap_angles_taken = []
-var knives_by_snap_angle = {}
+var knives_by_snap_angle = []
 
 var loading_done : bool = false
 var cur_autothrow_time : float = 0.0
@@ -20,6 +20,7 @@ var use_curve : bool = false
 onready var body = get_parent()
 onready var map = get_node("/root/Main/Map")
 onready var throwables = get_node("/root/Main/Throwables")
+onready var particles = get_node("/root/Main/Particles")
 onready var mode = get_node("/root/Main/ModeManager")
 onready var guide = $Guide
 onready var timer = $Timer
@@ -37,6 +38,8 @@ func activate():
 		guide = null
 	
 	max_knives = mode.get_max_knife_capacity()
+	knives_by_snap_angle.resize(num_snap_angles)
+	
 	create_starting_knives()
 
 func _on_Timer_timeout():
@@ -59,16 +62,17 @@ func has_type(type : String):
 	
 	return false
 
-func has_dumpling_on_income_vec(knife):
-	var income_vec = (knife.get_global_position() - body.get_global_position()).normalized()
-	var income_vec_rotated_correctly = income_vec.rotated(-body.rotation)
-	var ang = income_vec_rotated_correctly.angle()
-	var ang_index = snap_ang_to_index(ang)
+func check_dumpling_hit(dumpling, attacker):
+	var type = dumpling.modules.status.type
 	
-	if not (ang_index in snap_angles_taken): return false
-	if knives_by_snap_angle[ang_index].modules.status.type != "dumpling": return false
+	if type == "dumpling_poisoned":
+		attacker.modules.powerups.grab(null, type, "reverse")
+		attacker.modules.knives.lose_random()
 	
-	return true
+	if not mode.inverted_dumpling_behaviour(): return
+
+	throwables.create_new_for(attacker, type)
+	remove_specific(dumpling)
 
 func _on_Slasher_slash_range_changed(s):
 	$AutoThrow.set_scale(s)
@@ -116,9 +120,17 @@ func lose_random():
 	if knives_held.size() <= 0: return
 	
 	var rand_knife = knives_held[randi() % knives_held.size()]
-	unsnap_knife_angle(rand_knife.rotation)
-	knives_held.erase(rand_knife)
-	rand_knife.queue_free()
+	remove_specific(rand_knife)
+
+func remove_specific(obj):
+	unhighlight_knife(obj)
+	highlight_first_knife()
+	
+	check_for_collectibles(obj, -1)
+	
+	unsnap_knife_angle(obj.rotation)
+	knives_held.erase(obj)
+	obj.queue_free()
 
 func count():
 	return knives_held.size()
@@ -155,16 +167,41 @@ func grab_knife(knife):
 	
 	body.modules.slasher.reset_idle_timer()
 	
+	# check for types that do something special to us
+	var val = +1
+	var type = knife.modules.status.type
+	if type == "dumpling_double":
+		val = 2
+		body.modules.grower.grow(0.1)
+	elif type == "dumpling_downgrade":
+		val = -1
+		body.modules.grower.shrink(0.1)
+	elif type == "dumpling_timebomb":
+		knife.modules.timebomb.activate()
+	
+	check_for_collectibles(knife, val)
+	
 	if loading_done:
 		highlight_first_knife()
 
-func throw_first_knife():
-	if knives_held.size() <= 0: return null # TO DO: Feedback "KNIFE ICON, QUESTION MARK"
+func check_for_collectibles(obj, change):
+	var col_group = mode.get_collectible_group()
+	if not col_group: return
+	if not obj.is_in_group(col_group): return
 	
-	throw_knife(knives_held[0])
+	body.modules.collector.collect(change)
+
+func throw_first_knife():
+	var first_knife = get_first_knife()
+	if not first_knife: 
+		particles.general_feedback(body.global_position, "No Throwables!")
+		return
+	
+	throw_knife(first_knife)
 
 func get_first_knife_vec():
-	if knives_held.size() <= 0: return Vector2.ZERO
+	var first_knife = get_first_knife()
+	if not first_knife: return Vector2.ZERO
 	
 	var ang = knives_held[0].rotation + body.rotation
 	return Vector2(cos(ang), sin(ang))
@@ -202,6 +239,18 @@ func throw_knife(knife):
 	
 	knife.modules.thrower.throw(body, final_throw_vec)
 	
+	# check for types that do something special to us
+	var val = -1
+	var type = knife.modules.status.type
+	if type == "dumpling_double":
+		val = -2
+	elif type == "dumpling_downgrade":
+		val = +1
+	elif type == "dumpling_timebomb":
+		knife.modules.timebomb.deactivate()
+	
+	check_for_collectibles(knife, val)
+	
 	unhighlight_knife(knife)
 	highlight_first_knife()
 
@@ -212,10 +261,23 @@ func unhighlight_knife(knife):
 	if guide:
 		guide.set_visible(false)
 
-func highlight_first_knife():
+func get_first_knife():
 	if knives_held.size() <= 0: return
 	
-	var first_knife = knives_held[0]
+	var col_group = mode.get_collectible_group()
+	if not col_group: return knives_held[0]
+	
+	# throwables that are also collectible can't be thrown
+	# (as it would be useless and annoying, losing your collectible each time)
+	for i in range(knives_held.size()):
+		if knives_held[i].is_in_group(col_group): continue
+		return knives_held[i]
+	
+	return null
+
+func highlight_first_knife():
+	var first_knife = get_first_knife()
+	if not first_knife: return
 	first_knife.get_node("AnimationPlayer").play("Highlight")
 
 	if guide:
@@ -231,13 +293,16 @@ func highlight_first_knife():
 #
 func unsnap_knife_angle(rot):
 	var epsilon = 0.03
-	var ang_index : int = int(floor((rot + epsilon) / (2*PI) * num_snap_angles))
-	knives_by_snap_angle.erase(ang_index)
+	var ang_index = snap_ang_to_index(rot)
+	
+	knives_by_snap_angle[ang_index] = null
 	snap_angles_taken.erase(ang_index)
 
 func snap_ang_to_index(ang):
 	var epsilon = 0.03
-	return floor((ang + epsilon) / (2*PI) * num_snap_angles)
+	var ang_index : int = int(round((ang + epsilon) / (2*PI) * num_snap_angles))
+	ang_index = (ang_index + num_snap_angles) % num_snap_angles 
+	return ang_index
 
 func snap_ang(ang):
 	var ang_index = snap_ang_to_index(ang)
@@ -350,8 +415,10 @@ func knife_overlaps_problematic_body(knife):
 	if result:
 		for obj in result:
 			var hit_body = obj.collider
+			
 			if hit_body == knife: continue
 			if hit_body.is_in_group("Players"): continue
+			if hit_body.is_in_group("Throwables"): continue
 			if not hit_body.is_in_group("Sliceables"): return true
 	
 	return false

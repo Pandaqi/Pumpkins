@@ -37,11 +37,18 @@ func get_random_shape():
 # Predefined shapes
 func load_predefined_shapes():
 	var list = predefined_shape_scene.instance()
+	var shape_size = PREDEFINED_SHAPE_SIZE
+	
+	# ModeManager not loaded yet, need to grab it this way
+	var mode_data = GlobalDict.modes[GlobalDict.cfg.game_mode]
+	if mode_data.has("starting_shape_scale"):
+		shape_size *= mode_data.starting_shape_scale
+	
 	for child in list.get_children():
 		if not (child is CollisionPolygon2D): continue
 		
 		var key = child.name.to_lower()
-		var val = scale_shape_absolutely( Array(child.polygon), PREDEFINED_SHAPE_SIZE )
+		var val = scale_shape_absolutely( Array(child.polygon), shape_size)
 
 		GlobalDict.predefined_shapes[key].points = val
 

@@ -196,9 +196,7 @@ func execute_quick_slash():
 	body.modules.statistics.record("quick_stabs", 1)
 	body.modules.statistics.record("knives_used", 1)
 	
-	if not vec:
-		# print the "NO KNIVES" feedback
-		return
+	if not vec: return
 	
 	hide_range_sprite()
 	
@@ -313,4 +311,6 @@ func reset_idle_timer():
 # We've grabbed/thrown a knife and then not done something for X seconds
 # The penalty? Automatically throw something
 func _on_IdleTimer_timeout():
+	if not GlobalDict.cfg.auto_throw_if_idle: return
+	
 	execute_thrown_slash()

@@ -188,6 +188,17 @@ position = Vector2( 1046.52, 791.96 )
 [node name="Node2D8" type="Node2D" parent="Collectors"]
 position = Vector2( 989.949, 1004.09 )
 
+[node name="Dumplings" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="Dumplings"]
+position = Vector2( 804.051, 134.946 )
+
+[node name="Node2D2" type="Node2D" parent="Dumplings"]
+position = Vector2( 1669.95, 792.806 )
+
+[node name="Node2D3" type="Node2D" parent="Dumplings"]
+position = Vector2( 666.294, 885.581 )
+
 [node name="CustomLogic" type="Node2D" parent="."]
 script = ExtResource( 3 )
 
@@ -246,7 +257,9 @@ light_mask = 3
 [node name="CanvasModulate" type="CanvasModulate" parent="CustomLogic"]
 color = Color( 0.0392157, 0.235294, 0.0392157, 1 )
 
-[node name="Light2D" type="Light2D" parent="CustomLogic"]
+[node name="Light2D" type="Light2D" parent="CustomLogic" groups=[
+"KeepLights",
+]]
 position = Vector2( 316.784, 322.441 )
 texture = ExtResource( 4 )
 texture_scale = 2.0
@@ -254,7 +267,9 @@ range_item_cull_mask = 3
 shadow_enabled = true
 shadow_item_cull_mask = 2
 
-[node name="Light2D2" type="Light2D" parent="CustomLogic"]
+[node name="Light2D2" type="Light2D" parent="CustomLogic" groups=[
+"KeepLights",
+]]
 position = Vector2( 458.205, 825.901 )
 texture = ExtResource( 4 )
 texture_scale = 2.0
@@ -262,7 +277,9 @@ range_item_cull_mask = 3
 shadow_enabled = true
 shadow_item_cull_mask = 2
 
-[node name="Light2D3" type="Light2D" parent="CustomLogic"]
+[node name="Light2D3" type="Light2D" parent="CustomLogic" groups=[
+"KeepLights",
+]]
 position = Vector2( 1168.14, 650.538 )
 texture = ExtResource( 4 )
 texture_scale = 2.0
@@ -270,7 +287,9 @@ range_item_cull_mask = 3
 shadow_enabled = true
 shadow_item_cull_mask = 2
 
-[node name="Light2D4" type="Light2D" parent="CustomLogic"]
+[node name="Light2D4" type="Light2D" parent="CustomLogic" groups=[
+"KeepLights",
+]]
 position = Vector2( 1318.05, 302.642 )
 texture = ExtResource( 4 )
 texture_scale = 2.0
@@ -278,7 +297,9 @@ range_item_cull_mask = 3
 shadow_enabled = true
 shadow_item_cull_mask = 2
 
-[node name="Light2D5" type="Light2D" parent="CustomLogic"]
+[node name="Light2D5" type="Light2D" parent="CustomLogic" groups=[
+"KeepLights",
+]]
 position = Vector2( 1813.02, 330.926 )
 texture = ExtResource( 4 )
 texture_scale = 2.0

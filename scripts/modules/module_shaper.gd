@@ -68,6 +68,7 @@ func check_death():
 	var area_getting_dangerously_small = (area < (slicer.PLAYER_MIN_AREA_FOR_SHAPE + 900.0))
 	if area_getting_dangerously_small:
 		particles.general_feedback(body.global_position, "Almost dead!")
+		body.modules.status.almost_dead()
 
 # Area calculation
 func at_max_size():

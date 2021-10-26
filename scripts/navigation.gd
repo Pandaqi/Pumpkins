@@ -64,7 +64,7 @@ func convert_body_into_nav_mesh(node):
 	if not (node.get_parent() is StaticBody2D): return
 	
 	# DEBUGGING
-	if not node.is_visible(): return
+	# if not node.is_visible(): return
 	
 	var is_col_shape = (node is CollisionShape2D)
 	var is_col_poly = (node is CollisionPolygon2D)

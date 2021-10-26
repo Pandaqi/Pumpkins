@@ -5,11 +5,18 @@ onready var body = get_parent()
 var color : Color = Color(1.0, 1.0, 0.0)
 var pumpkin_orange = Color(1.0, 93/255.0, 32/255.0)
 var disabled : bool = false
+var is_huge : bool = false
 
 onready var shape_manager = get_node("/root/Main/ShapeManager")
 
 func set_color(col):
 	color = col
+
+func use_huge_coloring():
+	is_huge = true
+
+func use_regular_coloring():
+	is_huge = false
 
 func disable():
 	disabled = true
@@ -29,14 +36,18 @@ func _draw():
 	var middle_layer_2 = []
 	var top_layer = []
 	
+	var thresholds = [0.9,0.8,0.65,0.3]
+	if is_huge:
+		thresholds = [0.98,0.92,0.78,0.55]
+	
 	for i in range(num_shapes):
 		var points = Array(body.shape_owner_get_shape(0, i).points)
 		
 		outline_layer.append(points)
-		bottom_layer.append(shape_manager.scale_shape(points, 0.9))
-		middle_layer.append(shape_manager.scale_shape(points, 0.8))
-		middle_layer_2.append(shape_manager.scale_shape(points, 0.65))
-		top_layer.append(shape_manager.scale_shape(points, 0.3))
+		bottom_layer.append(shape_manager.scale_shape(points, thresholds[0]))
+		middle_layer.append(shape_manager.scale_shape(points, thresholds[1]))
+		middle_layer_2.append(shape_manager.scale_shape(points, thresholds[2]))
+		top_layer.append(shape_manager.scale_shape(points, thresholds[3]))
 	
 	var outline_color = Color(0.0, 0.0, 0.0, 1.0)
 	for i in range(num_shapes):

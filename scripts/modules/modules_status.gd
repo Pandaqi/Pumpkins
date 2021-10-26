@@ -12,8 +12,7 @@ onready var particles = get_node("/root/Main/Particles")
 onready var mode = get_node("/root/Main/ModeManager")
 onready var arena = get_node("/root/Main/ArenaLoader")
 
-var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
-var dumpling_part_color : Color = Color(1.0, 207/255.0, 112/255.0)
+export var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
 
 # DEBUGGING (quick death checks, SURELY remove on publish)
 #func _input(ev):
@@ -88,7 +87,6 @@ func make_powerup_leftover():
 
 func make_dumpling_leftover():
 	player_num = -1
-	body.modules.drawer.set_color(dumpling_part_color)
 
 func delete():
 	body.queue_free()
@@ -96,6 +94,9 @@ func delete():
 func can_die():
 	if not is_from_a_player(): return false
 	return mode.players_can_die()
+
+func almost_dead():
+	pass
 
 func die():
 	if is_dead: return
@@ -125,8 +126,14 @@ func die():
 func hide_completely():
 	body.modulate.a = 0.0
 	body.modules.topping.hide_completely()
-	body.modules.light2d.queue_free()
+	
+	if body.modules.has('light2d'):
+		body.modules.light2d.queue_free()
 	body.modules.shadowlocation.queue_free()
+
+func show_again():
+	body.modules.a = 1.0
+	body.modules.topping.make_ghost()
 
 func make_ghost():
 	if is_dead: return

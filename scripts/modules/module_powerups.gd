@@ -43,7 +43,10 @@ func grab(obj, type, is_throwable):
 		return
 	
 	GlobalAudio.play_dynamic_sound(body, "collect")
-	particles.create_explosion_particles(obj.global_position)
+	
+	var pos = body.global_position
+	if obj: pos = obj.global_position
+	particles.create_explosion_particles(pos)
 	
 	show_feedback(type, false, is_throwable)
 	

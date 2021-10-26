@@ -16,8 +16,8 @@ func _ready():
 func _on_Timer_timeout():
 	grow(0.15)
 
-func grow(val):
-	if body.modules.shaper.at_max_size(): return
+func grow(val, ignore_max_size = false):
+	if not ignore_max_size and body.modules.shaper.at_max_size(): return
 	change_size(1.0 + val)
 
 func shrink(val):

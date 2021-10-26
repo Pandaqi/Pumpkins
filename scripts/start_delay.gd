@@ -12,6 +12,7 @@ var original_bus_index
 var original_volume : float
 
 var active : bool = false
+var skipped : bool = false
 
 func _input(ev):
 	if not active: return
@@ -22,6 +23,9 @@ func _input(ev):
 # skip animation to the part AFTER the reminders
 # (though not completely, as that is jarring and misses some of the other fade in
 func skip():
+	if skipped: return
+	
+	skipped = true
 	$AnimationPlayer.seek(6.0, true)
 
 func play_game_sound():

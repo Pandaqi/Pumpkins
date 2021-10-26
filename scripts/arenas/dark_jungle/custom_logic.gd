@@ -1,6 +1,9 @@
 extends Node2D
 
-var predefined_powerup_locations = [Vector2(1100, 1035), Vector2(800,400), Vector2(1250, 400)]
+var predefined_powerup_locations = [
+	Vector2(1100, 1035), Vector2(800,400), Vector2(1250, 400),
+	Vector2(250, 850), Vector2(1650, 850), Vector2(1650, 300), Vector2(250, 300)
+]
 
 func _ready():
 	GlobalDict.cfg.predefined_powerup_locations = predefined_powerup_locations

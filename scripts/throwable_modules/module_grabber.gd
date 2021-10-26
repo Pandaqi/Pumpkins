@@ -40,5 +40,8 @@ func complete_grab(other_body):
 	
 	body.add_collision_exception_with(other_body)
 	
+#	if body.modules.fakebody.has_real_body:
+#		body.modules.fakebody.disable_real_collisions()
+	
 	other_body.modules.knives.grab_knife(body)
 	return true

@@ -24,6 +24,9 @@ func set_type(tp):
 	
 	if type == "boomerang":
 		body.modules.shadowlocation.type = "circle"
+	
+	if data.category == "dumpling":
+		body.add_to_group("Dumplings")
 
 func record_succesful_actions():
 	if num_succesful_actions <= 0: return

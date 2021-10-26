@@ -14,6 +14,7 @@ onready var map = get_node("/root/Main/Map")
 onready var shape_manager = get_node("/root/Main/ShapeManager")
 onready var spawner = get_node("/root/Main/Spawner")
 onready var throwables = get_node("/root/Main/Throwables")
+onready var mode = get_node("/root/Main/ModeManager")
 
 var powerup_scene = preload("res://scenes/powerup.tscn")
 
@@ -21,6 +22,8 @@ var available_powerups = []
 var full_list = []
 var pre_locs = null
 var placement_params
+
+var spawns_since_last_req_type : int = 0
 
 func activate():
 	available_powerups = GlobalDict.cfg.powerups
@@ -95,13 +98,42 @@ func place_powerup():
 	if is_throwable: rand_type = throwables.get_random_type()
 	if not rand_type: rand_type = "knife" # if all else fails, default to just giving more knives
 	
-	p.set_throwable(is_throwable)
-	p.set_type(rand_type)
+	var params = check_required_type(rand_type, is_throwable)
+
+	p.set_throwable(params.is_throwable)
+	p.set_type(params.rand_type)
 	
 	var rand_shape = shape_manager.get_random_shape()
 	p.set_shape(rand_shape)
 	
 	tween_bounce_appear(p)
+
+func check_required_type(rand_type, is_throwable):
+	var req_type = mode.required_throwable_type()
+	if not req_type: return
+	
+	var params = {
+		'rand_type': rand_type,
+		'is_throwable': is_throwable,
+	}
+	
+	if spawns_since_last_req_type > 3:
+		spawns_since_last_req_type = 0
+		
+		params.rand_type = req_type
+		params.is_throwable = true
+		return params
+	
+	if not is_throwable: 
+		spawns_since_last_req_type += 1
+		return params
+	
+	if GlobalDict.throwables[rand_type].category != req_type:
+		spawns_since_last_req_type += 1
+		return params
+	
+	spawns_since_last_req_type = 0
+	return params
 
 func tween_bounce_appear(obj):
 	var start_scale = Vector2.ZERO

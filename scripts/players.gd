@@ -42,7 +42,11 @@ func create_players():
 		
 		map.entities.add_child(p)
 		
-		p.set_position(spawner.get_valid_pos(params))
+		var pos = spawner.get_valid_pos(params)
+		var home_base_pos = mode.get_pos_around_home_base(player_data[i].team)
+		if home_base_pos: pos = home_base_pos
+
+		p.set_position(pos)
 		
 		var new_shape = shape_manager.select_random_predefined_shape()
 		if GlobalDict.cfg.everyone_starts_pumpkin:

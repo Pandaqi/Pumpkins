@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/arenas/graveyard/graveyard_bg.png" type="Texture" id=1]
 [ext_resource path="res://assets/arenas/graveyard/graveyard_objects.png" type="Texture" id=2]
@@ -11,6 +11,9 @@
 
 [sub_resource type="OccluderPolygon2D" id=6]
 polygon = PoolVector2Array( 190.794, 366.36, 250.01, 366.99, 247.49, 296.435, 262.609, 297.065, 261.979, 273.756, 175.045, 274.386, 173.155, 297.695, 187.644, 297.695 )
+
+[sub_resource type="CircleShape2D" id=9]
+radius = 79.4765
 
 [sub_resource type="CircleShape2D" id=8]
 radius = 116.131
@@ -123,6 +126,11 @@ light_mask = 2
 position = Vector2( -0.723206, -4.46335 )
 texture = ExtResource( 8 )
 
+[node name="Area2D" type="Area2D" parent="Map/Entities/StaticBody2D2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D2/Area2D"]
+shape = SubResource( 9 )
+
 [node name="StaticBody2D3" parent="Map/Entities" groups=[
 "Stuckables",
 ] instance=ExtResource( 5 )]
@@ -165,6 +173,12 @@ light_mask = 2
 [node name="Sprite2" type="Sprite" parent="Map/Entities/StaticBody2D6"]
 position = Vector2( 4.69702, -3.76883 )
 texture = ExtResource( 8 )
+
+[node name="Area2D" type="Area2D" parent="Map/Entities/StaticBody2D6"]
+position = Vector2( 7.36548, 1.60117 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D6/Area2D"]
+shape = SubResource( 9 )
 
 [node name="StaticBody2D7" parent="Map/Entities" groups=[
 "Stuckables",
@@ -219,6 +233,13 @@ light_mask = 2
 position = Vector2( 3.88316, -8.48779 )
 texture = ExtResource( 8 )
 
+[node name="Area2D" type="Area2D" parent="Map/Entities/StaticBody2D11"]
+position = Vector2( 5.51709, -9.65042 )
+rotation = -3.14159
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D11/Area2D"]
+shape = SubResource( 9 )
+
 [node name="StaticBody2D12" parent="Map/Entities" groups=[
 "Deflectables",
 ] instance=ExtResource( 5 )]
@@ -265,6 +286,13 @@ light_mask = 2
 [node name="Sprite4" type="Sprite" parent="Map/Entities/StaticBody2D15"]
 position = Vector2( 5.25488, 5.38324 )
 texture = ExtResource( 8 )
+
+[node name="Area2D" type="Area2D" parent="Map/Entities/StaticBody2D15"]
+position = Vector2( 7.94119, 2.25806 )
+rotation = -3.14159
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D15/Area2D"]
+shape = SubResource( 9 )
 
 [node name="StaticBody2D16" parent="Map/Entities" groups=[
 "Deflectables",
@@ -372,7 +400,7 @@ anims/RESET = SubResource( 5 )
 [node name="Timer" type="Timer" parent="Map/Overlay/Light2D"]
 wait_time = 15.0
 
-[node name="CanvasLayer" type="CanvasModulate" parent="Map/Overlay"]
+[node name="CanvasModulate" type="CanvasModulate" parent="Map/Overlay"]
 color = Color( 0.109804, 0.247059, 0.337255, 1 )
 
 [node name="Collectors" type="Node2D" parent="."]
@@ -400,6 +428,17 @@ position = Vector2( 1724.85, 916.499 )
 
 [node name="Node2D8" type="Node2D" parent="Collectors"]
 position = Vector2( 653.543, 918.393 )
+
+[node name="Dumplings" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="Dumplings"]
+position = Vector2( 414.394, 436.077 )
+
+[node name="Node2D2" type="Node2D" parent="Dumplings"]
+position = Vector2( 956.479, 927.568 )
+
+[node name="Node2D3" type="Node2D" parent="Dumplings"]
+position = Vector2( 1421.47, 395.12 )
 
 [node name="CustomLogic" type="Node2D" parent="."]
 script = ExtResource( 7 )

@@ -20,6 +20,10 @@ func disable_real_collisions():
 	body.collision_layer = 0 
 	body.collision_mask = 0
 
+func enable_real_collisions():
+	body.collision_layer = 1
+	body.collision_mask = 1
+
 func _physics_process(dt):
 	reset_all()
 	
@@ -69,7 +73,7 @@ func shoot_raycast(dt):
 	var margin = 6
 	var vel = body.modules.mover.velocity
 	var rot = body.rotation
-	var raycast_length = 2*knife_half_size + 3 * vel.length() * dt + margin
+	var raycast_length = 2*knife_half_size + vel.length() * dt + margin
 
 	var normal = vel.normalized()
 	if vel.length() <= 0.1: normal = Vector2(cos(rot), sin(rot))

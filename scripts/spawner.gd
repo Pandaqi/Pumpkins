@@ -28,6 +28,10 @@ func get_valid_pos(params):
 	
 	return pos
 
+func out_of_bounds(pos):
+	var margin = 30
+	return pos.x < margin or pos.x > (1920.0 - margin) or pos.y < margin or pos.y > (1080.0 - margin)
+
 func get_random_inner_position():
 	var edge_margin = 60
 	var vp_without_edge = Vector2(1920-2*edge_margin,1080-2*edge_margin) 

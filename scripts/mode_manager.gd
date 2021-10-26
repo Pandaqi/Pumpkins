@@ -7,6 +7,7 @@ var mode_data
 var min_collections_needed_to_win : int = 5
 
 onready var arena = get_node("../ArenaLoader")
+onready var spawner = get_node("../Spawner")
 
 func activate():
 	game_mode = GlobalDict.cfg.game_mode 
@@ -58,6 +59,10 @@ func get_collectibles():
 	if not mode_data.has("collectible_group"): return []
 	return get_tree().get_nodes_in_group(mode_data.collectible_group)
 
+func get_collectible_group():
+	if not mode_data.has("collectible_group"): return null
+	return mode_data.collectible_group
+
 func get_max_knife_capacity():
 	if not mode_data.has("max_knife_capacity"): return DEFAULT_MAX_KNIVES
 	return mode_data.max_knife_capacity
@@ -65,3 +70,27 @@ func get_max_knife_capacity():
 func get_starting_knives():
 	if not mode_data.has('num_starting_knives'): return GlobalDict.cfg.num_starting_knives
 	return mode_data.num_starting_knives
+
+func inverted_dumpling_behaviour():
+	return mode_data.has("inverse_dumpling_behaviour")
+
+func required_throwable_type():
+	if not mode_data.has("required_throwable_type"): return null
+	return mode_data.required_throwable_type
+
+func get_pos_around_home_base(team_num : int) -> Vector2:
+	if game_mode != "dwarfing_dumplings": return Vector2.ZERO
+	
+	var home_base = arena.huge_dumplings[team_num]
+	var radius = 150.0
+	var bad_pos = true
+	var pos = Vector2.ZERO
+	
+	while bad_pos:
+		var rand_rot = 2*randf()*PI
+		pos = home_base.global_position + Vector2(cos(rand_rot), sin(rand_rot))*radius
+		
+		bad_pos = spawner.out_of_bounds(pos)
+	
+	return pos
+	

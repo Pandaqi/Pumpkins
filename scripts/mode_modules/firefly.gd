@@ -20,7 +20,12 @@ func _physics_process(_dt):
 # warning-ignore:return_value_discarded
 	move_and_slide(vec * SPEED)
 	set_rotation(vec.angle())
-	light.energy = 1.2 + (randf()-0.5)*0.14
+	
+	var lights_disabled = (not GlobalDict.cfg.light_effects)
+	
+	var rand_energy = 1.2 + (randf()-0.5)*0.14
+	if lights_disabled: rand_energy *= 0.5
+	light.energy = rand_energy
 
 func on_throwable_hit():
 	lights_out()

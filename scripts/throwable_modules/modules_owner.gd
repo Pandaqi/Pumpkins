@@ -20,9 +20,9 @@ func is_friendly():
 	return (mode == "friendly")
 
 func set_owner(o):
-	if mode != "auto": return
-	
 	my_owner = o
+	
+	if mode != "auto": return
 
 	var num = my_owner.modules.status.player_num
 	sprite.set_frame(body.modules.status.base_frame + num)
@@ -33,15 +33,18 @@ func get_owner():
 	return my_owner
 
 func is_body(other_body):
+	if is_friendly(): return true
+	if is_hostile(): return false
 	return my_owner == other_body
 
 func has_none():
 	return (my_owner == null)
 
 func remove():
+	my_owner = null
+	
 	if mode != "auto": return
 	
-	my_owner = null
 	sprite.set_frame(body.modules.status.base_frame + 8)
 	anim_player.play("Highlight")
 	emit_signal("owner_changed", -1)

@@ -42,7 +42,7 @@ func set_random_velocity():
 	var rand_rot = 2*PI*randf()
 	velocity = Vector2(cos(rand_rot), sin(rand_rot))*150
 
-func add_to_override_vec(vec, dt, size = GHOST_KNIFE_VELOCITY):
+func add_to_override_vec(vec, _dt, size = GHOST_KNIFE_VELOCITY):
 	total_override_vec += vec * size
 	total_override_influencers += 1
 
@@ -63,6 +63,9 @@ func _physics_process(dt):
 func stop():
 	velocity = Vector2.ZERO
 	trail_particles.set_emitting(false)
+	
+	# TESTING IF THIS IS BETTER/MORE CONSISTENT
+	body.modules.status.is_stuck = true
 
 func came_to_standstill():
 	stop()

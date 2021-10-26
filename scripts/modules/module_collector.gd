@@ -28,7 +28,11 @@ func collect(dc):
 	collectors.update_team_count(body.modules.status.team_num)
 	
 	GlobalAudio.play_dynamic_sound(body, "collect")
-	particles.create_collectible_particle(body.global_position, "+" + str(dc))
+	
+	var final_string = "+" + str(dc)
+	if dc < 0: final_string = str(dc)
+	
+	particles.create_collectible_particle(body.global_position, dc)
 
 func disable_collection():
 	collection_disabled = true

@@ -38,7 +38,10 @@ func change_mode():
 	# lights only appear during the day
 	var delay = 0.0
 	var delay_step = 0.2
+	var lights_disabled = (not GlobalDict.cfg.light_effects)
 	for light in lights:
+		if lights_disabled: light.energy = 0.3
+		
 		tween.interpolate_property(light, "visible",
 			is_day, not is_day, 1.0,
 			Tween.TRANS_LINEAR, Tween.EASE_OUT,
@@ -50,9 +53,10 @@ func change_mode():
 	var color = night_color
 	if is_day: color = Color(1,1,1)
 	
-	tween.interpolate_property(canvas_mod, "color",
-		canvas_mod.color, color, 1.0,
-		Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	if is_instance_valid(canvas_mod):
+		tween.interpolate_property(canvas_mod, "color",
+			canvas_mod.color, color, 1.0,
+			Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	
 	# at night, do something special
 	if not is_day:
