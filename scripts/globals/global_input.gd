@@ -23,8 +23,8 @@ func _ready():
 	build_input_map()
 
 func create_debugging_players():
-	var num_players = 2
-	var num_bots = 0
+	var num_players = 1
+	var num_bots = 1
 	for i in range(8):
 		GlobalDict.player_data[i].active = false
 		GlobalDict.player_data[i].bot = false

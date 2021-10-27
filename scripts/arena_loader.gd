@@ -15,9 +15,6 @@ var dumpling_locations = []
 var huge_dumplings = []
 
 func activate():
-	# DEBUGGING:
-#	GlobalDict.cfg.arena = 'bogus_blackouts'
-	
 	load_arena()
 
 func load_arena():

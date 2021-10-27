@@ -92,6 +92,7 @@ func delete():
 	body.queue_free()
 
 func can_die():
+	if is_dead: return false
 	if not is_from_a_player(): return false
 	return mode.players_can_die()
 
@@ -107,7 +108,8 @@ func die():
 	particles.create_explosion_particles(body.global_position)
 	GlobalAudio.play_dynamic_sound(body, "death")
 	
-	var params = arena.on_player_death(body)
+	var params = {}
+	if not is_bot: params = arena.on_player_death(body)
 
 	body.modules.knives.destroy_knives()
 	body.modules.collector.disable_collection()
@@ -127,7 +129,8 @@ func hide_completely():
 	body.modulate.a = 0.0
 	body.modules.topping.hide_completely()
 	
-	if body.modules.has('light2d'):
+	# lights might have been disabled (and thus violently removed) through the settings
+	if body.modules.has('light2d') and is_instance_valid(body.modules.light2d):
 		body.modules.light2d.queue_free()
 	body.modules.shadowlocation.queue_free()
 

@@ -5,6 +5,7 @@
 [ext_resource path="res://scripts/module_manager_sliceable.gd" type="Script" id=3]
 
 [node name="Window" type="StaticBody2D" groups=[
+"IgnoreNavs",
 "Sliceables",
 ]]
 position = Vector2( 566.063, 457.845 )

@@ -2,7 +2,6 @@ extends StaticBody2D
 
 var modules = {}
 
-
 func _ready():
 	register_modules()
 

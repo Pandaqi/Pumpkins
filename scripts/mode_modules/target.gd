@@ -104,9 +104,7 @@ func on_knife_entered(body):
 	player.modules.collector.collect(num_points)
 	
 	if is_rotating:
-		var old_rot = body.global_rotation
-		var offset_vec = -Vector2(cos(old_rot), sin(old_rot))
-		var new_pos = offset_vec.rotated(-rotation) * RADIUS
+		var new_pos = vec * RADIUS
 
 		body.get_parent().remove_child(body)
 		add_child(body)
@@ -115,7 +113,7 @@ func on_knife_entered(body):
 		body.show_behind_parent = true
 		
 		body.set_position(new_pos)
-		body.set_rotation(old_rot - rotation)
+		body.set_rotation(-vec.angle())
 		
 		knives_inside.append(body)
 	

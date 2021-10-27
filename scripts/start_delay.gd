@@ -60,7 +60,7 @@ func game_over(winning_team):
 	
 	original_bus_index = AudioServer.get_bus_index("BG")
 	original_volume = AudioServer.get_bus_volume_db(original_bus_index)
-	AudioServer.set_bus_volume_db(original_bus_index, 0)
+	AudioServer.set_bus_volume_db(original_bus_index, -INF)
 	
 	active = true
 

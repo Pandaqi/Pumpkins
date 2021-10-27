@@ -65,6 +65,13 @@ func fill_container():
 	var add_size = 420
 	var offset = -Vector2(0.5*(num_cols-1), 0.5*(num_rows-1))*add_size
 
+	# re-calculate how many bots were logged in before
+	num_bots = 0
+	for i in range(max_players):
+		var d = GlobalDict.player_data[i]
+		if d.active and d.bot:
+			num_bots += 1
+
 	for i in range(max_players):
 		var col = i % num_cols
 		var row = floor(i / num_cols)

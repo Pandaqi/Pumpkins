@@ -70,8 +70,12 @@ func move_regular(vec):
 	var final_speed = speed_multiplier*MOVE_SPEED*speed_penalty_for_size
 	var final_vec = forward_vec*final_speed
 	var old_pos = body.get_global_position()
+	
 # warning-ignore:return_value_discarded
-	body.move_and_slide(final_vec)
+	var result_vec = body.move_and_slide(final_vec, Vector2.ZERO)
+#
+#	if body.modules.status.is_bot:
+#		body.move_and_slide(result_vec)
 	
 	last_velocity = final_vec
 	

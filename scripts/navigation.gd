@@ -1,6 +1,6 @@
 extends Node2D
 
-const BODY_SAFE_MARGIN : float = 30.0 # 1.03 goes wrong
+const BODY_SAFE_MARGIN : float = 35.0
 
 onready var nav_2d = $Navigation2D
 onready var map = get_node("../Map")
@@ -63,10 +63,7 @@ func convert_all_children(node):
 func convert_body_into_nav_mesh(node):
 	if not (node.get_parent() is StaticBody2D): return
 	if node.get_parent().is_in_group("IgnoreNavs"): return
-	
-	# DEBUGGING
-	# if not node.is_visible(): return
-	
+
 	var is_col_shape = (node is CollisionShape2D)
 	var is_col_poly = (node is CollisionPolygon2D)
 	if not (is_col_shape or is_col_poly): return

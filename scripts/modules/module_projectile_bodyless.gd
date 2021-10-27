@@ -79,7 +79,6 @@ func poll_back_raycast():
 	if not hit_body or not is_instance_valid(hit_body): return
 	body.modules.grabber.try_grabbing(hit_body)
 
-# TO DO: Not doing anything special with _ghosts_ anymore, as it doesn't seem worth it?
 func poll_special_hits():
 	for nonsolid in body.modules.fakebody.nonsolids_hit:
 		if nonsolid.script and nonsolid.has_method("on_throwable_hit"):
@@ -96,6 +95,8 @@ func poll_special_hits():
 func handle_dumpling(obj):
 	var victim = obj.modules.owner.get_owner()
 	var attacker = body.modules.owner.get_owner()
+	if not victim or not attacker: return
+	
 	victim.modules.knives.check_dumpling_hit(obj, attacker)
 
 func get_stuck(result):
@@ -177,12 +178,3 @@ func deflect(res):
 	body.modules.mover.set_velocity(VELOCITY_LEFT_AFTER_DEFLECTION*new_vel)
 	
 	last_deflection_time = OS.get_ticks_msec()
-
-# Ghosts slow down moving knifes
-func apply_ghost_effect(_ghost):
-	# TO DO: use the ghost argument for something?? (remove underscore then)
-	
-	var vel = body.modules.mover.velocity
-	vel *= GHOST_SLOWDOWN
-	vel = vel.rotated((randf()-0.5)*GHOST_RAND_ROTATION)
-	body.modules.mover.set_velocity(vel)

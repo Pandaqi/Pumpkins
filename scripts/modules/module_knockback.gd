@@ -37,7 +37,8 @@ func repel_hostile_entities():
 	var avg_vec_away = Vector2.ZERO
 	for b in bodies:
 		if b == body: continue # it's ourselves
-		if same_team(b): continue
+		if same_team(b): continue # it's a teammate
+		if b.modules.status.is_dead: continue # it's a ghost
 		
 		var vec_away = (b.global_position - body.global_position).normalized()
 		var force = vec_away * REPEL_FORCE

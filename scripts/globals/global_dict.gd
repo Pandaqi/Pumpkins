@@ -96,8 +96,8 @@ var player_colors = [
 ]
 
 var player_data = [
-	{ "team": 0, "bot": false, "active": true },
-	{ "team": 1, "bot": true, "active": true },
+	{ "team": 0, "bot": false, "active": false },
+	{ "team": 1, "bot": false, "active": false },
 	{ "team": 2, "bot": false, "active": false },
 	{ "team": 3, "bot": false, "active": false },
 	{ "team": 4, "bot": false, "active": false },
