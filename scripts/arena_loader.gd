@@ -16,7 +16,7 @@ var huge_dumplings = []
 
 func activate():
 	# DEBUGGING:
-	GlobalDict.cfg.arena = 'bogus_blackouts'
+#	GlobalDict.cfg.arena = 'bogus_blackouts'
 	
 	load_arena()
 

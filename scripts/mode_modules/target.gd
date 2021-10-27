@@ -10,6 +10,8 @@ const LINE_THICKNESS : float = 5.0
 const DIVISION_LINE_COLOR : Color = Color(64/255.0, 4/255.0, 0.0)
 const POINT_BOUNDS = { 'min': -2, 'max': 5 }
 
+const DIST_PER_POINT_UPGRADE : float = 300.0
+
 var division_angles = []
 var division_points = []
 
@@ -83,6 +85,7 @@ func place_labels():
 
 func on_knife_entered(body):
 	var vec = (body.get_global_position() - get_global_position()).normalized()
+	vec = vec.rotated(-rotation)
 	var angle = vec.angle()
 	
 	if angle < 0: angle += 2*PI
@@ -91,7 +94,14 @@ func on_knife_entered(body):
 	var division = get_division_from_angle(angle)
 	var player = body.modules.owner.get_owner()
 	
-	player.modules.collector.collect(division_points[division])
+	var num_points = division_points[division]
+	var multiplier = clamp(body.modules.thrower.get_distance_traveled() / DIST_PER_POINT_UPGRADE, 0.0, 3.0)
+	if num_points < 0: multiplier = clamp(multiplier, 1.0, 3.0)
+	
+	num_points *= multiplier
+	num_points = floor(num_points)
+	
+	player.modules.collector.collect(num_points)
 	
 	if is_rotating:
 		var old_rot = body.global_rotation

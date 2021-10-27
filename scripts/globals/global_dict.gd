@@ -32,7 +32,7 @@ var modes = {
 	
 	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 5, "auto_grow": true, "collectible_group": "PlayerParts" },
 
-	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 10, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3, "max_teams": 4 },
+	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 20, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3, "max_teams": 4 },
 	
 	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 5, "max_knife_capacity": 5, "collectible_group": "Dumplings", "inverse_dumpling_behaviour": true, "required_throwable_type": "dumpling" },
 	
@@ -58,7 +58,8 @@ var configurable_settings = {
 	"show_guides": { "frame": 5, "def": true },
 	"everyone_starts_pumpkin": { "frame": 6, "def": false },
 	"stuck_reset": { "frame": 7, "def": true },
-	"light_effects": { "frame": 8, "def": true }
+	"light_effects": { "frame": 8, "def": true },
+	"auto_throw_if_idle": { "frame": 9, "def": true }
 }
 
 var throwables = {

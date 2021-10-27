@@ -172,10 +172,10 @@ func grab_knife(knife):
 	var type = knife.modules.status.type
 	if type == "dumpling_double":
 		val = 2
-		body.modules.grower.grow(0.1)
+		body.modules.grower.grow(0.2)
 	elif type == "dumpling_downgrade":
 		val = -1
-		body.modules.grower.shrink(0.1)
+		body.modules.grower.shrink(0.2)
 	elif type == "dumpling_timebomb":
 		knife.modules.timebomb.activate()
 	
@@ -188,6 +188,7 @@ func check_for_collectibles(obj, change):
 	var col_group = mode.get_collectible_group()
 	if not col_group: return
 	if not obj.is_in_group(col_group): return
+	if body.modules.status.team_num < 0: return
 	
 	body.modules.collector.collect(change)
 
@@ -387,6 +388,7 @@ func _on_Shaper_shape_updated():
 
 func destroy_knives():
 	for knife in knives_held:
+		unhighlight_knife(knife)
 		knife.queue_free()
 	
 	knives_held = []

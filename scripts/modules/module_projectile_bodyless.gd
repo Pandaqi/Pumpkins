@@ -84,6 +84,9 @@ func poll_special_hits():
 	for nonsolid in body.modules.fakebody.nonsolids_hit:
 		if nonsolid.script and nonsolid.has_method("on_throwable_hit"):
 			nonsolid.on_throwable_hit()
+		
+		if nonsolid.is_in_group("Mist"):
+			body.modules.mover.rotate_velocity((randf()-0.5)*0.3*PI)
 
 #
 # Calculating the interactions we have
@@ -136,6 +139,7 @@ func slice_through_body(obj):
 	# so make sure we invalidate any info afterwards
 	body.modules.fakebody.reset_all()
 	
+	var hit_a_player = obj.is_in_group("Players")
 	var my_owner = body.modules.owner.get_owner()
 	var result = slicer.slice_bodies_hitting_line(start, end, [], [obj], my_owner)
 	if result.size() <= 0: return false
@@ -146,7 +150,7 @@ func slice_through_body(obj):
 	
 	body.modules.status.record_succesful_action(1)
 	
-	if my_owner:
+	if my_owner and hit_a_player:
 		var penalty = mode.get_player_slicing_penalty()
 		if penalty != 0: my_owner.modules.collector.collect(penalty)
 		

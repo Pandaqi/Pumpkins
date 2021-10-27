@@ -33,8 +33,14 @@ func _ready():
 func set_body(val : bool):
 	has_real_body = val
 
+func get_velocity():
+	return velocity
+
 func set_velocity(vel):
 	velocity = vel
+
+func rotate_velocity(rot):
+	velocity = velocity.rotated(rot)
 
 func set_random_velocity():
 	body.modules.status.is_stuck = false

@@ -20,11 +20,6 @@ var end_point
 
 # Actual slicing functionality
 func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include = [], attacker = null):
-	# debug draw (for me)
-	start_point = p1
-	end_point = p2
-	update()
-	
 	# create a (narrow, elongated) rectangle along line
 	var angle = (p2 - p1).angle()
 	var avg_pos = (p2 + p1)*0.5
@@ -284,6 +279,9 @@ func determine_shape_layers(new_shapes, p1, p2):
 	
 	return shape_layers
 
+# CRUCIAL NOTE:
+# CollisionPolygon2D must be positioned at exactly 0
+# Because we use the global transform of its PARENT, not the node itself, which means any offset is not taken into account and calculations are completely wrong
 func slice_shape(shp, slice_start : Vector2, slice_end : Vector2) -> Dictionary:
 	shp = shp + []
 

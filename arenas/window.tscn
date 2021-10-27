@@ -17,6 +17,7 @@ polygon = PoolVector2Array( -8.87311, -78.1904, 7.18121, -78.785, 7.18121, 80.56
 
 [node name="Status" type="Node2D" parent="."]
 script = ExtResource( 2 )
+MAX_REGROWS = 10000
 
 [node name="RegrowTimer" type="Timer" parent="Status"]
 one_shot = true

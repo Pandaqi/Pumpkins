@@ -12,7 +12,11 @@ config_version=4
 
 config/name="Pumpkins"
 run/main_scene="res://GameConfig.tscn"
-config/icon="res://icon.png"
+boot_splash/image="res://assets/marketing/splash_screen.png"
+boot_splash/bg_color=Color( 0.952941, 0.482353, 0.156863, 1 )
+config/icon="res://assets/marketing/favicon.png"
+config/macos_native_icon="res://assets/marketing/favicon.icns"
+config/windows_native_icon="res://assets/marketing/favicon.ico"
 
 [autoload]
 

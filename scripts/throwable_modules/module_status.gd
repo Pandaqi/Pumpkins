@@ -27,6 +27,13 @@ func set_type(tp):
 	
 	if data.category == "dumpling":
 		body.add_to_group("Dumplings")
+		
+		var circle_shape = CircleShape2D.new()
+		circle_shape.radius = 8
+		body.modules.collisionshape2d.shape = circle_shape
+		
+		body.modules.shadowlocation.type = "circle"
+		body.modules.shadowlocation.extents.x = 24
 
 func record_succesful_actions():
 	if num_succesful_actions <= 0: return

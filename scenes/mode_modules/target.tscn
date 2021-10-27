@@ -7,9 +7,10 @@
 radius = 41.795
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 122.993
+radius = 52.5629
 
 [node name="Target" type="StaticBody2D" groups=[
+"IgnoreNavs",
 "Stuckables",
 "Targets",
 ]]

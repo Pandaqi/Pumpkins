@@ -20,6 +20,8 @@ func delete():
 
 	regrow_timer.wait_time = REGROW_DURATION + randf() * 5
 	regrow_timer.start()
+	
+	body.modules.navigation.remove()
 
 func regrow():
 	body.collision_layer = 1
@@ -34,6 +36,8 @@ func regrow():
 	tween.start()
 	
 	num_regrows += 1
+	
+	body.modules.navigation.add()
 
 func _on_RegrowTimer_timeout():
 	regrow()

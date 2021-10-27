@@ -312,5 +312,7 @@ func reset_idle_timer():
 # The penalty? Automatically throw something
 func _on_IdleTimer_timeout():
 	if not GlobalDict.cfg.auto_throw_if_idle: return
+	var no_first_knife = (not body.modules.knives.get_first_knife())
+	if no_first_knife: return
 	
 	execute_thrown_slash()

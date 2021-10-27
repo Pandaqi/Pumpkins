@@ -43,8 +43,10 @@ func start_game():
 	var max_teams = 8
 	if data.has('max_teams'): max_teams = data.max_teams
 	var too_many_teams = (main.count_total_teams() > max_teams)
+	
 	if too_many_teams:
 		particles.general_feedback(screen_center, "Max " + str(max_teams) + " teams!", main)
+		return
 	
 	Global.start_game()
 

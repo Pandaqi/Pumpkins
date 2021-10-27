@@ -1,5 +1,7 @@
 extends Node
 
+const GRAB_DISABLE_DURATION : float = 0.08
+
 onready var body = get_parent()
 onready var timer = $Timer
 
@@ -10,6 +12,7 @@ func is_disabled_for_owner():
 
 func disable():
 	grabbing_by_owner_disabled = true
+	timer.wait_time = GRAB_DISABLE_DURATION
 	timer.start()
 
 func enable():

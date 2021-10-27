@@ -17,12 +17,12 @@ func set_body(val : bool):
 	if not has_real_body: disable_real_collisions()
 
 func disable_real_collisions():
-	body.collision_layer = 0 
-	body.collision_mask = 0
+	body.collision_layer = 32 # 2^5 => 6th layer
+	body.collision_mask = 32
 
 func enable_real_collisions():
-	body.collision_layer = 1
-	body.collision_mask = 1
+	body.collision_layer = 1 + 32
+	body.collision_mask = 1 + 32
 
 func _physics_process(dt):
 	reset_all()

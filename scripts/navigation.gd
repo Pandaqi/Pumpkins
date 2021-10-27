@@ -62,6 +62,7 @@ func convert_all_children(node):
 
 func convert_body_into_nav_mesh(node):
 	if not (node.get_parent() is StaticBody2D): return
+	if node.get_parent().is_in_group("IgnoreNavs"): return
 	
 	# DEBUGGING
 	# if not node.is_visible(): return
@@ -85,7 +86,13 @@ func convert_body_into_nav_mesh(node):
 		polygon = make_global(scale_shape(node.polygon, BODY_SAFE_MARGIN), trans)
 	
 	polygon = PoolVector2Array(polygon)
-	polygons.append(polygon)
+	
+	var obj = {
+		'poly': polygon,
+		'parent': node,
+		'body': node.get_parent()
+	}
+	polygons.append(obj)
 
 func keep_shape_within_bounds(shp):
 	for i in range(shp.size()):
@@ -93,25 +100,32 @@ func keep_shape_within_bounds(shp):
 	return shp
 
 func cut_holes_in_mesh(nav_poly):
-#	for i in range(polygons.size()):
-#		polygons[i] = keep_shape_within_bounds(polygons[i])
-#
-	for poly in polygons:
-		debug_overlap_polygons.append(poly)
-		nav_poly.add_outline(poly)
+	var index = 0
+	for obj in polygons:
+		debug_overlap_polygons.append(obj.poly)
+		nav_poly.add_outline_at_index(obj.poly, index)
+		
+		if obj.body.is_in_group("DynamicNavigation"):
+			obj.body.modules.navigation.set_data({
+				'nav_poly': nav_poly,
+				'outline': obj.poly,
+				'index': index
+			})
+		
+		index += 1
 
 func merge_polygons():
 	var num_polygons = polygons.size()
 
 	var i = 0
 	while i < num_polygons:
-		var my_poly = polygons[i]
+		var my_poly = polygons[i].poly
 		
 		var j = i
 		while j < (num_polygons-1):
 			j += 1
 			
-			var other_poly = polygons[j]
+			var other_poly = polygons[j].poly
 		
 			# check if overlaps
 			var no_overlap = (Geometry.intersect_polygons_2d(my_poly, other_poly).size() <= 0)
@@ -120,7 +134,7 @@ func merge_polygons():
 			# if so, merge, start again
 			var merged_poly = Geometry.merge_polygons_2d(my_poly, other_poly)
 			
-			polygons[i] = merged_poly[0]
+			polygons[i].poly = merged_poly[0]
 			my_poly = merged_poly[0]
 			
 			polygons.remove(j)
@@ -134,11 +148,11 @@ func cut_offscreen_bits():
 	var other_poly = full_screen_poly
 	
 	for i in range(polygons.size()-1,-1,-1):
-		var my_poly = polygons[i]
+		var my_poly = polygons[i].poly
 		var intersect_polys = Geometry.intersect_polygons_2d(my_poly, other_poly)
 		if intersect_polys.size() <= 0: continue
 
-		polygons[i] = Geometry.offset_polygon_2d(intersect_polys[0], -0.2)[0]
+		polygons[i].poly = Geometry.offset_polygon_2d(intersect_polys[0], -0.2)[0]
 
 func build_navigation_mesh():
 	var nav_poly_node = NavigationPolygonInstance.new()
