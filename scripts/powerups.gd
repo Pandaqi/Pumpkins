@@ -70,7 +70,7 @@ func check_powerup_placement():
 	if num_powerups >= NUMBERS.max: return
 	if pre_locs and num_powerups >= pre_locs.size(): return
 	
-	place_powerup()
+	place_powerup(num_powerups)
 
 func get_random_type():
 	if available_powerups.size() <= 0: return null 
@@ -80,11 +80,12 @@ func get_random_type():
 		if GlobalDict.powerups[key].weight >= target:
 			return key
 
-func place_powerup():
+func place_powerup(cur_num_powerups):
 	var p = powerup_scene.instance()
 	
 	var pos = spawner.get_valid_pos(placement_params)
 	if pre_locs: pos = pre_locs[randi() % pre_locs.size()]
+	if pre_locs and cur_num_powerups <= 0: pos = pre_locs[0]
 	
 	p.set_position(pos)
 	p.set_rotation(randf() * 2 * PI)

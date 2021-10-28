@@ -186,7 +186,9 @@ func handle_old_body_death(b, params = {}):
 		b.modules.status.die()
 		
 		# NOW ask the main node to check game over, because the "dying" has finished
-		main_node.player_died(params.original_player_num)
+		var dying_was_succesful = b.modules.status.is_dead
+		if dying_was_succesful:
+			main_node.player_died(params.original_player_num)
 		return
 	
 	if params.is_keep_alive: return

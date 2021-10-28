@@ -93,4 +93,6 @@ func get_pos_around_home_base(team_num : int) -> Vector2:
 		bad_pos = spawner.out_of_bounds(pos)
 	
 	return pos
-	
+
+func respawn_on_death():
+	return mode_data.has("respawn_on_death")

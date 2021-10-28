@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://arenas/arena_skeleton.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/arenas/bogus_blackouts/bg.png" type="Texture" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://assets/arenas/bogus_blackouts/overhead_light5.png" type="Texture" id=18]
 [ext_resource path="res://assets/arenas/bogus_blackouts/overhead_light4.png" type="Texture" id=19]
 [ext_resource path="res://arenas/overhead_light.tscn" type="PackedScene" id=20]
+[ext_resource path="res://scenes/mode_modules/teleporter.tscn" type="PackedScene" id=21]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 27.7839
@@ -135,15 +136,7 @@ room_num = 5
 texture = ExtResource( 3 )
 centered = false
 
-[node name="Stairs" type="Area2D" parent="Map/Entities" index="15"]
-position = Vector2( 80, 1000 )
-collision_layer = 2
-collision_mask = 2
-script = ExtResource( 14 )
-other_stairs = Vector2( 1840, 80 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Stairs" index="0"]
-shape = SubResource( 1 )
+[node name="Stairs" parent="Map/Entities" index="15" instance=ExtResource( 21 )]
 
 [node name="Table" type="StaticBody2D" parent="Map/Entities" index="16" groups=[
 "Stuckables",
@@ -430,8 +423,6 @@ script = ExtResource( 12 )
 [node name="AutoLightsoffTimer" type="Timer" parent="CustomLogic" index="0"]
 wait_time = 25.0
 
-[connection signal="body_entered" from="Map/Entities/Stairs" to="Map/Entities/Stairs" method="_on_Stairs_body_entered"]
-[connection signal="body_exited" from="Map/Entities/Stairs" to="Map/Entities/Stairs" method="_on_Stairs_body_exited"]
 [connection signal="body_entered" from="Map/Entities/Stairs2" to="Map/Entities/Stairs2" method="_on_Stairs_body_entered"]
 [connection signal="body_exited" from="Map/Entities/Stairs2" to="Map/Entities/Stairs2" method="_on_Stairs_body_exited"]
 [connection signal="timeout" from="CustomLogic/AutoLightsoffTimer" to="CustomLogic" method="_on_AutoLightsoffTimer_timeout"]

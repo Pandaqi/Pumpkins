@@ -12,7 +12,14 @@ onready var particles = get_node("/root/Main/Particles")
 onready var mode = get_node("/root/Main/ModeManager")
 onready var arena = get_node("/root/Main/ArenaLoader")
 
+var respawn_timer
+var anim_player
+var teleport_timer
+
 export var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
+
+var starting_position : Vector2
+var starting_shape : Array
 
 # DEBUGGING (quick death checks, SURELY remove on publish)
 #func _input(ev):
@@ -23,6 +30,9 @@ export var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
 func set_player_num(num):
 	player_num = num
 	
+	starting_position = body.global_position
+	starting_shape = body.modules.shaper.get_shape_list()
+	
 	body.modules.drawer.set_color(GlobalDict.player_colors[num])
 	if body.modules.has('fader'):
 		body.modules.fader.activate(is_from_a_player())
@@ -31,6 +41,10 @@ func set_player_num(num):
 
 func set_player_specific_data():
 	if not body.is_in_group("Players"): return
+	
+	respawn_timer = $RespawnTimer
+	anim_player = $AnimationPlayer
+	teleport_timer = $TeleportTimer
 	
 	if body.modules.has('input'):
 		body.modules.input.set_player_num(player_num)
@@ -99,15 +113,40 @@ func can_die():
 func almost_dead():
 	pass
 
-func die():
-	if is_dead: return
+func respawn():
+	body.set_rotation(0)
 	
-	is_dead = true
+	body.modules.knives.destroy_knives()
+	body.modules.shaper.destroy()
+	body.modules.shaper.create_from_shape_list(starting_shape)
+	
+	var old_position = body.global_position
+	body.plan_teleport(starting_position)
+	
+	particles.general_feedback(old_position, "Respawn!")
+	particles.general_feedback(starting_position, "Respawn!")
+	
 	make_ghost()
+	respawn_timer.start()
+	anim_player.play("RespawnFlicker")
+
+func _on_RespawnTimer_timeout():
+	undo_ghost()
+	anim_player.stop()
+
+func die(forced  = false):
+	if is_dead: return
 	
 	particles.create_explosion_particles(body.global_position)
 	GlobalAudio.play_dynamic_sound(body, "death")
 	
+	if mode.respawn_on_death() and not forced:
+		respawn()
+		return
+	
+	is_dead = true
+	make_ghost()
+
 	var params = {}
 	if not is_bot: params = arena.on_player_death(body)
 
@@ -136,10 +175,10 @@ func hide_completely():
 
 func show_again():
 	body.modules.a = 1.0
-	body.modules.topping.make_ghost()
+	make_ghost(true)
 
-func make_ghost():
-	if is_dead: return
+func make_ghost(forced = false):
+	if is_dead and forced: return
 	
 	body.modulate.a = 0.6
 	

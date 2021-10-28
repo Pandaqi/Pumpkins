@@ -182,7 +182,6 @@ func show_gameover_gui(team_num):
 		
 		if p.modules.status.is_dead:
 			p.modules.status.show_again()
-			p.modules.status.make_ghost()
 
 func _input(ev):
 	if not game_over_state: return

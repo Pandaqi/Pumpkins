@@ -27,7 +27,9 @@ func almost_dead():
 func die():
 	var team = players.get_players_in_team(team_num)
 	for player in team:
-		player.modules.status.die()
+		
+		# @param => forced = true, so nothing can get in the way
+		player.modules.status.die(true)
 	
 	body.queue_free()
 	

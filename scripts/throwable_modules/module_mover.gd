@@ -5,6 +5,8 @@ const MIN_SIGNIFICANT_VELOCITY : float = 90.0
 const MIN_BOOMERANG_VELOCITY : float = 500.0
 const GHOST_KNIFE_VELOCITY : float = 200.0
 
+const HIGH_SPEED_THRESHOLD : float = 1000.0
+
 const CURVE_SPEED : float = 0.016
 const CURVE_DAMPING : float = 0.98
 
@@ -38,6 +40,9 @@ func get_velocity():
 
 func set_velocity(vel):
 	velocity = vel
+
+func at_high_speed():
+	return velocity.length() >= HIGH_SPEED_THRESHOLD
 
 func rotate_velocity(rot):
 	velocity = velocity.rotated(rot)

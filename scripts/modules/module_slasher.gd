@@ -29,8 +29,12 @@ const THROW_STRENGTH_BOUNDS = { 'min': 1300, 'max': 2200 }
 var strength_multiplier : float = 1.0
 onready var throw_strength_sprite = $ThrowStrength
 
-const IDLE_PENALTY_INTERVAL : float = 8.0
-onready var idle_timer = $IdleTimer
+const IDLE_PENALTY_INTERVAL : float = 9.5
+const IDLE_REMINDER_THRESHOLD : float = 2.0
+
+onready var idle_timer = $IdleHourglass/IdleTimer
+onready var idle_hourglass = $IdleHourglass
+onready var idle_hourglass_anim_player = $IdleHourglass/IdleHourglass/AnimationPlayer
 
 var disabled : bool = false
 
@@ -75,8 +79,17 @@ func show_range_sprite():
 func _physics_process(_dt):
 	if disabled: return
 	
+	show_idle_hourglass()
 	grow_strength_sprite()
 	position_range_sprite()
+
+func show_idle_hourglass():
+	if not use_idle_timer(): return
+	if idle_timer.time_left >= IDLE_REMINDER_THRESHOLD: return
+	
+	idle_hourglass.set_rotation(-body.rotation)
+	idle_hourglass.set_visible(true)
+	idle_hourglass_anim_player.play("IdleHourglass")
 
 func position_range_sprite():
 	if not range_sprite: return
@@ -304,6 +317,9 @@ func held_too_long():
 	return get_time_held() > MAX_TIME_HELD
 
 func reset_idle_timer():
+	idle_hourglass.set_visible(false)
+	idle_hourglass_anim_player.stop()
+	
 	idle_timer.stop()
 	idle_timer.wait_time = IDLE_PENALTY_INTERVAL
 	idle_timer.start()
@@ -311,8 +327,13 @@ func reset_idle_timer():
 # We've grabbed/thrown a knife and then not done something for X seconds
 # The penalty? Automatically throw something
 func _on_IdleTimer_timeout():
-	if not GlobalDict.cfg.auto_throw_if_idle: return
-	var no_first_knife = (not body.modules.knives.get_first_knife())
-	if no_first_knife: return
+	reset_idle_timer()
+	if not use_idle_timer(): return
 	
 	execute_thrown_slash()
+
+func use_idle_timer():
+	if not GlobalDict.cfg.auto_throw_if_idle: return false
+	var no_first_knife = (not body.modules.knives.get_first_knife())
+	if no_first_knife: return false
+	return true

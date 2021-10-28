@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://assets/arenas/dark_jungle/bg.png" type="Texture" id=1]
 [ext_resource path="res://assets/arenas/dark_jungle/vine_placement.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://assets/arenas/dark_jungle/border_vines.png" type="Texture" id=7]
 [ext_resource path="res://arenas/firefly.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scripts/arenas/dark_jungle/custom_logic.gd" type="Script" id=9]
+[ext_resource path="res://scenes/mode_modules/teleporter.tscn" type="PackedScene" id=10]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( 2.41553, -44.511, 48.6648, -20.125, 50.3466, 15.1927, 25.9606, 39.5786, -14.4025, 42.9422, -45.5156, 4.26102, -33.743, -21.8068 )
@@ -398,6 +399,26 @@ rotation = -0.277814
 position = Vector2( 1383.92, 100.48 )
 rotation = 0.0229962
 
+[node name="TeleporterA1" parent="Map/Entities" index="5" instance=ExtResource( 10 )]
+position = Vector2( 650, 35 )
+other_stairs = Vector2( 1870, 950 )
+detect_throwables = true
+
+[node name="TeleporterA2" parent="Map/Entities" index="6" instance=ExtResource( 10 )]
+position = Vector2( 1870, 950 )
+other_stairs = Vector2( 650, 35 )
+detect_throwables = true
+
+[node name="TeleporterB1" parent="Map/Entities" index="7" instance=ExtResource( 10 )]
+position = Vector2( 1260, 45 )
+other_stairs = Vector2( 35, 930 )
+detect_throwables = true
+
+[node name="TeleporterB2" parent="Map/Entities" index="8" instance=ExtResource( 10 )]
+position = Vector2( 35, 930 )
+other_stairs = Vector2( 1260, 45 )
+detect_throwables = true
+
 [node name="Sprite" type="Sprite" parent="Map/Overlay" index="0"]
 texture = ExtResource( 3 )
 centered = false
@@ -496,4 +517,4 @@ position = Vector2( 1030.42, 987.766 )
 script = ExtResource( 9 )
 
 [node name="Node2D" type="Node2D" parent="CustomLogic" index="0"]
-position = Vector2( 280, 850 )
+position = Vector2( 1100, 1035 )

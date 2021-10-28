@@ -52,7 +52,9 @@ func poll_front_raycast():
 		if handled: body.queue_free()
 		return
 	
-	if handled: return
+	if handled: 
+		if hit_body.is_in_group("ThrowableDeleters"): body.queue_free()
+		return
 	
 	if hit_body.is_in_group("Stuckables"):
 		handled = get_stuck(result)
@@ -125,6 +127,12 @@ func check_repellant_powerup(obj):
 func slice_through_body(obj):
 	# projectiles with a real body can NEVER slice something
 	if body.modules.fakebody.has_real_body: return false
+	
+	# if the object has the same (team) owner as the throwable, never slice
+	if obj.is_in_group("Players") and obj.modules.knives.is_mine(body): return false
+	
+	# if the object is also in the stuckables group, only make slicing succesful if speed high enough
+	if obj.is_in_group("Stuckables") and not body.modules.mover.at_high_speed(): return false
 	
 	var res = check_repellant_powerup(obj)
 	if res: return false

@@ -38,9 +38,7 @@ func grab(obj, type, is_throwable):
 	
 	var already_full = at_max_capacity()
 	if is_throwable: already_full = body.modules.knives.at_max_capacity()
-	if already_full: 
-		print("AT MAXIMUM")
-		return
+	if already_full: return
 	
 	GlobalAudio.play_dynamic_sound(body, "collect")
 	
@@ -82,7 +80,6 @@ func _physics_process(_dt):
 	show_temporary_effects_ui()
 	
 	if disabled: return
-	
 	handle_temporary_effects()
 
 func show_temporary_effects_ui():

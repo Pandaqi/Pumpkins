@@ -8,9 +8,9 @@ const ROTATE_SPEED : float = 1.6
 const RADIUS : float = 48.0
 const LINE_THICKNESS : float = 5.0
 const DIVISION_LINE_COLOR : Color = Color(64/255.0, 4/255.0, 0.0)
-const POINT_BOUNDS = { 'min': -2, 'max': 5 }
+const POINT_BOUNDS = { 'min': -5, 'max': 8 }
 
-const DIST_PER_POINT_UPGRADE : float = 300.0
+const DIST_UNTIL_FULL_POINTS : float = 1400.0
 
 var division_angles = []
 var division_points = []
@@ -52,7 +52,7 @@ func check_auto_rotating(dt):
 
 func get_random_point_val():
 	var rand = randi() % (POINT_BOUNDS.max - POINT_BOUNDS.min) + POINT_BOUNDS.min
-	if rand == 0: rand = 1 if randf() <= 0.5 else -1
+	if rand == 0: rand = POINT_BOUNDS.max if randf() <= 0.5 else POINT_BOUNDS.min
 	return rand
 
 func create_divisions():
@@ -95,8 +95,7 @@ func on_knife_entered(body):
 	var player = body.modules.owner.get_owner()
 	
 	var num_points = division_points[division]
-	var multiplier = clamp(body.modules.thrower.get_distance_traveled() / DIST_PER_POINT_UPGRADE, 0.0, 3.0)
-	if num_points < 0: multiplier = clamp(multiplier, 1.0, 3.0)
+	var multiplier = clamp(body.modules.thrower.get_distance_traveled() / DIST_UNTIL_FULL_POINTS, 0.0, 1.0)
 	
 	num_points *= multiplier
 	num_points = floor(num_points)

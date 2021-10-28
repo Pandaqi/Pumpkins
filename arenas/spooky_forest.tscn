@@ -204,6 +204,8 @@ position = Vector2( 1697.06, 953.18 )
 
 [node name="SliceTrunk" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 124.925, 527.613 )
 collision_layer = 5
@@ -224,6 +226,8 @@ texture = ExtResource( 8 )
 
 [node name="SliceTrunk2" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 162.706, 744.466 )
 collision_layer = 5
@@ -244,6 +248,8 @@ texture = ExtResource( 18 )
 
 [node name="SliceTrunk3" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 497.951, 1856.86 )
 collision_layer = 5
@@ -265,6 +271,8 @@ texture = ExtResource( 19 )
 
 [node name="SliceTrunk4" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 586.909, 717.601 )
 collision_layer = 5
@@ -285,6 +293,8 @@ texture = ExtResource( 11 )
 
 [node name="SliceTrunk5" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 1169.57, 743.057 )
 collision_layer = 5
@@ -305,6 +315,8 @@ texture = ExtResource( 12 )
 
 [node name="SliceTrunk6" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 1401.5, 948.118 )
 collision_layer = 5
@@ -325,6 +337,8 @@ texture = ExtResource( 13 )
 
 [node name="SliceTrunk7" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 1336.4, 234.184 )
 collision_layer = 5
@@ -345,6 +359,8 @@ texture = ExtResource( 14 )
 
 [node name="SliceTrunk8" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 1742.68, 256.91 )
 collision_layer = 5
@@ -365,6 +381,8 @@ texture = ExtResource( 15 )
 
 [node name="SliceTrunk9" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 578.03, 127.938 )
 collision_layer = 5
@@ -385,6 +403,8 @@ texture = ExtResource( 16 )
 
 [node name="SliceTrunk10" type="StaticBody2D" parent="Map/Entities" groups=[
 "Sliceables",
+"Stuckables",
+"ThrowableDeleters",
 ]]
 position = Vector2( 453.438, 150.591 )
 collision_layer = 5

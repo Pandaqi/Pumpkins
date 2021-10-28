@@ -308,11 +308,11 @@ func attack():
 		var start = our_pos
 		var end = closest_target.body.global_position
 		var exclusion = [body]
-		var params = shoot_raycast(start, end, exclusion, 1 + 2 + 4 + 8, closest_target.body)
+		var rc_params = shoot_raycast(start, end, exclusion, 1 + 2 + 4 + 8, closest_target.body)
 		
-		if not params.result: continue
-		if params.sliceable_in_front: sliceable_in_the_way = true
-		if not (params.result.collider == closest_target.body): continue
+		if not rc_params.result: continue
+		if rc_params.sliceable_in_front: sliceable_in_the_way = true
+		if not (rc_params.result.collider == closest_target.body): continue
 		
 		cant_reach = false
 	
@@ -407,7 +407,7 @@ func moving_will_hit_something(start, vec):
 	
 	return null
 
-func go_around_obstacles(dt):
+func go_around_obstacles(_dt):
 	var final_vec = params.final_vec
 	var original_vec = params.final_vec
 	var tries = {

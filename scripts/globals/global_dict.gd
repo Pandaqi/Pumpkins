@@ -6,6 +6,8 @@ var base_cfg = {
 	'powerups': [],
 	'throwables': [],
 	
+	'use_cartoony_coloring': true,
+	
 	'max_players': 6,
 	'auto_pickup_powerups': false,
 	'auto_slice_powerups': true,
@@ -36,9 +38,11 @@ var modes = {
 	
 	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 5, "max_knife_capacity": 5, "collectible_group": "Dumplings", "inverse_dumpling_behaviour": true, "required_throwable_type": "dumpling" },
 	
-	"dwarfing_dumplings": { "frame": 4, "win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true, "max_teams": 3, "starting_shape_scale": 0.66, "required_throwable_type": "dumpling" },
+	"dwarfing_dumplings": { "frame": 4, "win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true, "max_teams": 3, "starting_shape_scale": 0.66, "required_throwable_type": "dumpling", "respawn_on_death": true },
 	
-	#"ropeless_race": { "frame": 5, "win": "survival", "forbid_slicing_players": true, "fade_rubble": true, "players_can_die": true }
+	#"ropeless_race": { "frame": 5, "win": "survival", "forbid_slicing_players": true, "fade_rubble": true, "players_can_die": true },
+	
+	#"capture_the_flag": { "frame": 6, "win": "collection", "fade_rubble": true }
 }
 
 var arenas = {

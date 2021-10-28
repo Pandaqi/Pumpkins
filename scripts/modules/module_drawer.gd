@@ -8,6 +8,7 @@ export var use_multi_color : bool = true
 var pumpkin_orange = Color(1.0, 93/255.0, 32/255.0)
 var disabled : bool = false
 var is_huge : bool = false
+var smooth_outline_with_circles : bool = false
 
 onready var shape_manager = get_node("/root/Main/ShapeManager")
 
@@ -33,6 +34,10 @@ func enable():
 
 func _draw():
 	if disabled: return
+	
+	if GlobalDict.cfg.use_cartoony_coloring:
+		cartoony_draw()
+		return
 	
 	var num_shapes = body.shape_owner_get_shape_count(0)
 	var outline_layer = []
@@ -76,3 +81,33 @@ func _draw():
 
 func _on_Shaper_shape_updated():
 	update()
+
+func cartoony_draw():
+	var num_shapes = body.shape_owner_get_shape_count(0)
+	
+	var full_shape = []
+
+	var full_polygon = PoolVector2Array([])
+	
+	for i in range(num_shapes):
+		var points = body.shape_owner_get_shape(0, i).points
+		
+		var points_inflated = Geometry.offset_polygon_2d(points, 1.0)[0]
+		full_polygon = Geometry.merge_polygons_2d(full_polygon, points_inflated)[0]
+	
+	var outline_margin = 0
+	
+	var outline_polygon = Geometry.offset_polygon_2d(full_polygon, outline_margin)[0]
+	outline_polygon.append(outline_polygon[0])
+	
+	var outline_color = color.darkened(0.7)
+	var outline_thickness = 5.0
+	
+	draw_polygon(full_polygon, [color])
+	draw_polyline(outline_polygon, outline_color, outline_thickness, true)
+	
+	# NOTE: This is really slow + doesn't look good if things modulate their alpha
+	# So only apply to players?
+	if smooth_outline_with_circles:
+		for point in outline_polygon:
+			draw_circle(point, 0.5*outline_thickness, outline_color)
