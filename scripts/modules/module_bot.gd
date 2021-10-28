@@ -139,12 +139,23 @@ func read_situation():
 	
 	for i in range(targets.size()-1,-1,-1):
 		var t = targets[i]
+		
+		# don't target ourself
 		var its_ourself = (t.body == body)
 		if its_ourself: 
 			targets.remove(i)
 			continue
-
-		# TO DO: remove our own teammates, our huge dumpling, etc.
+		
+		# don't target anyone who still has a tutorial going
+		if t.body.modules.has('tutorial'):
+			targets.remove(i)
+			continue
+		
+		# don't target our own teammates
+		# (this includes our own huge dumpling)
+		if body.modules.status.same_team(t.body):
+			targets.remove(i)
+			continue
 	
 	#
 	# general information about players

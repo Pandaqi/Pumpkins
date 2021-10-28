@@ -22,6 +22,7 @@ func _physics_process(_dt):
 	poll_special_hits()
 	poll_front_raycast()
 	poll_back_raycast()
+	poll_side_raycast()
 
 func poll_front_raycast():
 	var result = body.modules.fakebody.front_raycast
@@ -77,9 +78,13 @@ func poll_back_raycast():
 	var result = body.modules.fakebody.back_raycast
 	if not result: return
 	
-	var hit_body = result.collider
-	if not hit_body or not is_instance_valid(hit_body): return
-	body.modules.grabber.try_grabbing(hit_body)
+	grab_throwable(result.collider)
+
+func poll_side_raycast():
+	var result = body.modules.fakebody.side_raycasts
+	if not result: return
+	
+	grab_throwable(result.collider)
 
 func poll_special_hits():
 	for nonsolid in body.modules.fakebody.nonsolids_hit:
@@ -92,6 +97,10 @@ func poll_special_hits():
 #
 # Calculating the interactions we have
 #
+
+func grab_throwable(hit_body):
+	if not hit_body or not is_instance_valid(hit_body): return
+	body.modules.grabber.try_grabbing(hit_body)
 
 # TO DO: Check if the attacking object (ourselves, "body") is an actual knife?
 func handle_dumpling(obj):

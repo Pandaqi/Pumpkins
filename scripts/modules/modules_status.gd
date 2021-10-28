@@ -14,7 +14,6 @@ onready var arena = get_node("/root/Main/ArenaLoader")
 
 var respawn_timer
 var anim_player
-var teleport_timer
 
 export var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
 
@@ -44,7 +43,6 @@ func set_player_specific_data():
 	
 	respawn_timer = $RespawnTimer
 	anim_player = $AnimationPlayer
-	teleport_timer = $TeleportTimer
 	
 	if body.modules.has('input'):
 		body.modules.input.set_player_num(player_num)
@@ -121,9 +119,9 @@ func respawn():
 	body.modules.shaper.create_from_shape_list(starting_shape)
 	
 	var old_position = body.global_position
-	body.plan_teleport(starting_position)
+	body.modules.teleporter.teleport(starting_position)
 	
-	particles.general_feedback(old_position, "Respawn!")
+	particles.general_feedback(old_position, "Dead!")
 	particles.general_feedback(starting_position, "Respawn!")
 	
 	make_ghost()
@@ -178,7 +176,7 @@ func show_again():
 	make_ghost(true)
 
 func make_ghost(forced = false):
-	if is_dead and forced: return
+	if is_dead and not forced: return
 	
 	body.modulate.a = 0.6
 	
@@ -206,3 +204,8 @@ func undo_ghost():
 	body.modules.drawer.enable()
 	
 	body.remove_from_group("NonSolids")
+
+func same_team(other_body):
+	var our_team = team_num
+	var their_team = other_body.modules.status.team_num
+	return (our_team == their_team)

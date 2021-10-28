@@ -37,6 +37,20 @@ var audio_preload = {
 	"ui_team_change": preload("res://assets/audio/ui_button_press.ogg"),
 	"ui_player_add": preload("res://assets/audio/ui_button_press.ogg"),
 	"ui_player_remove": preload("res://assets/audio/ui_button_press.ogg"),
+	
+	# mode-specific stuff
+	"window": [
+		preload("res://assets/audio/window1.ogg"),
+		preload("res://assets/audio/window2.ogg")
+	],
+	
+	"vine": [
+		preload("res://assets/audio/vine1.ogg"),
+		preload("res://assets/audio/vine2.ogg")
+	],
+	
+	"switch": preload("res://assets/audio/switch.ogg"),
+	"teleport": preload("res://assets/audio/teleport.ogg")
 }
 
 func _ready():

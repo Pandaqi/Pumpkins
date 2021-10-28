@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=2]
@@ -30,6 +30,7 @@
 [ext_resource path="res://scripts/module_statistics.gd" type="Script" id=28]
 [ext_resource path="res://assets/ui/throw_strength_indicator.png" type="Texture" id=29]
 [ext_resource path="res://assets/ui/idle_indicator.png" type="Texture" id=30]
+[ext_resource path="res://scenes/modules/teleporter.tscn" type="PackedScene" id=31]
 
 [sub_resource type="Animation" id=15]
 length = 0.001
@@ -319,9 +320,7 @@ one_shot = true
 anims/RESET = SubResource( 15 )
 anims/RespawnFlicker = SubResource( 16 )
 
-[node name="TeleportTimer" type="Timer" parent="Status"]
-wait_time = 0.2
-one_shot = true
+[node name="Teleporter" parent="." instance=ExtResource( 31 )]
 
 [node name="Statistics" type="Node" parent="."]
 script = ExtResource( 28 )
@@ -504,27 +503,27 @@ anims/LightFLicker = SubResource( 8 )
 anims/RESET = SubResource( 9 )
 
 [connection signal="timeout" from="Status/RespawnTimer" to="Status" method="_on_RespawnTimer_timeout"]
-[connection signal="button_press" from="Input" to="Slasher" method="_on_Input_button_press"]
 [connection signal="button_press" from="Input" to="Mover" method="_on_Input_button_press"]
-[connection signal="button_release" from="Input" to="Slasher" method="_on_Input_button_release"]
+[connection signal="button_press" from="Input" to="Slasher" method="_on_Input_button_press"]
 [connection signal="button_release" from="Input" to="Mover" method="_on_Input_button_release"]
-[connection signal="move_vec" from="Input" to="Slasher" method="_on_Input_move_vec"]
+[connection signal="button_release" from="Input" to="Slasher" method="_on_Input_button_release"]
 [connection signal="move_vec" from="Input" to="Mover" method="_on_Input_move_vec"]
-[connection signal="button_press" from="Bot" to="Slasher" method="_on_Input_button_press"]
+[connection signal="move_vec" from="Input" to="Slasher" method="_on_Input_move_vec"]
 [connection signal="button_press" from="Bot" to="Mover" method="_on_Input_button_press"]
-[connection signal="button_release" from="Bot" to="Slasher" method="_on_Input_button_release"]
+[connection signal="button_press" from="Bot" to="Slasher" method="_on_Input_button_press"]
 [connection signal="button_release" from="Bot" to="Mover" method="_on_Input_button_release"]
-[connection signal="move_vec" from="Bot" to="Slasher" method="_on_Input_move_vec"]
+[connection signal="button_release" from="Bot" to="Slasher" method="_on_Input_button_release"]
 [connection signal="move_vec" from="Bot" to="Mover" method="_on_Input_move_vec"]
+[connection signal="move_vec" from="Bot" to="Slasher" method="_on_Input_move_vec"]
 [connection signal="timeout" from="Bot/UnstuckTimer" to="Bot" method="_on_UnstuckTimer_timeout"]
 [connection signal="moved" from="Mover" to="Tutorial" method="_on_Mover_moved"]
 [connection signal="movement_started" from="Mover" to="Particles" method="_on_Mover_movement_started"]
 [connection signal="movement_stopped" from="Mover" to="Particles" method="_on_Mover_movement_stopped"]
 [connection signal="timeout" from="Knives/Timer" to="Knives" method="_on_Timer_timeout"]
-[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
 [connection signal="timeout" from="Shaper/StatTimer" to="Shaper" method="_on_StatTimer_timeout"]
 [connection signal="timeout" from="Grower/Timer" to="Grower" method="_on_Timer_timeout"]
 [connection signal="aim" from="Slasher" to="Tutorial" method="_on_Slasher_aim"]

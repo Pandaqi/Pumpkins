@@ -6,12 +6,9 @@ const MAX_ANGULAR_VEL_ON_IMPACT : float = 50.0
 
 var modules = {}
 var shoot_away : Vector2 = Vector2.ZERO
-var teleport_pos : Vector2 = Vector2.ZERO
 
 var last_velocity : Vector2 = Vector2.ZERO
 var last_rotation : float = 0.0
-
-var forced_teleport_allowed : bool = true
 
 func _ready():
 	register_modules()
@@ -34,18 +31,8 @@ func get_forward_vec():
 func plan_shoot_away(vec):
 	shoot_away = vec
 
-func plan_teleport(pos):
-	teleport_pos = pos
-	
-	if self.is_in_group("Players"):
-		set_position(teleport_pos)
-
 func _integrate_forces(state):
 	#state.angular_velocity = 0.0
-	
-	if teleport_pos.length() > 0.5:
-		state.transform.origin = teleport_pos
-		teleport_pos = Vector2.ZERO
 
 	if shoot_away.length() > 0.5:
 		state.linear_velocity = shoot_away

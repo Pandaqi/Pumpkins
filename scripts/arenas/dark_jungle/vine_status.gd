@@ -11,6 +11,8 @@ var player_num = -1
 var num_regrows : int = 0
 
 func delete():
+	GlobalAudio.play_dynamic_sound(body, "vine")
+	
 	if num_regrows >= MAX_REGROWS:
 		body.queue_free()
 	

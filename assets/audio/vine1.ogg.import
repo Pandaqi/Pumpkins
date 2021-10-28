@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/vine1.ogg-2ee1d3d3513361b7822e1052427513a8.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/vine1.ogg"
+dest_files=[ "res://.import/vine1.ogg-2ee1d3d3513361b7822e1052427513a8.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

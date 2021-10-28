@@ -7,7 +7,9 @@ var has_real_body : bool = false
 var knife_half_size = 0.5 * (0.25*256)
 var back_raycast = null
 var front_raycast = null
+var side_raycasts = null
 var nonsolids_hit = []
+var space_state = null
 
 var collision_exceptions = []
 
@@ -28,29 +30,53 @@ func _physics_process(dt):
 	reset_all()
 	
 	if body.modules.status.being_held: return
+	space_state = get_world_2d().direct_space_state 
 	
 	shoot_raycast(dt)
 	shoot_back_raycast()
+	shoot_side_raycast()
 
 func reset_all():
 	nonsolids_hit = []
 	back_raycast = null
 	front_raycast = null
+	side_raycasts = null
+
+func waiting_for_pickup():
+	if body.modules.status.is_stuck: return true
+	if body.modules.owner.has_none(): return true
+	if body.modules.owner.is_friendly(): return true
+	return false
+
+func shoot_pickup_raycast(start, end):
+	space_state.intersect_ray(start, end, build_exclude_array(), 2)
+
+func shoot_side_raycast():
+	if not waiting_for_pickup(): return
+	
+	var normal = Vector2(cos(body.rotation), sin(body.rotation))
+	var ortho_normal = normal.rotated(0.5*PI)
+
+	var start = body.global_position
+	var end = body.global_position + ortho_normal * knife_half_size * 1.5
+	
+	var result = shoot_pickup_raycast(start, end)
+	side_raycasts = result
+	if result: return
+	
+	end = body.global_position - ortho_normal * knife_half_size * 1.5
+	result = shoot_pickup_raycast(start, end)
+	side_raycasts = result
 
 func shoot_back_raycast():
-	if not (body.modules.status.is_stuck or body.modules.owner.has_none()): return
-
-	var space_state = get_world_2d().direct_space_state 
+	if not waiting_for_pickup(): return
 
 	# This one extends considerably, so that bots (or weirder shapes) can also pick it up
 	var normal = Vector2(cos(body.rotation), sin(body.rotation))
-	var start = body.global_position + normal*knife_half_size
-	var end = body.global_position - normal * knife_half_size * 4
+	var start = body.global_position + normal * knife_half_size
+	var end = body.global_position - normal * knife_half_size * 1.5
 	
-	var exclude = build_exclude_array()
-	var collision_layer = 2
-	
-	var result = space_state.intersect_ray(start, end, exclude, collision_layer)
+	var result = shoot_pickup_raycast(start, end)
 	back_raycast = result
 
 func build_exclude_array():
@@ -67,9 +93,7 @@ func build_exclude_array():
 
 func shoot_raycast(dt):
 	if body.modules.status.is_stuck: return
-	
-	var space_state = get_world_2d().direct_space_state
-	
+
 	var margin = 6
 	var vel = body.modules.mover.velocity
 	var rot = body.rotation
