@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://assets/arenas/graveyard/graveyard_bg.png" type="Texture" id=1]
 [ext_resource path="res://assets/arenas/graveyard/graveyard_objects.png" type="Texture" id=2]
@@ -8,6 +8,13 @@
 [ext_resource path="res://scripts/arenas/graveyard/light_mover.gd" type="Script" id=6]
 [ext_resource path="res://scripts/arenas/graveyard/tombstone_mover.gd" type="Script" id=7]
 [ext_resource path="res://assets/arenas/graveyard/dynamic_tombstone.png" type="Texture" id=8]
+[ext_resource path="res://assets/arenas/graveyard/gate.png" type="Texture" id=9]
+[ext_resource path="res://scripts/modules/throwable_deleter.gd" type="Script" id=10]
+[ext_resource path="res://scripts/arenas/graveyard/gate.gd" type="Script" id=11]
+[ext_resource path="res://arenas/sliceable_stone.tscn" type="PackedScene" id=12]
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 114.653, 36.7635 )
 
 [sub_resource type="OccluderPolygon2D" id=6]
 polygon = PoolVector2Array( 190.794, 366.36, 250.01, 366.99, 247.49, 296.435, 262.609, 297.065, 261.979, 273.756, 175.045, 274.386, 173.155, 297.695, 187.644, 297.695 )
@@ -92,6 +99,64 @@ texture = ExtResource( 1 )
 centered = false
 
 [node name="Entities" type="Node2D" parent="Map"]
+
+[node name="Gate" type="StaticBody2D" parent="Map/Entities" groups=[
+"Deflectables",
+"Gates",
+]]
+position = Vector2( 960, 20 )
+collision_layer = 13
+collision_mask = 13
+script = ExtResource( 11 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Gate"]
+polygon = PoolVector2Array( -168.858, 25.9555, -112.167, 31.4495, -113.733, 14.5652, 110.771, 13.6635, 110.67, 31.0009, 164.137, 31.0009, 201.136, -22.8165, -202.494, -21.1347 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Gate"]
+position = Vector2( -1.33484, -4.00452 )
+texture = ExtResource( 9 )
+
+[node name="ThrowableDeleter" type="Area2D" parent="Map/Entities/Gate"]
+position = Vector2( -2.07748, -3.34084 )
+collision_layer = 32
+collision_mask = 32
+script = ExtResource( 10 )
+exclude_types = [ "ghost_knife" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Gate/ThrowableDeleter"]
+position = Vector2( 0.675659, -6.38703 )
+shape = SubResource( 10 )
+
+[node name="Gate2" type="StaticBody2D" parent="Map/Entities" groups=[
+"Deflectables",
+"Gates",
+]]
+position = Vector2( 944.864, 1057.67 )
+rotation = 3.14159
+collision_layer = 13
+collision_mask = 13
+script = ExtResource( 11 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Gate2"]
+polygon = PoolVector2Array( -168.858, 25.9555, -113.285, 31.3136, -115.989, 11.4779, 110.318, 13.2817, 108.514, 31.0009, 164.137, 31.0009, 201.136, -22.8165, -202.494, -21.1347 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Gate2"]
+position = Vector2( -1.53235, -8.36597 )
+rotation = -3.14159
+texture = ExtResource( 9 )
+flip_v = true
+
+[node name="ThrowableDeleter" type="Area2D" parent="Map/Entities/Gate2"]
+position = Vector2( -5.50745, -12.0359 )
+rotation = -3.14159
+collision_layer = 32
+collision_mask = 32
+script = ExtResource( 10 )
+exclude_types = [ "ghost_knife" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Gate2/ThrowableDeleter"]
+position = Vector2( 0.675659, -6.38703 )
+shape = SubResource( 10 )
 
 [node name="GraveyardObjects" type="Sprite" parent="Map/Entities"]
 position = Vector2( 960, 540 )
@@ -332,26 +397,45 @@ collision_mask = 13
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D19"]
 shape = SubResource( 7 )
 
-[node name="Gate" type="StaticBody2D" parent="Map/Entities" groups=[
-"Deflectables",
-]]
-position = Vector2( 960, 20 )
-collision_layer = 13
-collision_mask = 13
+[node name="Regrowable" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 702.554, 437.063 )
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Gate"]
-polygon = PoolVector2Array( -168.858, 25.9555, 7.73022, 31.0009, 164.137, 31.0009, 201.136, -22.8165, -202.494, -21.1347 )
+[node name="Regrowable2" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 741.946, 430.212 )
+rotation = -0.1836
 
-[node name="Gate2" type="StaticBody2D" parent="Map/Entities" groups=[
-"Deflectables",
-]]
-position = Vector2( 944.864, 1057.67 )
-rotation = 3.14159
-collision_layer = 13
-collision_mask = 13
+[node name="Regrowable3" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 777.055, 412.229 )
+rotation = -0.629536
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Gate2"]
-polygon = PoolVector2Array( -168.858, 25.9555, 7.73022, 31.0009, 164.137, 31.0009, 201.136, -22.8165, -202.494, -21.1347 )
+[node name="Regrowable4" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 1372.08, 663.012 )
+
+[node name="Regrowable5" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 1412.66, 659.729 )
+
+[node name="Regrowable6" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 1453.12, 659.585 )
+
+[node name="Regrowable7" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 22.0136, 659.623 )
+rotation = 0.0934646
+
+[node name="Regrowable8" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 62.4748, 653.888 )
+rotation = -0.315189
+
+[node name="Regrowable9" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 838.077, 991.037 )
+rotation = 2.07311
+
+[node name="Regrowable10" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 849.139, 948.775 )
+rotation = 1.66446
+
+[node name="Regrowable11" parent="Map/Entities" instance=ExtResource( 12 )]
+position = Vector2( 1895.45, 393.25 )
+rotation = 2.83503
 
 [node name="Overlay" type="Node2D" parent="Map"]
 
@@ -449,5 +533,12 @@ script = ExtResource( 7 )
 wait_time = 5.0
 one_shot = true
 
+[node name="GateTimer" type="Timer" parent="CustomLogic"]
+wait_time = 10.0
+one_shot = true
+
+[connection signal="body_entered" from="Map/Entities/Gate/ThrowableDeleter" to="Map/Entities/Gate/ThrowableDeleter" method="_on_Area2D_body_entered"]
+[connection signal="body_entered" from="Map/Entities/Gate2/ThrowableDeleter" to="Map/Entities/Gate2/ThrowableDeleter" method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="Map/Overlay/Light2D/Timer" to="Map/Overlay/Light2D" method="_on_Timer_timeout"]
 [connection signal="timeout" from="CustomLogic/TombstoneTimer" to="CustomLogic" method="_on_TombstoneTimer_timeout"]
+[connection signal="timeout" from="CustomLogic/GateTimer" to="CustomLogic" method="_on_GateTimer_timeout"]

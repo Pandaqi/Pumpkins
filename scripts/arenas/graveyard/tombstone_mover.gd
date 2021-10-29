@@ -1,19 +1,34 @@
 extends Node2D
 
 const TIMER_BOUNDS = { 'min': 5, 'max': 15 }
+const GATE_TIMER_BOUNDS = { 'min': 5, 'max': 15 }
 
 var all_dynamic_tombstones = []
 var cur_hidden_tombstone = null
 
+var all_gates = []
+var cur_opened_gate = null
+
 onready var map = get_node("/root/Main/Map")
 onready var tombstone_timer = $TombstoneTimer
 onready var tween = $Tween
+
+onready var gate_timer = $GateTimer
 
 var player_controlled_tombstone = preload("res://arenas/tombstone_dynamic.tscn")
 
 func activate():
 	all_dynamic_tombstones = get_tree().get_nodes_in_group("Dynamics")
 	_on_TombstoneTimer_timeout()
+	
+	deactivate_all_gates()
+
+func deactivate_all_gates():
+	all_gates = get_tree().get_nodes_in_group("Gates")
+	for g in all_gates:
+		g.deactivate(tween)
+	
+	_on_GateTimer_timeout()
 
 func on_player_death(p) -> Dictionary:
 	var t = player_controlled_tombstone.instance()
@@ -78,3 +93,17 @@ func disappear(obj):
 	Tween.TRANS_ELASTIC, Tween.EASE_OUT)
 	tween.start()
 
+func _on_GateTimer_timeout():
+	if cur_opened_gate:
+		cur_opened_gate.deactivate(tween)
+	
+	# whatever the current one is, pick the OTHER one
+	if all_gates[0] == cur_opened_gate:
+		cur_opened_gate = all_gates[1]
+	else:
+		cur_opened_gate = all_gates[0]
+	
+	cur_opened_gate.activate(tween)
+	
+	gate_timer.wait_time = rand_range(GATE_TIMER_BOUNDS.min, GATE_TIMER_BOUNDS.max)
+	gate_timer.start()

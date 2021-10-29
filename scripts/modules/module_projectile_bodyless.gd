@@ -50,7 +50,7 @@ func poll_front_raycast():
 		handled = slice_through_body(hit_body)
 	
 	if body.modules.status.type == "ghost_knife": 
-		if handled: body.queue_free()
+		if handled and hit_body.is_in_group("Players"): body.queue_free()
 		return
 	
 	if handled: 

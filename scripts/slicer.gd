@@ -1,7 +1,7 @@
 extends Node2D
 
 const SLICE_EXPLODE_FORCE : float = 1000.0
-const MIN_AREA_FOR_SHAPE : float = 350.0
+const MIN_AREA_FOR_SHAPE : float = 100.0
 
 # NOTE: if player falls below this size, they die
 const PLAYER_MIN_AREA_FOR_SHAPE : float = 950.0

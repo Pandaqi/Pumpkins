@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://arenas/arena_skeleton.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/arenas/bogus_blackouts/bg.png" type="Texture" id=2]
@@ -21,6 +21,10 @@
 [ext_resource path="res://assets/arenas/bogus_blackouts/overhead_light4.png" type="Texture" id=19]
 [ext_resource path="res://arenas/overhead_light.tscn" type="PackedScene" id=20]
 [ext_resource path="res://scenes/mode_modules/teleporter.tscn" type="PackedScene" id=21]
+[ext_resource path="res://scripts/modules/throwable_deleter.gd" type="Script" id=22]
+
+[sub_resource type="RectangleShape2D" id=16]
+extents = Vector2( 77.4227, 35.4361 )
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 27.7839
@@ -98,47 +102,61 @@ rotation = 1.5708
 [node name="Window7" parent="Map/Entities" index="6" instance=ExtResource( 13 )]
 position = Vector2( 766.018, 116.093 )
 
-[node name="LightButton" parent="Map/Entities" index="7" instance=ExtResource( 11 )]
+[node name="Window8" parent="Map/Entities" index="7" instance=ExtResource( 13 )]
+position = Vector2( 1920.95, 517.647 )
+
+[node name="ThrowableDeleter" type="Area2D" parent="Map/Entities" index="8"]
+position = Vector2( 1940.53, 519.787 )
+rotation = 1.5708
+collision_layer = 32
+collision_mask = 32
+script = ExtResource( 22 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/ThrowableDeleter" index="0"]
+position = Vector2( -1.18127, -7.71448 )
+shape = SubResource( 16 )
+
+[node name="LightButton" parent="Map/Entities" index="9" instance=ExtResource( 11 )]
 position = Vector2( 789.633, 292.545 )
 room_num = 4
 
-[node name="LightButton2" parent="Map/Entities" index="8" instance=ExtResource( 11 )]
+[node name="LightButton2" parent="Map/Entities" index="10" instance=ExtResource( 11 )]
 position = Vector2( 535.143, 726.605 )
 rotation = 3.14159
 room_num = 6
 
-[node name="LightButton3" parent="Map/Entities" index="9" instance=ExtResource( 11 )]
+[node name="LightButton3" parent="Map/Entities" index="11" instance=ExtResource( 11 )]
 position = Vector2( 1882.25, 267.438 )
 rotation = 3.14159
 room_num = 2
 
-[node name="LightButton4" parent="Map/Entities" index="10" instance=ExtResource( 11 )]
+[node name="LightButton4" parent="Map/Entities" index="12" instance=ExtResource( 11 )]
 position = Vector2( 661.857, 38.737 )
 rotation = 1.5708
 room_num = 7
 
-[node name="LightButton5" parent="Map/Entities" index="11" instance=ExtResource( 11 )]
+[node name="LightButton5" parent="Map/Entities" index="13" instance=ExtResource( 11 )]
 position = Vector2( 1225.26, 652.698 )
 rotation = 1.5708
 room_num = 1
 
-[node name="LightButton6" parent="Map/Entities" index="12" instance=ExtResource( 11 )]
+[node name="LightButton6" parent="Map/Entities" index="14" instance=ExtResource( 11 )]
 position = Vector2( 826.672, 174.376 )
 rotation = -1.5708
 room_num = 3
 
-[node name="LightButton7" parent="Map/Entities" index="13" instance=ExtResource( 11 )]
+[node name="LightButton7" parent="Map/Entities" index="15" instance=ExtResource( 11 )]
 position = Vector2( 226.272, 317.329 )
 rotation = -1.5708
 room_num = 5
 
-[node name="Entities" type="Sprite" parent="Map/Entities" index="14"]
+[node name="Entities" type="Sprite" parent="Map/Entities" index="16"]
 texture = ExtResource( 3 )
 centered = false
 
-[node name="Stairs" parent="Map/Entities" index="15" instance=ExtResource( 21 )]
+[node name="Stairs" parent="Map/Entities" index="17" instance=ExtResource( 21 )]
 
-[node name="Table" type="StaticBody2D" parent="Map/Entities" index="16" groups=[
+[node name="Table" type="StaticBody2D" parent="Map/Entities" index="18" groups=[
 "Stuckables",
 ]]
 position = Vector2( 1765.33, 418.258 )
@@ -146,7 +164,7 @@ position = Vector2( 1765.33, 418.258 )
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="Map/Entities/Table" index="0"]
 polygon = PoolVector2Array( 61.9839, 68.8333, 54.0469, 84.7073, 38.1729, 95.0254, -39.6097, 95.0254, -57.0712, 86.2947, -65.8019, 67.2459, -65.8019, -74.0327, -55.4838, -94.669, -39.6097, -100.225, 34.2043, -101.019, 52.4595, -92.2879, 62.7776, -76.4138 )
 
-[node name="Stairs2" type="Area2D" parent="Map/Entities" index="17"]
+[node name="Stairs2" type="Area2D" parent="Map/Entities" index="19"]
 position = Vector2( 1840, 80 )
 collision_layer = 2
 collision_mask = 2
@@ -156,7 +174,7 @@ other_stairs = Vector2( 80, 1000 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Stairs2" index="0"]
 shape = SubResource( 1 )
 
-[node name="Walls" type="StaticBody2D" parent="Map/Entities" index="18" groups=[
+[node name="Walls" type="StaticBody2D" parent="Map/Entities" index="20" groups=[
 "Deflectables",
 ]]
 collision_layer = 5
@@ -423,6 +441,7 @@ script = ExtResource( 12 )
 [node name="AutoLightsoffTimer" type="Timer" parent="CustomLogic" index="0"]
 wait_time = 25.0
 
+[connection signal="body_entered" from="Map/Entities/ThrowableDeleter" to="Map/Entities/ThrowableDeleter" method="_on_Area2D_body_entered"]
 [connection signal="body_entered" from="Map/Entities/Stairs2" to="Map/Entities/Stairs2" method="_on_Stairs_body_entered"]
 [connection signal="body_exited" from="Map/Entities/Stairs2" to="Map/Entities/Stairs2" method="_on_Stairs_body_exited"]
 [connection signal="timeout" from="CustomLogic/AutoLightsoffTimer" to="CustomLogic" method="_on_AutoLightsoffTimer_timeout"]

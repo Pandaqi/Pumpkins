@@ -83,17 +83,29 @@ func _on_Shaper_shape_updated():
 	update()
 
 func cartoony_draw():
-	var num_shapes = body.shape_owner_get_shape_count(0)
-	
 	var full_shape = []
 
-	var full_polygon = PoolVector2Array([])
+	var shape_list = body.modules.shaper.shape_list + []
 	
-	for i in range(num_shapes):
-		var points = body.shape_owner_get_shape(0, i).points
+	# pre-inflate all shapes (to ensure merges work)
+	for i in range(shape_list.size()):
+		shape_list[i] = Geometry.offset_polygon_2d(shape_list[i], 1.0)[0]
+	
+	# now keep merging with shapes until none left
+	var counter = 1
+	var full_polygon = shape_list[0]
+	while shape_list.size() > 1:
+		var new_polygon = Geometry.merge_polygons_2d(full_polygon, shape_list[counter])
 		
-		var points_inflated = Geometry.offset_polygon_2d(points, 1.0)[0]
-		full_polygon = Geometry.merge_polygons_2d(full_polygon, points_inflated)[0]
+		# no succesful merge? continue
+		if new_polygon.size() > 1:
+			counter += 1
+			continue
+		
+		# succes? save the merged polygon, remove the other from the list and start searching again
+		full_polygon = new_polygon[0]
+		shape_list.remove(counter)
+		counter = 1
 	
 	var outline_margin = 0
 	

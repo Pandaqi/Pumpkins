@@ -49,7 +49,7 @@ func waiting_for_pickup():
 	return false
 
 func shoot_pickup_raycast(start, end):
-	space_state.intersect_ray(start, end, build_exclude_array(), 2)
+	return space_state.intersect_ray(start, end, build_exclude_array(), 2)
 
 func shoot_side_raycast():
 	if not waiting_for_pickup(): return
@@ -87,8 +87,8 @@ func build_exclude_array():
 	
 	if body.modules.owner.has_none(): return exclude
 	if not body.modules.grabber.is_disabled_for_owner(): return exclude
-	exclude.append(body.modules.owner.get_owner())
 	
+	exclude.append(body.modules.owner.get_owner())
 	return exclude
 
 func shoot_raycast(dt):

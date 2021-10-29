@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scripts/modules/module_flat_color_drawer.gd" type="Script" id=1]
+[ext_resource path="res://scripts/module_manager_sliceable.gd" type="Script" id=2]
+[ext_resource path="res://scripts/arenas/dark_jungle/vine_status.gd" type="Script" id=3]
+
+[node name="Regrowable" type="StaticBody2D" groups=[
+"IgnoreNavs",
+"Sliceables",
+]]
+script = ExtResource( 2 )
+override_color = true
+
+[node name="Status" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="RegrowTimer" type="Timer" parent="Status"]
+wait_time = 8.0
+one_shot = true
+
+[node name="Tween" type="Tween" parent="Status"]
+
+[node name="Drawer" type="Node2D" parent="."]
+script = ExtResource( 1 )
+
+[connection signal="timeout" from="Status/RegrowTimer" to="Status" method="_on_RegrowTimer_timeout"]

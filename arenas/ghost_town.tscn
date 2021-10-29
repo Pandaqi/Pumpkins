@@ -1,10 +1,14 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://assets/arenas/ghost_town/bg.png" type="Texture" id=1]
 [ext_resource path="res://assets/arenas/ghost_town/entities.png" type="Texture" id=2]
 [ext_resource path="res://scripts/arenas/ghost_town/custom_logic.gd" type="Script" id=3]
 [ext_resource path="res://assets/arenas/graveyard/light_texture.png" type="Texture" id=4]
 [ext_resource path="res://assets/arenas/ghost_town/overlay.png" type="Texture" id=5]
+[ext_resource path="res://scripts/modules/throwable_deleter.gd" type="Script" id=6]
+[ext_resource path="res://scenes/regrowable.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/arenas/ghost_town/barrel.png" type="Texture" id=8]
+[ext_resource path="res://scenes/throwable_deleter.tscn" type="PackedScene" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 129.504, 12.0208 )
@@ -23,6 +27,9 @@ extents = Vector2( 76.9028, 14.7894 )
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 48.3728, 12.5762 )
+
+[sub_resource type="RectangleShape2D" id=16]
+extents = Vector2( 97.093, 36.7635 )
 
 [sub_resource type="OccluderPolygon2D" id=7]
 polygon = PoolVector2Array( 364.879, 354.765, 364.879, 260.472, 625.507, 257.294, 625.507, 288.018, 391.365, 286.959, 389.246, 356.884 )
@@ -155,6 +162,61 @@ polygon = PoolVector2Array( 225.869, -50.5007, 180.614, -1.0032, 142.43, 14.5532
 position = Vector2( 1755.65, 1045.41 )
 rotation = 3.14159
 polygon = PoolVector2Array( 225.869, -50.5007, 180.614, -1.0032, 142.43, 14.5532, 129.702, 28.6953, 84.4474, 32.9379, 85.8615, -5.24585, 66.0626, -23.6306, -0.405487, -32.1159, -58.3882, -23.6306, -71.1161, 0.411011, -69.7019, 34.3521, -129.099, 31.5237, -174.354, 0.411011, -177.182, -67.4713 )
+
+[node name="ThrowableDeleter" parent="Map/Entities" instance=ExtResource( 9 )]
+
+[node name="ThrowableDeleter2" type="Area2D" parent="Map/Entities"]
+position = Vector2( 1756.43, 1066.13 )
+collision_layer = 32
+collision_mask = 32
+script = ExtResource( 6 )
+exclude_types = [ "ghost_knife" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/ThrowableDeleter2"]
+position = Vector2( 0.573624, -6.38703 )
+shape = SubResource( 16 )
+
+[node name="Barrel" parent="Map/Entities" instance=ExtResource( 7 )]
+position = Vector2( 413.066, 199.798 )
+color = Color( 0.607843, 0.329412, 0.168627, 1 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Barrel"]
+texture = ExtResource( 8 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Barrel"]
+polygon = PoolVector2Array( 2.23218, -37.7229, 18.6539, -32.4256, 29.2485, -21.3012, 35.6053, -3.29033, 35.6053, 10.4827, 29.7782, 22.6665, 18.6539, 32.2017, 2.7619, 37.499, -6.77325, 37.499, -23.1949, 30.6125, -31.6707, 20.0179, -36.4382, 4.65564, -36.4382, -5.40926, -31.1409, -19.712, -23.1949, -29.7769, -9.42194, -36.6634 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Map/Entities/Barrel"]
+light_mask = 2
+light_mask = 2
+
+[node name="Barrel2" parent="Map/Entities" instance=ExtResource( 7 )]
+position = Vector2( 825.105, 758.153 )
+color = Color( 0.607843, 0.329412, 0.168627, 1 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Barrel2"]
+texture = ExtResource( 8 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Barrel2"]
+polygon = PoolVector2Array( 2.23218, -37.7229, 18.6539, -32.4256, 29.2485, -21.3012, 35.6053, -3.29033, 35.6053, 10.4827, 29.7782, 22.6665, 18.6539, 32.2017, 2.7619, 37.499, -6.77325, 37.499, -23.1949, 30.6125, -31.6707, 20.0179, -36.4382, 4.65564, -36.4382, -5.40926, -31.1409, -19.712, -23.1949, -29.7769, -9.42194, -36.6634 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Map/Entities/Barrel2"]
+light_mask = 2
+light_mask = 2
+
+[node name="Barrel3" parent="Map/Entities" instance=ExtResource( 7 )]
+position = Vector2( 1142.96, 315.842 )
+color = Color( 0.607843, 0.329412, 0.168627, 1 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Barrel3"]
+texture = ExtResource( 8 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Barrel3"]
+polygon = PoolVector2Array( 2.23218, -37.7229, 18.6539, -32.4256, 29.2485, -21.3012, 35.6053, -3.29033, 35.6053, 10.4827, 29.7782, 22.6665, 18.6539, 32.2017, 2.7619, 37.499, -6.77325, 37.499, -23.1949, 30.6125, -31.6707, 20.0179, -36.4382, 4.65564, -36.4382, -5.40926, -31.1409, -19.712, -23.1949, -29.7769, -9.42194, -36.6634 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Map/Entities/Barrel3"]
+light_mask = 2
+light_mask = 2
 
 [node name="Overlay" type="Node2D" parent="Map"]
 
@@ -315,4 +377,5 @@ wait_time = 20.0
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2( 1750, 1025 )
 
+[connection signal="body_entered" from="Map/Entities/ThrowableDeleter2" to="Map/Entities/ThrowableDeleter2" method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="CustomLogic/Timer" to="CustomLogic" method="_on_Timer_timeout"]
