@@ -6,6 +6,12 @@ const GHOST_SLOWDOWN : float = 0.995
 const VELOCITY_LEFT_AFTER_DEFLECTION : float = 0.9
 const MIN_TIME_BETWEEN_DEFLECTIONS : float = 50.0 # milliseconds
 
+const MIN_DIST_BEFORE_SLICE : float = 100.0
+const MIN_DIST_BEFORE_CERTAIN_SLICE : float = 250.0
+const MIN_DIST_LONG_THROW_BONUS : float = 1000.0
+
+const LONG_THROW_EXTRA_SLICE_PROB : float = 1.0
+
 onready var body = get_parent()
 
 onready var particles = get_node("/root/Main/Particles")
@@ -126,6 +132,21 @@ func get_stuck(result):
 	body.modules.fakebody.reset_all()
 	body.modules.fakebody.reset_collision_exceptions()
 	
+	var hit_body = result.collider
+	if not (hit_body is StaticBody2D):
+		var old_rotation = body.global_rotation
+		var old_position = body.global_position
+		
+		body.get_parent().remove_child(body)
+		hit_body.add_child(body)
+		
+		body.set_rotation(old_rotation - hit_body.rotation)
+		body.set_position(hit_body.to_local(old_position))
+		
+		body.modules.status.reset_to_held_state()
+		
+		print("GETTING STUCK _IN_ SOME _MOVING_ THING")
+	
 	return true
 
 func check_repellant_powerup(obj):
@@ -143,6 +164,21 @@ func slice_through_body(obj):
 	# if the object is also in the stuckables group, only make slicing succesful if speed high enough
 	if obj.is_in_group("Stuckables") and not body.modules.mover.at_high_speed(): return false
 	
+	# if the distance traveled was too low, tell player that, do nothing
+	# (only applicable to players, as using it on powerups/environment as well would just be annoying)
+	var dist_traveled = body.modules.distancetracker.calculate()
+	if obj.is_in_group("Players"):
+		if dist_traveled < MIN_DIST_BEFORE_SLICE:
+			particles.general_feedback(body.global_position, "Too close!")
+			return false
+		
+		elif dist_traveled < MIN_DIST_BEFORE_CERTAIN_SLICE:
+			var prob = (dist_traveled-MIN_DIST_BEFORE_SLICE)/(MIN_DIST_BEFORE_CERTAIN_SLICE - MIN_DIST_BEFORE_SLICE)
+			if randf() > prob: 
+				particles.general_feedback(body.global_position, "Too close!")
+				return false
+	
+	# some powerups can repel knives
 	var res = check_repellant_powerup(obj)
 	if res: return false
 	
@@ -173,6 +209,19 @@ func slice_through_body(obj):
 		if penalty != 0: my_owner.modules.collector.collect(penalty)
 		
 		my_owner.modules.statistics.record("players_sliced", 1)
+		
+		if dist_traveled > MIN_DIST_LONG_THROW_BONUS:
+			particles.general_feedback(body.global_position, "Long throw!")
+			
+			body.modules.mover.set_velocity(body.modules.distancetracker.get_original_velocity())
+			
+			my_owner.modules.grower.grow(0.2)
+			
+			var perform_extra_slice = (randf() <= LONG_THROW_EXTRA_SLICE_PROB)
+			if perform_extra_slice:
+				start = (start-center).rotated(0.5*PI) + center
+				end = (end-center).rotated(0.5*PI) + center
+				slicer.slice_bodies_hitting_line(start, end, [], [obj], my_owner)
 
 	return true
 

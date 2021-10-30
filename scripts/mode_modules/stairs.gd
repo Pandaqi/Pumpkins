@@ -10,7 +10,8 @@ func _ready():
 
 func _on_Stairs_body_entered(body):
 	if body.is_in_group("Throwables"):
-		if not detect_throwables or body.modules.status.being_held: return
+		if not detect_throwables: return
+		if not body.modules.status.react_to_areas(): return
 	
 	if not body.is_in_group("Players"): return
 	if not body.modules.teleporter.forced_allowed(): return

@@ -11,6 +11,8 @@ func _unhandled_input(ev):
 	check_new_controller(ev)
 	check_new_keyboard(ev)
 	
+	check_controller_game_exit(ev)
+	
 	check_remove_controller(ev)
 	check_remove_keyboard(ev)
 	check_remove_bot(ev)
@@ -18,6 +20,13 @@ func _unhandled_input(ev):
 	check_team_change(ev)
 	
 	check_navigation(ev)
+
+func check_controller_game_exit(ev):
+	if not (ev is InputEventJoypadButton): return
+	if not (ev.device == 0): return
+	if not GlobalInput.get_player_count() <= 0: return
+	if not (ev.button_index == 1): return
+	get_tree().quit()
 
 func check_navigation(ev):
 	if ev.is_action_released("continue"):

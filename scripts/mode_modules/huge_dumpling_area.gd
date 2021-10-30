@@ -12,7 +12,7 @@ func _on_Shaper_shape_updated():
 
 func _on_Area2D_body_entered(other_body):
 	if not other_body.is_in_group("Dumplings"): return
-	if other_body.modules.status.being_held: return
+	if not other_body.modules.status.react_to_areas(): return
 	
 	body.modules.grower.grow(0.05, true)
 	other_body.queue_free()

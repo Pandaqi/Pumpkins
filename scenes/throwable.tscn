@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://assets/throwable_items.png" type="Texture" id=1]
 [ext_resource path="res://scripts/throwable_modules/module_fake_body.gd" type="Script" id=2]
@@ -13,6 +13,8 @@
 [ext_resource path="res://assets/particles/throwable_trail.png" type="Texture" id=11]
 [ext_resource path="res://scripts/throwable_modules/module_timebomb.gd" type="Script" id=12]
 [ext_resource path="res://scenes/modules/teleporter.tscn" type="PackedScene" id=13]
+[ext_resource path="res://scripts/modules/module_knockback.gd" type="Script" id=14]
+[ext_resource path="res://scripts/modules/module_distance_tracker.gd" type="Script" id=15]
 
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 29.968, 8.30107 )
@@ -144,11 +146,17 @@ script = ExtResource( 8 )
 [node name="FakeBody" type="Node2D" parent="."]
 script = ExtResource( 2 )
 
+[node name="Knockback" type="Node2D" parent="."]
+script = ExtResource( 14 )
+
 [node name="Timebomb" type="Node2D" parent="."]
 script = ExtResource( 12 )
 
 [node name="Timer" type="Timer" parent="Timebomb"]
 one_shot = true
+
+[node name="DistanceTracker" type="Node2D" parent="."]
+script = ExtResource( 15 )
 
 [node name="ShadowLocation" type="Node2D" parent="." groups=[
 "ShadowMakers",
@@ -168,5 +176,6 @@ anims/Highlight = SubResource( 1 )
 anims/RESET = SubResource( 2 )
 
 [connection signal="timeout" from="Grabber/Timer" to="Grabber" method="_on_Timer_timeout"]
+[connection signal="move_complete" from="Mover" to="DistanceTracker" method="_on_Mover_move_complete"]
 [connection signal="owner_changed" from="Owner" to="Mover" method="_on_Owner_owner_changed"]
 [connection signal="timeout" from="Timebomb/Timer" to="Timebomb" method="_on_Timer_timeout"]

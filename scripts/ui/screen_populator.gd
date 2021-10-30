@@ -97,6 +97,8 @@ func create_item_list_visuals():
 			# Arguments = frame, specific item type, our type ( = section in config)
 			var item_type = key
 			var frame_index = item_list[key].frame
+
+			s.set_data(item_list[key])
 			s.set_type(frame_index, item_type, type)
 			s.set_size(base_item_scale, glow_scale)
 			
@@ -160,18 +162,24 @@ func reset_all_options():
 	
 	for x in range(cols):
 		for y in range(rows):
-			if not item_grid[x][y]: break
-			if item_grid[x][y].is_on(): all_disabled = false
+			if not item_grid[x][y]: continue
+			if item_grid[x][y].ignore_default_buttons(): continue
+			if item_grid[x][y].is_on(): 
+				all_disabled = false
+				break
 	
 	for x in range(cols):
 		for y in range(rows):
-			if not item_grid[x][y]: break
+			if not item_grid[x][y]: continue
+			if item_grid[x][y].ignore_default_buttons(): continue
 			item_grid[x][y].reset(all_disabled)
 
 func randomize_all_options():
 	for x in range(cols):
 		for y in range(rows):
-			if not item_grid[x][y]: break
+			if not item_grid[x][y]: continue
+			if item_grid[x][y].ignore_default_buttons(): continue
+			
 			item_grid[x][y].randomize_me()
 
 func focus_on(pos : Vector2):

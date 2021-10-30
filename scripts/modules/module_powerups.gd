@@ -119,7 +119,7 @@ func handle_temporary_effects():
 			deactivate_effect(obj.type)
 			temporary.remove(i)
 
-func handle_temporary_effect(obj):
+func handle_temporary_effect(_obj):
 	pass
 
 func activate_effect(type):

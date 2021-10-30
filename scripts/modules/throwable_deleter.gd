@@ -22,7 +22,7 @@ func _on_Area2D_body_entered(body):
 	if not active: return
 	
 	if not body.is_in_group("Throwables"): return
-	if body.modules.status.being_held: return
+	if not body.modules.status.react_to_areas(): return
 	if body.modules.status.type in exclude_types: return
 	
 	particles.general_feedback(body.global_position, "Destroyed!")

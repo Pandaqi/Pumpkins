@@ -170,7 +170,7 @@ func read_situation():
 	
 	# check opponents close to us
 	# (if their active knife is in our general direction, step out of there)
-	var vec_away_from_players : Vector2 = Vector2.ZERO
+	vec_away_from_players = Vector2.ZERO
 	num_considered = 0
 	for player in players_close:
 		var knife_vec = player.body.modules.knives.get_first_knife_vec()
@@ -205,7 +205,6 @@ func assemble_movement_vector():
 	params.final_vec = (params.vec / float(params.weight)).normalized()
 
 func check_immediate_danger():
-	var our_pos = body.get_global_position()
 	var weight = 10
 	
 	params.vec += vec_away_from_throwables * weight
@@ -351,7 +350,6 @@ func attack():
 
 	# if we're throwing and close enough, THROW IT
 	if not cant_reach:
-		var target_pos = closest_target.body.global_position
 		if is_throwing:
 			if closest_target.dot >= 0.94:
 				params.release_button = true

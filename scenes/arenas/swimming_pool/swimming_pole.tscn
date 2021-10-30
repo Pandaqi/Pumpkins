@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scripts/module_manager_sliceable.gd" type="Script" id=1]
+[ext_resource path="res://scripts/modules/module_flat_color_drawer.gd" type="Script" id=2]
+[ext_resource path="res://assets/arenas/swimming_pool/swimming_pole.png" type="Texture" id=3]
+[ext_resource path="res://scripts/modules/module_status_item.gd" type="Script" id=4]
+
+[sub_resource type="PhysicsMaterial" id=1]
+bounce = 0.4
+
+[node name="SwimmingPole" type="RigidBody2D" groups=[
+"ModeItems",
+"Sliceables",
+"Stuckables",
+]]
+position = Vector2( 1201.35, 804.336 )
+collision_mask = 9
+physics_material_override = SubResource( 1 )
+linear_damp = 0.8
+angular_damp = 0.8
+script = ExtResource( 1 )
+color = Color( 0.678431, 0.137255, 0.815686, 1 )
+override_color = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -70.8461, -88.7359, -66.6417, -97.9857, -49.8238, -101.349, -21.2333, -79.486, 6.5163, -42.4866, 19.1297, -17.2596, 18.2889, 16.3762, 19.1297, 71.0344, 23.3342, 91.2159, 30.0614, 101.307, 19.9706, 118.966, 6.5163, 122.329, -4.41534, 115.602, -6.09711, 79.4434, -9.46075, 11.3308, -10.3016, -2.96448, -28.8013, -32.3958, -54.8691, -66.0317 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -20.1588, 7.55951 )
+scale = Vector2( 0.6, 0.6 )
+texture = ExtResource( 3 )
+
+[node name="Drawer" type="Node2D" parent="."]
+position = Vector2( -471.434, -734.09 )
+script = ExtResource( 2 )
+
+[node name="Status" type="Node2D" parent="."]
+script = ExtResource( 4 )

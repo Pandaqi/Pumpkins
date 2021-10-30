@@ -6,14 +6,12 @@ var is_dead : bool = false
 var is_bot : bool = false
 
 var is_ghost : bool = false
+var in_water : bool = false
 
 onready var body = get_parent()
 onready var particles = get_node("/root/Main/Particles")
 onready var mode = get_node("/root/Main/ModeManager")
 onready var arena = get_node("/root/Main/ArenaLoader")
-
-var respawn_timer
-var anim_player
 
 export var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
 
@@ -40,9 +38,6 @@ func set_player_num(num):
 
 func set_player_specific_data():
 	if not body.is_in_group("Players"): return
-	
-	respawn_timer = $RespawnTimer
-	anim_player = $AnimationPlayer
 	
 	if body.modules.has('input'):
 		body.modules.input.set_player_num(player_num)
@@ -111,26 +106,8 @@ func can_die():
 func almost_dead():
 	pass
 
-func respawn():
-	body.set_rotation(0)
-	
-	body.modules.knives.destroy_knives()
-	body.modules.shaper.destroy()
-	body.modules.shaper.create_from_shape_list(starting_shape)
-	
-	var old_position = body.global_position
-	body.modules.teleporter.teleport(starting_position)
-	
-	particles.general_feedback(old_position, "Dead!")
-	particles.general_feedback(starting_position, "Respawn!")
-	
-	make_ghost()
-	respawn_timer.start()
-	anim_player.play("RespawnFlicker")
-
-func _on_RespawnTimer_timeout():
-	undo_ghost()
-	anim_player.stop()
+func react_to_areas():
+	return true
 
 func die(forced  = false):
 	if is_dead: return
@@ -139,7 +116,7 @@ func die(forced  = false):
 	GlobalAudio.play_dynamic_sound(body, "death")
 	
 	if mode.respawn_on_death() and not forced:
-		respawn()
+		body.modules.respawner.respawn()
 		return
 	
 	is_dead = true
@@ -209,3 +186,9 @@ func same_team(other_body):
 	var our_team = team_num
 	var their_team = other_body.modules.status.team_num
 	return (our_team == their_team)
+
+func enter_water():
+	in_water = true
+
+func exit_water():
+	in_water = false

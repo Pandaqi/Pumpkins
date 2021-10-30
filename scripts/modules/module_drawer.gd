@@ -83,8 +83,6 @@ func _on_Shaper_shape_updated():
 	update()
 
 func cartoony_draw():
-	var full_shape = []
-
 	var shape_list = body.modules.shaper.shape_list + []
 	
 	# pre-inflate all shapes (to ensure merges work)

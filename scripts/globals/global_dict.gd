@@ -50,11 +50,12 @@ var arenas = {
 	"ghost_town": { "frame": 2 },
 	"graveyard": { "frame": 1 },
 	"spooky_forest": { "frame": 0 },
-	"bogus_blackouts": { "frame": 7 }
+	"bogus_blackouts": { "frame": 7 },
+	"swimming_pool": { "frame": 6 }
 }
 
 var configurable_settings = {
-	"tutorial": { "frame": 0, "def": true },
+	"tutorial": { "frame": 0, "def": true, "ignore_default_buttons": true },
 	"aim_helper": { "frame": 1, "def": false },
 	"knife_always_in_front": { "frame": 2, "def": false },
 	"disable_flashing_effects": { "frame": 3, "def": false },

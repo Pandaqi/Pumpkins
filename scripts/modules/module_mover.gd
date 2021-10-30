@@ -21,7 +21,7 @@ signal movement_started()
 
 signal moved(amount)
 
-func _on_Input_move_vec(vec : Vector2, dt : float):
+func _on_Input_move_vec(vec : Vector2, _dt : float):
 	if not moving_enabled and GlobalDict.cfg.use_slidy_throwing:
 		continue_on_last_velocity()
 		return
@@ -62,13 +62,20 @@ func continue_on_last_velocity():
 func move_regular(vec):
 	body.slowly_orient_towards_vec(vec)
 	
+	var in_water = body.modules.status.in_water
 	var lerp_factor = 1.0
+	if in_water: lerp_factor = 0.0124
 	if ice: lerp_factor = 0.007
+	
 	forward_vec = lerp(forward_vec, body.get_forward_vec(), lerp_factor)
 	
 	var speed_penalty_for_size = body.modules.shaper.get_size_as_ratio()*0.5 + 0.5
-	var final_speed = speed_multiplier*MOVE_SPEED*speed_penalty_for_size
+	var speed_penalty_water = 1.0
+	if in_water: speed_penalty_water = 0.5
+	
+	var final_speed = speed_multiplier*MOVE_SPEED*speed_penalty_for_size*speed_penalty_water
 	var final_vec = forward_vec*final_speed
+	
 	var old_pos = body.get_global_position()
 	
 # warning-ignore:return_value_discarded

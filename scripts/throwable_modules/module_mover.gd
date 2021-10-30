@@ -1,6 +1,7 @@
 extends Node2D
 
 const LINEAR_DAMPING : float = 0.995
+const WATER_DAMPING : float = 0.99
 const MIN_SIGNIFICANT_VELOCITY : float = 90.0
 const MIN_BOOMERANG_VELOCITY : float = 500.0
 const GHOST_KNIFE_VELOCITY : float = 200.0
@@ -29,6 +30,8 @@ var boomerang_state : String = "flying"
 
 onready var trail_particles = $TrailParticles
 
+signal move_complete(dist)
+
 func _ready():
 	trail_particles.process_material = trail_particles.process_material.duplicate(true)
 
@@ -37,6 +40,14 @@ func set_body(val : bool):
 
 func get_velocity():
 	return velocity
+
+func rotate_velocity_to(target_vel, factor):
+	if velocity.length() <= 0.03: return target_vel
+	
+	var vel_norm = velocity.normalized()
+	var target_norm = target_vel.normalized()
+	
+	velocity = vel_norm.slerp(target_norm, factor) * velocity.length()
 
 func set_velocity(vel):
 	velocity = vel
@@ -90,10 +101,6 @@ func move(dt):
 	if we_are_overridden:
 		var avg = total_override_vec / float(total_override_influencers)
 		velocity = avg
-		
-		print("OVERRIDEN VEC")
-		print(total_override_vec)
-		print(velocity)
 	
 	if velocity.length() <= MIN_SIGNIFICANT_VELOCITY:
 		came_to_standstill()
@@ -102,6 +109,7 @@ func move(dt):
 	trail_particles.set_emitting(true)
 	trail_particles.process_material.direction = Vector3(velocity.x, velocity.y, 0)
 	
+	var old_pos = body.global_position
 	if has_real_body:
 		body.move_and_slide(velocity)
 	else:
@@ -109,7 +117,15 @@ func move(dt):
 	
 	body.set_rotation(velocity.angle())
 	
-	velocity *= LINEAR_DAMPING
+	var damping = LINEAR_DAMPING
+	if body.modules.status.in_water:
+		damping = WATER_DAMPING
+	
+	velocity *= damping
+	
+	var new_pos = body.global_position
+	var distance_traveled = (new_pos - old_pos).length()
+	emit_signal("move_complete", distance_traveled)
 
 func apply_ghost_knife(dt):
 	if not body.modules.status.type == "ghost_knife": return

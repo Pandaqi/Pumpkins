@@ -5,7 +5,11 @@ var explosion_particle = preload("res://scenes/particles/explosion.tscn")
 var collectible_particle = preload("res://scenes/particles/collectible.tscn")
 var general_feedback_scene = preload("res://scenes/particles/general_feedback.tscn")
 
-onready var map = get_node("../Map")
+var map = null
+
+func _ready():
+	if has_node("../Map"):
+		map = get_node("../Map")
 
 func create_slash(pos, vec):
 	var p = slash_particle.instance()

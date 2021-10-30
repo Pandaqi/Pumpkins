@@ -293,7 +293,6 @@ func highlight_first_knife():
 # Positioning the knives
 #
 func unsnap_knife_angle(rot):
-	var epsilon = 0.03
 	var ang_index = snap_ang_to_index(rot)
 	
 	knives_by_snap_angle[ang_index] = null

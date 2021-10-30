@@ -2,8 +2,6 @@ extends Node2D
 
 onready var body = get_parent()
 
-var start_pos
-
 func throw(thrower, vel):
 	body.modules.status.reset_to_thrown_state()
 	
@@ -23,7 +21,4 @@ func throw(thrower, vel):
 	elif type == "boomerang":
 		body.modules.mover.boomerang_state = "flying"
 	
-	start_pos = body.global_position
-
-func get_distance_traveled():
-	return (body.global_position - start_pos).length()
+	body.modules.distancetracker.reset()

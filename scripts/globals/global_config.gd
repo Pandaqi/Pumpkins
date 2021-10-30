@@ -40,6 +40,15 @@ var settings = [
 		"comp": "Checkbox", 
 		"def": true 
 	},
+	
+	# GAMEPLAY (tutorial)
+	{
+		"sec": "settings",
+		"label": "Tutorial",
+		"name": "tutorial",
+		"comp": "Checkbox",
+		"def": true
+	}
 ]
 
 func _ready():

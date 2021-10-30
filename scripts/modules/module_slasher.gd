@@ -4,6 +4,7 @@ const THROW_TIME_THRESHOLD : float = 220.0 # milliseconds
 const QUICK_SLASH_COOLDOWN_DURATION : float = 3000.0 # milliseconds
 
 const ROTATE_SPEED : float = 1.0
+const WATER_ROTATE_SPEED : float = 0.66
 const AIM_INTERP_FACTOR : float = 0.25
 
 onready var body = get_parent()
@@ -25,7 +26,7 @@ var slash_range : float
 onready var range_sprite = $Sprite
 
 const MAX_TIME_HELD : float = 700.0 # holding longer than this changing nothing anymore
-const THROW_STRENGTH_BOUNDS = { 'min': 1300, 'max': 2200 }
+const THROW_STRENGTH_BOUNDS = { 'min': 1500, 'max': 2500 }
 var strength_multiplier : float = 1.0
 onready var throw_strength_sprite = $ThrowStrength
 
@@ -118,6 +119,13 @@ func _on_Input_button_release():
 func _on_Input_move_vec(vec : Vector2, dt : float):
 	if disabled: return
 	if not slashing_enabled: return
+	
+	if body.modules.status.in_water:
+		var rotate_dir = 1 if vec.x > 0 else -1
+		var rotate_speed = WATER_ROTATE_SPEED
+		body.rotate(rotate_dir*(2*PI)*rotate_speed*dt)
+		return
+	
 	if vec.length() <= 0.1: return
 	
 	emit_signal("aim")

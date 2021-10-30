@@ -32,7 +32,7 @@ func collect(dc):
 	var final_string = "+" + str(dc)
 	if dc < 0: final_string = str(dc)
 	
-	particles.create_collectible_particle(body.global_position, dc)
+	particles.create_collectible_particle(body.global_position, final_string)
 
 func disable_collection():
 	collection_disabled = true

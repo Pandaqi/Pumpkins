@@ -1,13 +1,19 @@
 extends Node2D
 
 const DAMPING : float = 0.925
+const WATER_DAMPING : float = 0.99
 const REPEL_FORCE : float = 300.0
 
 var knockback_force : Vector2 = Vector2.ZERO
+var area = null
 onready var body = get_parent()
-onready var area = $Area2D
+
 
 var disabled : bool = false
+
+func _ready():
+	if has_node("Area2D"): 
+		area = $Area2D
 
 func _physics_process(_dt):
 	if disabled: return
@@ -18,6 +24,9 @@ func _physics_process(_dt):
 func disable():
 	disabled = true
 
+func remove():
+	knockback_force = Vector2.ZERO
+
 func apply(force):
 	knockback_force = force
 
@@ -25,13 +34,18 @@ func check_force():
 	if knockback_force.length() <= 0.03: return
 
 	body.move_and_slide(knockback_force)
-	knockback_force *= DAMPING
+	
+	var cur_damping = DAMPING
+	if body.modules.status.in_water: cur_damping = WATER_DAMPING
+	knockback_force *= cur_damping
 	
 	if knockback_force.length() <= 4.0:
 		knockback_force = Vector2.ZERO
 		return
 
 func repel_hostile_entities():
+	if not area: return
+	
 	var bodies = area.get_overlapping_bodies()
 	var num_repels = 0
 	var avg_vec_away = Vector2.ZERO

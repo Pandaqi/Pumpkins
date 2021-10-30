@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scripts/module_manager_sliceable.gd" type="Script" id=1]
+[ext_resource path="res://assets/arenas/swimming_pool/crocodile.png" type="Texture" id=2]
+[ext_resource path="res://scripts/modules/module_status_item.gd" type="Script" id=3]
+[ext_resource path="res://scripts/modules/module_selfdestructor.gd" type="Script" id=4]
+
+[sub_resource type="PhysicsMaterial" id=1]
+bounce = 0.4
+
+[node name="Crocodile" type="RigidBody2D" groups=[
+"ModeItems",
+"Stuckables",
+]]
+position = Vector2( 1198.26, 257.12 )
+collision_mask = 9
+physics_material_override = SubResource( 1 )
+linear_damp = 0.8
+angular_damp = 0.8
+script = ExtResource( 1 )
+color = Color( 0.678431, 0.137255, 0.815686, 1 )
+override_color = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -17.8697, 87.8524, -12.8243, 57.5801, -20.3924, 41.603, -25.4377, 8.80811, -22.0742, -18.1006, -11.1425, -83.6905, 4.83453, -97.9858, 22.4933, -93.7813, 31.7432, -74.4407, 24.1751, -58.4636, 21.6524, -77.8043, 11.5617, -78.6451, 3.15271, -67.7135, 12.4026, -34.0776, 25.8569, 17.217, 30.0614, 36.5577, 18.2888, 56.7392, 23.3342, 88.6932 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.6, 0.6 )
+texture = ExtResource( 2 )
+
+[node name="Status" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="SelfDestructor" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="Timer" type="Timer" parent="SelfDestructor"]
+wait_time = 10.0
+one_shot = true
+
+[connection signal="timeout" from="SelfDestructor/Timer" to="SelfDestructor" method="_on_Timer_timeout"]

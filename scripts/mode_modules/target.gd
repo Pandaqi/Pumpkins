@@ -95,7 +95,7 @@ func on_knife_entered(body):
 	var player = body.modules.owner.get_owner()
 	
 	var num_points = division_points[division]
-	var multiplier = clamp(body.modules.thrower.get_distance_traveled() / DIST_UNTIL_FULL_POINTS, 0.0, 1.0)
+	var multiplier = clamp(body.modules.distancetracker.calculate() / DIST_UNTIL_FULL_POINTS, 0.0, 1.0)
 	
 	num_points *= multiplier
 	num_points = floor(num_points)

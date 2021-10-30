@@ -11,6 +11,8 @@ var in_focus : bool = false
 var hovered : bool = false
 var focused_by_hover : bool = false
 
+var item_data
+
 var val : bool = false
 
 var section : String
@@ -62,6 +64,13 @@ func set_type(frame : int, tp : String, sec : String):
 	$Hover.set_frame(frame)
 	$Sprite.set_frame(frame)
 
+func set_data(d):
+	item_data = d
+
+func ignore_default_buttons():
+	if not item_data: return false
+	return item_data.has("ignore_default_buttons")
+
 func read_value_from_config():
 	val = GlobalConfig.read_game_config(section, type)
 	update_selection_ui()
@@ -70,15 +79,13 @@ func read_value_from_config():
 
 func reset(turn_on):
 	if reset_btn or random_btn: return
-	if type == "tutorial_active": return
-	
+
 	if turn_on and not is_on(): toggle()
 	elif not turn_on and is_on(): toggle()
 
 func randomize_me():
 	if reset_btn or random_btn: return
-	if type == "tutorial_active": return
-	
+
 	if randf() <= 0.5: toggle()
 
 func toggle():

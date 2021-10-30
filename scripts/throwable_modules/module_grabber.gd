@@ -40,6 +40,7 @@ func complete_grab(other_body):
 	body.modules.mover.stop()
 	body.modules.owner.set_owner(other_body)
 	body.modules.status.reset_to_held_state()
+	body.modules.knockback.remove()
 	
 	body.add_collision_exception_with(other_body)
 	
