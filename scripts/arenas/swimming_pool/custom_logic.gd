@@ -110,15 +110,13 @@ func _on_ItemTimer_timeout():
 	
 	lights.shuffle()
 	var rand_position = lights[0].global_position
-	
+
 	item_scenes.shuffle()
 	var rand_item = item_scenes[0].instance()
-	
-	# DEBUGGING:
-	rand_item = item_scenes[2].instance()
-	
 	rand_item.set_position(rand_position)
 	map.entities.add_child(rand_item)
+	
+	rand_item.modules.status.set_delete_audio("balloonpop")
 	
 	tween.interpolate_property(rand_item, "scale", 
 		Vector2.ZERO, Vector2(1,1), 0.66,

@@ -22,6 +22,7 @@ var audio_preload = {
 	
 	"grab": preload("res://assets/audio/grab.ogg"),
 	"move": preload("res://assets/audio/move.ogg"),
+	"move_water": preload("res://assets/audio/water_slosh.ogg"),
 	
 	"collect": preload("res://assets/audio/collect.ogg"),
 	"lose": preload("res://assets/audio/lose.ogg"),
@@ -50,7 +51,8 @@ var audio_preload = {
 	],
 	
 	"switch": preload("res://assets/audio/switch.ogg"),
-	"teleport": preload("res://assets/audio/teleport.ogg")
+	"teleport": preload("res://assets/audio/teleport.ogg"),
+	"balloonpop": preload("res://assets/audio/balloonpop.ogg"),
 }
 
 func _ready():

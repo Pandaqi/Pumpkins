@@ -6,7 +6,7 @@ var base_cfg = {
 	'powerups': [],
 	'throwables': [],
 	
-	'use_cartoony_coloring': true,
+	'use_cartoony_coloring': false,
 	
 	'max_players': 6,
 	'auto_pickup_powerups': false,

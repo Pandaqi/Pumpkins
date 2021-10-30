@@ -22,7 +22,7 @@ func _on_Timer_timeout():
 	enable()
 
 func try_grabbing(other_body):
-	if body.modules.status.being_held: return false
+	if body.modules.status.being_held and body.modules.owner.is_a_player(): return false
 	if not other_body.is_in_group("Grabbers"): return false
 	if grabbing_by_owner_disabled and body.modules.owner.is_body(other_body): return false
 	return check_valid_grab(other_body)

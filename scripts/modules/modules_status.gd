@@ -118,9 +118,9 @@ func die(forced  = false):
 	if mode.respawn_on_death() and not forced:
 		body.modules.respawner.respawn()
 		return
-	
+
 	is_dead = true
-	make_ghost()
+	make_ghost(true)
 
 	var params = {}
 	if not is_bot: params = arena.on_player_death(body)
@@ -189,6 +189,12 @@ func same_team(other_body):
 
 func enter_water():
 	in_water = true
+	
+	body.modules.mover.recreate_move_audio()
+	body.modules.particles.enter_water()
 
 func exit_water():
 	in_water = false
+	
+	body.modules.mover.recreate_move_audio()
+	body.modules.particles.exit_water()

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/balloonpop.ogg-c0ae2a93f79b923e6e5ea10428824f10.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/balloonpop.ogg"
+dest_files=[ "res://.import/balloonpop.ogg-c0ae2a93f79b923e6e5ea10428824f10.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

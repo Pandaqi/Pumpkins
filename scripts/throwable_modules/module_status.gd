@@ -47,6 +47,11 @@ func record_succesful_actions():
 func record_succesful_action(val):
 	num_succesful_actions += val
 
+func reset_to_held_and_stuck_state():
+	reset_to_held_state()
+	
+	is_stuck = true
+
 func reset_to_held_state():
 	is_stuck = false
 	being_held = true

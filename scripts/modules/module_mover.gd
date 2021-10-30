@@ -43,7 +43,17 @@ func _on_Input_move_vec(vec : Vector2, _dt : float):
 	move_regular(vec)
 	
 	if not move_audio_player or not is_instance_valid(move_audio_player):
-		move_audio_player = GlobalAudio.play_dynamic_sound(body, "move", -9)
+		create_move_audio()
+
+func recreate_move_audio():
+	remove_move_audio()
+	create_move_audio()
+
+func create_move_audio():
+	var key = "move"
+	if body.modules.status.in_water: key = "move_water"
+	
+	move_audio_player = GlobalAudio.play_dynamic_sound(body, key, -9)
 
 func remove_move_audio():
 	if not move_audio_player: return
@@ -71,7 +81,7 @@ func move_regular(vec):
 	
 	var speed_penalty_for_size = body.modules.shaper.get_size_as_ratio()*0.5 + 0.5
 	var speed_penalty_water = 1.0
-	if in_water: speed_penalty_water = 0.5
+	if in_water: speed_penalty_water = 0.775
 	
 	var final_speed = speed_multiplier*MOVE_SPEED*speed_penalty_for_size*speed_penalty_water
 	var final_vec = forward_vec*final_speed

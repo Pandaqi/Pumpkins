@@ -5,11 +5,12 @@ onready var body = get_parent()
 func throw(thrower, vel):
 	body.modules.status.reset_to_thrown_state()
 	
-	body.modules.owner.set_owner(thrower)
+	if thrower: 
+		body.modules.owner.set_owner(thrower)
+		body.remove_collision_exception_with(thrower)
+	
 	body.modules.mover.set_velocity(vel)
 	body.modules.grabber.disable()
-	
-	body.remove_collision_exception_with(thrower)
 	
 #	if body.modules.fakebody.has_real_body:
 #		body.modules.fakebody.enable_real_collisions()

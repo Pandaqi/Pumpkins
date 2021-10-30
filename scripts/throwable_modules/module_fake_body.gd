@@ -29,7 +29,7 @@ func enable_real_collisions():
 func _physics_process(dt):
 	reset_all()
 	
-	if body.modules.status.being_held: return
+	if body.modules.status.being_held and body.modules.owner.is_a_player(): return
 	space_state = get_world_2d().direct_space_state 
 	
 	shoot_raycast(dt)

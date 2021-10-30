@@ -13,15 +13,19 @@ func _ready():
 
 func _on_Timer_timeout():
 	throw_away_all_throwables_we_own()
-	
-	body.queue_free()
+	body.modules.status.delete()
 
 func throw_away_all_throwables_we_own():
-	for child in get_children():
+	for child in body.get_children():
 		if child.is_in_group("Throwables"):
-			var vec = (child.global_position - global_position).normalized() * 1000.0
+			var old_pos = child.global_position
+			var old_rot = child.global_rotation
+			var vec = (old_pos - global_position).normalized() * 1000.0
 			
-			remove_child(child)
+			child.get_parent().remove_child(child)
 			map.knives.add_child(child)
 			
-			child.throw(null, vec)
+			child.set_position(old_pos)
+			child.set_rotation(old_rot)
+			
+			child.modules.thrower.throw(null, vec)

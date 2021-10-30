@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/water_slosh.ogg-f9793bfacc6297a107148b03bed26d26.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/water_slosh.ogg"
+dest_files=[ "res://.import/water_slosh.ogg-f9793bfacc6297a107148b03bed26d26.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

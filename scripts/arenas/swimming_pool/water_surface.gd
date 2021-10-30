@@ -2,7 +2,7 @@ extends Sprite
 
 const RESET_THRESHOLD : float = 0.996 # closer to 1 means a longer wait between waves
 
-const NUM_WAVES_UNTIL_DIR_CHANGE : int = 5
+const NUM_WAVES_UNTIL_DIR_CHANGE : int = 4
 
 onready var area = $Area2D
 onready var water_line = $WaterLine
@@ -17,8 +17,18 @@ var num_waves_passed : int = 0
 
 var vp = Vector2(1920,1080)
 
+onready var voting = $Voting
+onready var mode = get_node("/root/Main/ModeManager")
+
 func _ready():
+	check_if_voting_needed()
 	change_direction()
+
+func check_if_voting_needed():
+	if mode.players_can_die(): return
+	
+	voting.queue_free()
+	voting = null
 
 func _physics_process(dt):
 	move_water_line(dt)
@@ -47,8 +57,8 @@ func move_water_line(dt):
 	ortho.y = abs(ortho.y)
 	
 	var abs_water_dir = water_dir
-	water_dir.x = abs(water_dir.x)
-	water_dir.y = abs(water_dir.y)
+	abs_water_dir.x = abs(water_dir.x)
+	abs_water_dir.y = abs(water_dir.y)
 	
 	var line_offset = 0.5 * vp * ortho
 	var actual_line = visual_water_line * abs_water_dir * vp
@@ -60,11 +70,15 @@ func move_water_line(dt):
 
 	material.set_shader_param("cur_line", visual_water_line)
 
-func change_direction():
-	# ensure it changes to something different
-	var rand_index = randi() % 3 + 1
-	water_dir = water_dir.rotated(rand_index * 0.5*PI)
+func change_direction(new_dir : Vector2 = Vector2.ZERO):
 	
+	# ensure it changes to something different
+	if new_dir.length() <= 0.03:
+		var rand_index = randi() % 3 + 1
+		water_dir = water_dir.rotated(rand_index * 0.5*PI)
+	else:
+		water_dir = new_dir
+
 	material.set_shader_param("water_dir", water_dir)
 	
 	num_waves_passed = 0
@@ -76,6 +90,16 @@ func reset_water_line():
 	num_waves_passed += 1
 	if num_waves_passed >= NUM_WAVES_UNTIL_DIR_CHANGE:
 		change_direction()
+	
+	if not voting: return
+	var vote_result = voting.request_and_reset_results()
+
+	if vote_result < 0: return
+	
+	var rot = vote_result * 0.5 * PI
+	var dir = Vector2(cos(rot), sin(rot))
+
+	change_direction(dir)
 
 func _on_Area2D_body_entered(body):
 	body.modules.status.enter_water()

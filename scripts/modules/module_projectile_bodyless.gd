@@ -143,9 +143,7 @@ func get_stuck(result):
 		body.set_rotation(old_rotation - hit_body.rotation)
 		body.set_position(hit_body.to_local(old_position))
 		
-		body.modules.status.reset_to_held_state()
-		
-		print("GETTING STUCK _IN_ SOME _MOVING_ THING")
+		body.modules.status.reset_to_held_and_stuck_state()
 	
 	return true
 

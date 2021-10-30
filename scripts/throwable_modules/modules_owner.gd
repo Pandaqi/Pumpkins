@@ -19,6 +19,9 @@ func is_hostile():
 func is_friendly():
 	return (mode == "friendly")
 
+func is_a_player():
+	return my_owner and my_owner.is_in_group("Players")
+
 func set_owner(o):
 	my_owner = o
 	

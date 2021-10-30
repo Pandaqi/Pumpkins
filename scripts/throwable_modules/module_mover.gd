@@ -1,7 +1,7 @@
 extends Node2D
 
-const LINEAR_DAMPING : float = 0.995
-const WATER_DAMPING : float = 0.99
+const LINEAR_DAMPING : float = 0.997
+const WATER_DAMPING : float = 0.9935 # minute differences here can make a HUGE difference, as it's multiplied every frame
 const MIN_SIGNIFICANT_VELOCITY : float = 90.0
 const MIN_BOOMERANG_VELOCITY : float = 500.0
 const GHOST_KNIFE_VELOCITY : float = 200.0

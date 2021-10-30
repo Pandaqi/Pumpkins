@@ -4,7 +4,7 @@ const THROW_TIME_THRESHOLD : float = 220.0 # milliseconds
 const QUICK_SLASH_COOLDOWN_DURATION : float = 3000.0 # milliseconds
 
 const ROTATE_SPEED : float = 1.0
-const WATER_ROTATE_SPEED : float = 0.66
+const WATER_ROTATE_SPEED : float = 0.87
 const AIM_INTERP_FACTOR : float = 0.25
 
 onready var body = get_parent()

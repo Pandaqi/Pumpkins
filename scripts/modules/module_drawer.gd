@@ -92,7 +92,7 @@ func cartoony_draw():
 	# now keep merging with shapes until none left
 	var counter = 1
 	var full_polygon = shape_list[0]
-	while shape_list.size() > 1:
+	while shape_list.size() > 1 and counter < shape_list.size():
 		var new_polygon = Geometry.merge_polygons_2d(full_polygon, shape_list[counter])
 		
 		# no succesful merge? continue
