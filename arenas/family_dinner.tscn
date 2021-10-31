@@ -1,0 +1,389 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://arenas/arena_skeleton.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/arenas/family_dinner/entities.png" type="Texture" id=2]
+[ext_resource path="res://assets/arenas/family_dinner/bg.png" type="Texture" id=3]
+[ext_resource path="res://assets/arenas/family_dinner/curtain.png" type="Texture" id=4]
+[ext_resource path="res://scenes/arenas/family_dinner/curtain.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scripts/arenas/family_dinner/custom_logic.gd" type="Script" id=6]
+[ext_resource path="res://scenes/regrowable.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/arenas/family_dinner/foods.png" type="Texture" id=8]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 59.0899
+
+[node name="FamilyDinner" instance=ExtResource( 1 )]
+
+[node name="Bg" type="Sprite" parent="Map/BG" index="0"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Entities" type="Sprite" parent="Map/BG" index="1"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Curtains" type="Node2D" parent="Map/Entities" index="0"]
+
+[node name="Curtain" parent="Map/Entities/Curtains" index="0" instance=ExtResource( 5 )]
+position = Vector2( 570.1, -26 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Curtains/Curtain" index="1"]
+texture = ExtResource( 4 )
+
+[node name="Curtain2" parent="Map/Entities/Curtains" index="1" instance=ExtResource( 5 )]
+position = Vector2( 1344.1, -26 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Curtains/Curtain2" index="1"]
+texture = ExtResource( 4 )
+flip_h = true
+
+[node name="Curtain3" parent="Map/Entities/Curtains" index="2" instance=ExtResource( 5 )]
+position = Vector2( 570.1, 1106 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Curtains/Curtain3" index="1"]
+texture = ExtResource( 4 )
+flip_v = true
+
+[node name="Curtain4" parent="Map/Entities/Curtains" index="3" instance=ExtResource( 5 )]
+position = Vector2( 1335.03, 1103.65 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Curtains/Curtain4" index="1"]
+texture = ExtResource( 4 )
+flip_h = true
+flip_v = true
+
+[node name="Food" type="Node2D" parent="Map/Entities" index="1"]
+
+[node name="Table" type="StaticBody2D" parent="Map/Entities" index="2"]
+position = Vector2( 310, 196 )
+collision_layer = 64
+collision_mask = 64
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Table" index="0"]
+polygon = PoolVector2Array( 2, -181, 85, -181, 112, -168, 131, -141, 128, 137, 115, 167, 87, 184, -77, 184, -109, 170, -122, 143, -122, -141, -104, -171, -77, -181 )
+
+[node name="Table2" type="StaticBody2D" parent="Map/Entities" index="3"]
+position = Vector2( 1594.34, 876.226 )
+collision_layer = 64
+collision_mask = 64
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Table2" index="0"]
+polygon = PoolVector2Array( 2, -181, 85, -181, 112, -168, 131, -141, 128, 137, 115, 167, 87, 184, -77, 184, -109, 170, -122, 143, -122, -141, -104, -171, -77, -181 )
+
+[node name="Table3" type="StaticBody2D" parent="Map/Entities" index="4"]
+position = Vector2( 954.303, 518.409 )
+collision_layer = 64
+collision_mask = 64
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Table3" index="0"]
+polygon = PoolVector2Array( -433.232, 262.794, -413.703, 293.032, -386.748, 310.138, 75.203, 306.598, 117.681, 285.359, 133.611, 244.65, 130.071, -11.9894, 406.18, -15.5293, 432.729, -36.7684, 445.118, -68.6271, 441.578, -213.761, 423.879, -247.39, 377.861, -265.089, -69.9312, -265.089, -105.33, -242.08, -119.489, -206.682, -119.489, 58.8077, -388.518, 65.8875, -423.917, 83.5867, -434.536, 117.215 )
+
+[node name="Plant" type="StaticBody2D" parent="Map/Entities" index="5"]
+position = Vector2( 54.7447, 50.9692 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Plant" index="0"]
+shape = SubResource( 1 )
+
+[node name="Plant2" type="StaticBody2D" parent="Map/Entities" index="6"]
+position = Vector2( 1865.36, 50.9692 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Plant2" index="0"]
+shape = SubResource( 1 )
+
+[node name="Plant3" type="StaticBody2D" parent="Map/Entities" index="7"]
+position = Vector2( 54.7447, 1025.08 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Plant3" index="0"]
+shape = SubResource( 1 )
+
+[node name="Plant4" type="StaticBody2D" parent="Map/Entities" index="8"]
+position = Vector2( 1865.36, 1025.08 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/Plant4" index="0"]
+shape = SubResource( 1 )
+
+[node name="Banana" parent="Map/Entities" index="9" instance=ExtResource( 7 )]
+position = Vector2( 236.833, 68.3766 )
+color = Color( 1, 0.737255, 0.176471, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Banana" index="2"]
+polygon = PoolVector2Array( -22.5905, 20.1898, -10.4066, 19.6601, 4.42584, 9.59518, 12.3718, -5.2373, 17.1394, -22.1887, 19.2583, -26.9563, 23.4962, -26.4266, 21.3773, -22.1887, 24.0259, -3.6481, 21.907, 11.1844, 12.9016, 23.8979, -2.99039, 27.0763, -19.4121, 26.0168, -23.6499, 24.9574 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Banana" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+
+[node name="Banana2" parent="Map/Entities" index="10" instance=ExtResource( 7 )]
+position = Vector2( 249.547, 75.7928 )
+rotation = -0.392699
+color = Color( 1, 0.737255, 0.176471, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Banana2" index="2"]
+polygon = PoolVector2Array( -22.5905, 20.1898, -10.4066, 19.6601, 4.42584, 9.59518, 12.3718, -5.2373, 17.1394, -22.1887, 19.2583, -26.9563, 23.4962, -26.4266, 21.3773, -22.1887, 24.0259, -3.6481, 21.907, 11.1844, 12.9016, 23.8979, -2.99039, 27.0763, -19.4121, 26.0168, -23.6499, 24.9574 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Banana2" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+
+[node name="Banana3" parent="Map/Entities" index="11" instance=ExtResource( 7 )]
+position = Vector2( 264.909, 77.9118 )
+rotation = -0.785398
+color = Color( 1, 0.737255, 0.176471, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Banana3" index="2"]
+polygon = PoolVector2Array( -22.5905, 20.1898, -10.4066, 19.6601, 4.42584, 9.59518, 12.3718, -5.2373, 17.1394, -22.1887, 19.2583, -26.9563, 23.4962, -26.4266, 21.3773, -22.1887, 24.0259, -3.6481, 21.907, 11.1844, 12.9016, 23.8979, -2.99039, 27.0763, -19.4121, 26.0168, -23.6499, 24.9574 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Banana3" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+
+[node name="Croissant" parent="Map/Entities" index="12" instance=ExtResource( 7 )]
+position = Vector2( 368.244, 295.048 )
+color = Color( 1, 0.423529, 0.164706, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Croissant" index="2"]
+polygon = PoolVector2Array( -19.5178, 1.39789, -13.1499, -6.8428, 9.69925, -8.7157, 18.6891, -3.09705, 21.3111, 2.89618, 10.823, 2.52161, 7.45178, 8.51483, 2.2077, 9.63858, -3.03638, 8.51483, -5.65839, 3.64536, -13.1499, 4.76907 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Croissant" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 1
+
+[node name="Croissant2" parent="Map/Entities" index="13" instance=ExtResource( 7 )]
+position = Vector2( 358.505, 324.265 )
+rotation = -2.0949
+color = Color( 1, 0.423529, 0.164706, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Croissant2" index="2"]
+polygon = PoolVector2Array( -19.5178, 1.39789, -13.1499, -6.8428, 9.69925, -8.7157, 18.6891, -3.09705, 21.3111, 2.89618, 10.823, 2.52161, 7.45178, 8.51483, 2.2077, 9.63858, -3.03638, 8.51483, -5.65839, 3.64536, -13.1499, 4.76907 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Croissant2" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 1
+
+[node name="Croissant3" parent="Map/Entities" index="14" instance=ExtResource( 7 )]
+position = Vector2( 390.344, 314.901 )
+rotation = -3.8991
+color = Color( 1, 0.423529, 0.164706, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Croissant3" index="2"]
+polygon = PoolVector2Array( -19.5178, 1.39789, -13.1499, -6.8428, 9.69925, -8.7157, 18.6891, -3.09705, 21.3111, 2.89618, 10.823, 2.52161, 7.45178, 8.51483, 2.2077, 9.63858, -3.03638, 8.51483, -5.65839, 3.64536, -13.1499, 4.76907 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Croissant3" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 1
+
+[node name="Aubergine" parent="Map/Entities" index="15" instance=ExtResource( 7 )]
+position = Vector2( 1674.68, 738.951 )
+rotation = -0.144077
+color = Color( 0.47451, 0.0666667, 0.439216, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Aubergine" index="2"]
+polygon = PoolVector2Array( -9.26099, -21.0974, -10.8501, -25.3352, -4.49329, -26.6595, -4.22852, -21.8919, 7.95532, -3.08649, 11.9283, 11.4811, 10.0742, 21.0163, 2.65808, 26.3137, -4.75818, 27.9028, -9.26099, 26.0488, -10.5852, 18.6325, -9.52576, 10.9514, -7.67175, 3.53522, -7.40686, -7.85406 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Aubergine" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 2
+
+[node name="Aubergine2" parent="Map/Entities" index="16" instance=ExtResource( 7 )]
+position = Vector2( 1640.51, 744.513 )
+rotation = -2.57506
+color = Color( 0.47451, 0.0666667, 0.439216, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Aubergine2" index="2"]
+polygon = PoolVector2Array( -9.26099, -21.0974, -10.8501, -25.3352, -4.49329, -26.6595, -4.22852, -21.8919, 7.95532, -3.08649, 11.9283, 11.4811, 10.0742, 21.0163, 2.65808, 26.3137, -4.75818, 27.9028, -9.26099, 26.0488, -10.5852, 18.6325, -9.52576, 10.9514, -7.67175, 3.53522, -7.40686, -7.85406 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Aubergine2" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 2
+
+[node name="Aubergine3" parent="Map/Entities" index="17" instance=ExtResource( 7 )]
+position = Vector2( 1667.53, 778.681 )
+rotation = -4.8104
+color = Color( 0.47451, 0.0666667, 0.439216, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Aubergine3" index="2"]
+polygon = PoolVector2Array( -9.26099, -21.0974, -10.8501, -25.3352, -4.49329, -26.6595, -4.22852, -21.8919, 7.95532, -3.08649, 11.9283, 11.4811, 10.0742, 21.0163, 2.65808, 26.3137, -4.75818, 27.9028, -9.26099, 26.0488, -10.5852, 18.6325, -9.52576, 10.9514, -7.67175, 3.53522, -7.40686, -7.85406 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Aubergine3" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 2
+
+[node name="Apple" parent="Map/Entities" index="18" instance=ExtResource( 7 )]
+position = Vector2( 1533.5, 976.271 )
+color = Color( 0.729412, 0.101961, 0.0352941, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Apple" index="2"]
+polygon = PoolVector2Array( -7.1416, -13.902, -16.6768, -3.30737, -13.4983, 5.69812, -3.96313, 16.8224, 8.2207, 15.2333, 18.8153, 3.04944, 18.8153, -4.89655, 9.28015, -14.4317, 1.86389, -17.0803 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Apple" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 3
+
+[node name="Apple2" parent="Map/Entities" index="19" instance=ExtResource( 7 )]
+position = Vector2( 1536.15, 1013.35 )
+rotation = -1.06679
+color = Color( 0.729412, 0.101961, 0.0352941, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Apple2" index="2"]
+polygon = PoolVector2Array( -7.1416, -13.902, -16.6768, -3.30737, -13.4983, 5.69812, -3.96313, 16.8224, 8.2207, 15.2333, 18.8153, 3.04944, 18.8153, -4.89655, 9.28015, -14.4317, 1.86389, -17.0803 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Apple2" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 3
+
+[node name="Apple3" parent="Map/Entities" index="20" instance=ExtResource( 7 )]
+position = Vector2( 1568.47, 989.514 )
+rotation = -3.65064
+color = Color( 0.729412, 0.101961, 0.0352941, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Apple3" index="2"]
+polygon = PoolVector2Array( -7.1416, -13.902, -16.6768, -3.30737, -13.4983, 5.69812, -3.96313, 16.8224, 8.2207, 15.2333, 18.8153, 3.04944, 18.8153, -4.89655, 9.28015, -14.4317, 1.86389, -17.0803 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Apple3" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 3
+
+[node name="Bread" parent="Map/Entities" index="21" instance=ExtResource( 7 )]
+position = Vector2( 647.275, 691.493 )
+color = Color( 1, 0.568627, 0.364706, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Bread" index="2"]
+polygon = PoolVector2Array( -29.8926, 9.6958, -28.7021, 19.6171, -25.1304, 22.7919, -12.0344, 18.8234, 12.9672, 0.965088, 29.238, -11.7341, 29.238, -16.0995, 20.5073, -22.449, 14.5546, -23.2427, 4.63336, -14.5121, -7.27216, -6.97192, -22.7493, 5.33044 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Bread" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 4
+
+[node name="Bread2" parent="Map/Entities" index="22" instance=ExtResource( 7 )]
+position = Vector2( 619.496, 679.191 )
+rotation = -0.191104
+color = Color( 1, 0.568627, 0.364706, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Bread2" index="2"]
+polygon = PoolVector2Array( -29.8926, 9.6958, -28.7021, 19.6171, -25.1304, 22.7919, -12.0344, 18.8234, 12.9672, 0.965088, 29.238, -11.7341, 29.238, -16.0995, 20.5073, -22.449, 14.5546, -23.2427, 4.63336, -14.5121, -7.27216, -6.97192, -22.7493, 5.33044 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Bread2" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 4
+
+[node name="Bread3" parent="Map/Entities" index="23" instance=ExtResource( 7 )]
+position = Vector2( 648.863, 721.257 )
+rotation = 0.342911
+color = Color( 1, 0.568627, 0.364706, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Bread3" index="2"]
+polygon = PoolVector2Array( -29.8926, 9.6958, -28.7021, 19.6171, -25.1304, 22.7919, -12.0344, 18.8234, 12.9672, 0.965088, 29.238, -11.7341, 29.238, -16.0995, 20.5073, -22.449, 14.5546, -23.2427, 4.63336, -14.5121, -7.27216, -6.97192, -22.7493, 5.33044 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Bread3" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 4
+
+[node name="Cupcake" parent="Map/Entities" index="24" instance=ExtResource( 7 )]
+position = Vector2( 1264.77, 364.092 )
+rotation = 0.342911
+color = Color( 0.956863, 0.639216, 0.301961, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Cupcake" index="2"]
+polygon = PoolVector2Array( -0.547974, -10.8842, -6.78149, -8.86945, -10.6128, -3.07703, -9.95959, 4.06396, -5.31543, 9.99081, 0.971313, 10.4854, 8.00574, 7.76324, 10.1821, 0.87616, 8.90161, -6.25156, 4.3772, -9.48218 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Cupcake" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 5
+
+[node name="Cupcake2" parent="Map/Entities" index="25" instance=ExtResource( 7 )]
+position = Vector2( 1272.51, 399.213 )
+rotation = 0.342911
+color = Color( 0.956863, 0.639216, 0.301961, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Cupcake2" index="2"]
+polygon = PoolVector2Array( -0.547974, -10.8842, -6.78149, -8.86945, -10.6128, -3.07703, -9.95959, 4.06396, -5.31543, 9.99081, 0.971313, 10.4854, 8.00574, 7.76324, 10.1821, 0.87616, 8.90161, -6.25156, 4.3772, -9.48218 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Cupcake2" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 5
+
+[node name="Cupcake3" parent="Map/Entities" index="26" instance=ExtResource( 7 )]
+position = Vector2( 1295.53, 375.799 )
+rotation = 0.342911
+color = Color( 0.956863, 0.639216, 0.301961, 1 )
+create_collectible_parts = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Cupcake3" index="2"]
+polygon = PoolVector2Array( -0.547974, -10.8842, -6.78149, -8.86945, -10.6128, -3.07703, -9.95959, 4.06396, -5.31543, 9.99081, 0.971313, 10.4854, 8.00574, 7.76324, 10.1821, 0.87616, 8.90161, -6.25156, 4.3772, -9.48218 )
+
+[node name="Sprite" type="Sprite" parent="Map/Entities/Cupcake3" index="3"]
+texture = ExtResource( 8 )
+hframes = 6
+frame = 5
+
+[node name="Node2D" type="Node2D" parent="Collectors" index="0"]
+position = Vector2( 747.51, 699.456 )
+
+[node name="Node2D2" type="Node2D" parent="Collectors" index="1"]
+position = Vector2( 1166.65, 379.094 )
+
+[node name="Node2D3" type="Node2D" parent="Collectors" index="2"]
+position = Vector2( 93.4388, 218.914 )
+
+[node name="Node2D4" type="Node2D" parent="Collectors" index="3"]
+position = Vector2( 1815.38, 883.664 )
+
+[node name="Node2D5" type="Node2D" parent="Collectors" index="4"]
+position = Vector2( 208.235, 771.537 )
+
+[node name="Node2D6" type="Node2D" parent="Collectors" index="5"]
+position = Vector2( 1612.49, 290.995 )
+
+[node name="Node2D7" type="Node2D" parent="Collectors" index="6"]
+position = Vector2( 568.642, 373.755 )
+
+[node name="Node2D8" type="Node2D" parent="Collectors" index="7"]
+position = Vector2( 1326.83, 779.546 )
+
+[node name="Node2D" type="Node2D" parent="Dumplings" index="0"]
+position = Vector2( 237.601, 712.804 )
+
+[node name="Node2D2" type="Node2D" parent="Dumplings" index="1"]
+position = Vector2( 1607.15, 360.407 )
+
+[node name="Node2D3" type="Node2D" parent="Dumplings" index="2"]
+position = Vector2( 1268.1, 872.985 )
+
+[node name="CustomLogic" parent="." index="3"]
+script = ExtResource( 6 )
+
+[node name="Timer" type="Timer" parent="CustomLogic" index="0"]
+one_shot = true
+
+[connection signal="timeout" from="CustomLogic/Timer" to="CustomLogic" method="_on_Timer_timeout"]

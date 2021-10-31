@@ -50,6 +50,7 @@ func repel_hostile_entities():
 	var num_repels = 0
 	var avg_vec_away = Vector2.ZERO
 	for b in bodies:
+		if not b.is_in_group("Players"): return
 		if b == body: continue # it's ourselves
 		if same_team(b): continue # it's a teammate
 		if b.modules.status.is_dead: continue # it's a ghost

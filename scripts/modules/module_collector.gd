@@ -9,12 +9,15 @@ onready var main_node = get_node("/root/Main")
 onready var mode = get_node("/root/Main/ModeManager")
 onready var collectors = get_node("/root/Main/Collectors")
 onready var particles = get_node("/root/Main/Particles")
+onready var arena = get_node("/root/Main/ArenaLoader")
 
 var num_collected : int = 0
 
 var multiplier : int = 1
 var collection_disabled : bool = false
 var magnet_enabled : bool = false
+
+var ghost_collected : int = 0
 
 func count():
 	return num_collected
@@ -48,6 +51,9 @@ func enable_magnet():
 func disable_magnet():
 	magnet_enabled = false
 
+func reset_ghost_collections():
+	ghost_collected = 0
+
 func check_magnet(_dt):
 	if not magnet_enabled: return
 	
@@ -66,10 +72,27 @@ func check_magnet(_dt):
 			other_body.move_and_slide(vec_to_me * MAGNET_STRENGTH)
 		elif other_body is StaticBody2D:
 			other_body.set_position(other_body.get_position() + vec_to_me*MAGNET_STRENGTH)
+
+func check_ghost_collection(other_body):
+	if not body.modules.status.is_ghost: return
+	if not other_body.is_in_group("GhostParts"): return
 	
+	ghost_collected += 1
+	
+	var target_num = arena.get_ghost_part_target_num()
+	
+	var txt = str(ghost_collected) + "/" + str(target_num)
+	particles.general_feedback(other_body.global_position, txt)
+	
+	other_body.queue_free()
+	
+	if ghost_collected >= target_num:
+		body.modules.respawner.revive()
 
 func _on_Area2D_body_entered(other_body):
-	if collection_disabled: return
+	if collection_disabled: 
+		check_ghost_collection(other_body)
+		return
 	
 	if not other_body.is_in_group("Parts"): return
 	

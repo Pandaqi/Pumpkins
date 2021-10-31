@@ -5,6 +5,8 @@ var modules = {}
 export var color : Color
 export var override_color : bool = false
 
+export var create_collectible_parts : bool = false
+
 func _ready():
 	register_modules()
 	

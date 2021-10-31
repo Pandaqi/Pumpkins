@@ -51,7 +51,8 @@ var arenas = {
 	"graveyard": { "frame": 1 },
 	"spooky_forest": { "frame": 0 },
 	"bogus_blackouts": { "frame": 7 },
-	"swimming_pool": { "frame": 6 }
+	"swimming_pool": { "frame": 6 },
+	"family_dinner": { "frame": 8, "ghost_part_target": 10 }
 }
 
 var configurable_settings = {

@@ -60,12 +60,17 @@ func slice_body(b, p1, p2, attacker):
 	var original_player_num = -1
 	var original_color = Color(1,1,1)
 	var use_multi_color = true
+	var make_collectible = false
+	
 	if b.modules.has("status"):
 		original_player_num = b.modules.status.player_num
 	
 	if b.modules.has("drawer"):
 		original_color = b.modules.drawer.color
 		use_multi_color = b.modules.drawer.use_multi_color
+	
+	if b.get("create_collectible_parts") and b.create_collectible_parts:
+		make_collectible = true
 	
 	var num_shapes = b.shape_owner_get_shape_count(0)
 	var cur_shapes = []
@@ -122,6 +127,7 @@ func slice_body(b, p1, p2, attacker):
 			'player_num': original_player_num, 
 			'is_powerup': params.is_powerup, 
 			'is_dumpling': params.is_dumpling,
+			'make_collectible': make_collectible,
 			'color': original_color,
 			'multi_color': use_multi_color
 		}
@@ -353,6 +359,9 @@ func create_body_from_shape_list(shapes : Array, params = {}) -> RigidBody2D:
 	
 	if params.player_num >= 0:
 		body.add_to_group("PlayerParts")
+	
+	if params.has('make_collectible') and params.make_collectible:
+		body.add_to_group("GhostParts")
 	
 	return body
 

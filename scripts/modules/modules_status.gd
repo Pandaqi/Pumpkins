@@ -19,10 +19,10 @@ var starting_position : Vector2
 var starting_shape : Array
 
 # DEBUGGING (quick death checks, SURELY remove on publish)
-#func _input(ev):
-#	if not is_from_a_player(): return
-#	if ev.is_action_released("ui_up"):
-#		die()
+func _input(ev):
+	if not is_from_a_player(): return
+	if ev.is_action_released("ui_up"):
+		die()
 
 func set_player_num(num):
 	player_num = num
@@ -127,6 +127,7 @@ func die(forced  = false):
 
 	body.modules.knives.destroy_knives()
 	body.modules.collector.disable_collection()
+	body.modules.collector.reset_ghost_collections()
 	body.modules.powerups.disable()
 	
 	body.modules.particles.disable()

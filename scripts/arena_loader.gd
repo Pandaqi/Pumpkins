@@ -69,6 +69,7 @@ func place_huge_dumplings():
 		
 		d.modules.status.set_team_num(i)
 		huge_dumplings.append(d)
-	
-	
-	
+
+func get_ghost_part_target_num():
+	if not arena_data.has('ghost_part_target'): return -1
+	return arena_data.ghost_part_target
