@@ -95,7 +95,7 @@ func make_powerup_leftover():
 func make_dumpling_leftover():
 	player_num = -1
 
-func delete():
+func delete(attacking_throwable):
 	body.queue_free()
 
 func can_die():
@@ -196,6 +196,8 @@ func enter_water():
 
 func exit_water():
 	in_water = false
+	
+	if not is_instance_valid(body): return
 	
 	body.modules.mover.recreate_move_audio()
 	body.modules.particles.exit_water()

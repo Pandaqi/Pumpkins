@@ -15,7 +15,7 @@ func _ready():
 
 func _on_Timer_timeout():
 	throw_away_all_throwables_we_own()
-	body.modules.status.delete()
+	body.modules.status.delete(null)
 
 func throw_away_all_throwables_we_own():
 	for child in body.get_children():

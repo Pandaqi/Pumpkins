@@ -20,7 +20,7 @@ func react_to_areas():
 func set_delete_audio(key):
 	delete_audio_key = key
 
-func delete():
+func delete(attacking_throwable):
 	if delete_audio_key != "":
 		GlobalAudio.play_dynamic_sound(body, delete_audio_key)
 	

@@ -228,5 +228,9 @@ position = Vector2( 1759.28, 557.2 )
 [node name="CustomLogic" parent="." index="3"]
 script = ExtResource( 5 )
 
+[node name="TreasureTimer" type="Timer" parent="CustomLogic" index="0"]
+one_shot = true
+
 [connection signal="body_entered" from="Map/Overlay/Water" to="Map/Overlay/Water" method="_on_Water_body_entered"]
 [connection signal="body_exited" from="Map/Overlay/Water" to="Map/Overlay/Water" method="_on_Water_body_exited"]
+[connection signal="timeout" from="CustomLogic/TreasureTimer" to="CustomLogic" method="_on_TreasureTimer_timeout"]

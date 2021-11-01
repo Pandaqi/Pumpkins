@@ -27,7 +27,6 @@ func collect(dc):
 	
 	num_collected += dc
 	
-	main_node.player_progression(body.modules.status.player_num)
 	collectors.update_team_count(body.modules.status.team_num)
 	
 	GlobalAudio.play_dynamic_sound(body, "collect")
@@ -36,6 +35,8 @@ func collect(dc):
 	if dc < 0: final_string = str(dc)
 	
 	particles.create_collectible_particle(body.global_position, final_string)
+	
+	main_node.player_progression(body, body.modules.status.player_num)
 
 func disable_collection():
 	collection_disabled = true

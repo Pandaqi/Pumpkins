@@ -38,7 +38,7 @@ func slice_through_body(state, index):
 	var start = center - normal * 500
 	var end = center + normal * 500
 
-	var result = slicer.slice_bodies_hitting_line(start, end, [body], [obj])
+	var result = slicer.slice_bodies_hitting_line(start, end, [body], [obj], body)
 	if result.size() <= 0: return false
 	
 	body.add_collision_exception_with(obj)

@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scripts/modules/module_flat_color_drawer.gd" type="Script" id=1]
+[ext_resource path="res://scripts/arenas/pirate_curse/treasure.gd" type="Script" id=2]
+[ext_resource path="res://assets/arenas/pirate_curse/treasures.png" type="Texture" id=3]
+[ext_resource path="res://scripts/module_manager_sliceable.gd" type="Script" id=4]
+[ext_resource path="res://scripts/modules/module_shadow_location.gd" type="Script" id=5]
+
+[sub_resource type="PhysicsMaterial" id=1]
+bounce = 0.4
+
+[node name="Treasure" type="RigidBody2D" groups=[
+"Sliceables",
+"Treasures",
+]]
+position = Vector2( 922.067, 534.573 )
+collision_mask = 9
+mass = 10.0
+physics_material_override = SubResource( 1 )
+linear_damp = 2.0
+angular_damp = 2.0
+script = ExtResource( 4 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( 1.40723, 18.5641, 38.3357, 19.8159, 46.4725, 14.1827, 45.8466, -15.8608, 37.7098, -22.1199, -36.7732, -23.3717, -44.2841, -18.3645, -43.0322, 15.4345, -37.399, 19.8159 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+hframes = 6
+
+[node name="Drawer" type="Node2D" parent="."]
+script = ExtResource( 1 )
+color = Color( 0.933333, 0.407843, 0, 1 )
+use_multi_color = false
+
+[node name="Status" type="Node2D" parent="."]
+position = Vector2( -922.067, -534.573 )
+script = ExtResource( 2 )
+
+[node name="ShadowLocation" type="Node2D" parent="." groups=[
+"ShadowMakers",
+]]
+script = ExtResource( 5 )
+extents = Vector2( 54, 32 )
+type = "rect"

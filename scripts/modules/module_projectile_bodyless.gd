@@ -6,8 +6,8 @@ const GHOST_SLOWDOWN : float = 0.995
 const VELOCITY_LEFT_AFTER_DEFLECTION : float = 0.9
 const MIN_TIME_BETWEEN_DEFLECTIONS : float = 50.0 # milliseconds
 
-const MIN_DIST_BEFORE_SLICE : float = 100.0
-const MIN_DIST_BEFORE_CERTAIN_SLICE : float = 250.0
+const MIN_DIST_BEFORE_SLICE : float = 90.0
+const MIN_DIST_BEFORE_CERTAIN_SLICE : float = 180.0
 const MIN_DIST_LONG_THROW_BONUS : float = 1000.0
 
 const LONG_THROW_EXTRA_SLICE_PROB : float = 1.0
@@ -196,7 +196,7 @@ func slice_through_body(obj):
 	
 	var hit_a_player = obj.is_in_group("Players")
 	var my_owner = body.modules.owner.get_owner()
-	var result = slicer.slice_bodies_hitting_line(start, end, [], [obj], my_owner)
+	var result = slicer.slice_bodies_hitting_line(start, end, [], [obj], body)
 	if result.size() <= 0: return false
 	
 	body.modules.fakebody.add_collision_exception(obj)
@@ -219,10 +219,7 @@ func slice_through_body(obj):
 			my_owner.modules.grower.grow(0.2)
 			
 			var perform_extra_slice = (randf() <= LONG_THROW_EXTRA_SLICE_PROB)
-			if perform_extra_slice:
-				start = (start-center).rotated(0.5*PI) + center
-				end = (end-center).rotated(0.5*PI) + center
-				slicer.slice_bodies_hitting_line(start, end, [], [obj], my_owner)
+			if perform_extra_slice: obj.modules.slasher.self_slice()
 
 	return true
 

@@ -244,7 +244,7 @@ func execute_quick_slash():
 	end += vec * slash_range * 2
 	
 	# @params start, end, exclude, include
-	slicer.slice_bodies_hitting_line(start, end, [body], [res.collider])
+	slicer.slice_bodies_hitting_line(start, end, [body], [res.collider], null)
 	
 	emit_signal("quick_slash")
 	
@@ -345,3 +345,12 @@ func use_idle_timer():
 	var no_first_knife = (not body.modules.knives.get_first_knife())
 	if no_first_knife: return false
 	return true
+
+func self_slice():
+	var center = body.global_position
+	var rot = 2*PI*randf()
+	var rand_vec = Vector2(cos(rot), sin(rot))
+	var start = center + rand_vec * 400
+	var end = center - rand_vec*400
+	
+	slicer.slice_bodies_hitting_line(start, end, [], [body], null)

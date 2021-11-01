@@ -19,7 +19,7 @@ var start_point
 var end_point
 
 # Actual slicing functionality
-func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include = [], attacker = null):
+func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include = [], attacking_throwable = null):
 	# create a (narrow, elongated) rectangle along line
 	var angle = (p2 - p1).angle()
 	var avg_pos = (p2 + p1)*0.5
@@ -52,11 +52,11 @@ func slice_bodies_hitting_line(p1 : Vector2, p2 : Vector2, exclude = [], include
 	# finally, slice whatever is left
 	var final_bodies = []
 	for b in bodies:
-		final_bodies += slice_body(b, p1, p2, attacker)
+		final_bodies += slice_body(b, p1, p2, attacking_throwable)
 	
 	return final_bodies
 
-func slice_body(b, p1, p2, attacker):
+func slice_body(b, p1, p2, attacking_throwable):
 	var original_player_num = -1
 	var original_color = Color(1,1,1)
 	var use_multi_color = true
@@ -108,6 +108,10 @@ func slice_body(b, p1, p2, attacker):
 	create_visual_effects(b)
 	
 	# check if the shape needs to keep one part alive and/or die
+	var attacker = null
+	if attacking_throwable:
+		attacker = attacking_throwable.modules.owner.get_owner()
+	
 	var params = { 
 		'p1': p1,
 		'p2': p2,
@@ -116,6 +120,7 @@ func slice_body(b, p1, p2, attacker):
 		'is_keep_alive': false,
 		'is_powerup': false,
 		'is_player': false,
+		'attacking_throwable': attacking_throwable,
 		'attacker': attacker 
 	}
 	check_keep_alive(b, shape_layers, params)
@@ -124,6 +129,7 @@ func slice_body(b, p1, p2, attacker):
 	# create bodies for each set of points left over
 	var new_bodies = []
 	var new_body_params = { 
+			'attacking_throwable': attacking_throwable,
 			'player_num': original_player_num, 
 			'is_powerup': params.is_powerup, 
 			'is_dumpling': params.is_dumpling,
@@ -194,7 +200,7 @@ func handle_old_body_death(b, params = {}):
 		# NOW ask the main node to check game over, because the "dying" has finished
 		var dying_was_succesful = b.modules.status.is_dead
 		if dying_was_succesful:
-			main_node.player_died(params.original_player_num)
+			main_node.player_died(b, params.original_player_num)
 		return
 	
 	if params.is_keep_alive: return
@@ -210,7 +216,7 @@ func handle_old_body_death(b, params = {}):
 		b.queue_free()
 		return
 	
-	b.modules.status.delete()
+	b.modules.status.delete(params.attacking_throwable)
 
 func shoot_body_away_from_line(p1, p2, body):
 	var vec = (p2 - p1).normalized()

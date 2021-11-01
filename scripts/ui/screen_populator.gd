@@ -51,7 +51,7 @@ func _ready():
 	cols = data.cols
 	large_tiles = data.large_tiles
 	
-	if large_tiles: item_size *= 2
+	if large_tiles: item_size *= 1.66
 	else: glow_scale *= 0.5
 	
 	texture = load("res://assets/ui/settings/" + type + ".png")

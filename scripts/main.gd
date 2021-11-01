@@ -56,8 +56,9 @@ func debug_game_over():
 	var winner = get_tree().get_nodes_in_group("Players")[0].modules.status.team_num
 	game_state.game_over(winner)
 
-func player_died(num):
+func player_died(node, num):
+	players.player_died(node)
 	game_state.player_died(num)
 
-func player_progression(num):
+func player_progression(node, num):
 	game_state.player_progression(num)

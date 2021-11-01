@@ -6,7 +6,7 @@ var base_cfg = {
 	'powerups': [],
 	'throwables': [],
 	
-	'use_cartoony_coloring': false,
+	'use_cartoony_coloring': true,
 	
 	'max_players': 6,
 	'auto_pickup_powerups': false,
@@ -53,7 +53,8 @@ var arenas = {
 	"bogus_blackouts": { "frame": 7 },
 	"swimming_pool": { "frame": 6 },
 	"family_dinner": { "frame": 8, "ghost_part_target": 10 },
-	"pirate_curse": { "frame": 9 }
+	"pirate_curse": { "frame": 9 },
+	"haunted_house": { "frame": 5 }
 }
 
 var configurable_settings = {
@@ -84,7 +85,7 @@ var throwables = {
 }
 
 var nav_data = {
-	"arenas": { "frames": Vector2(4,4), "single_choice_mode": true, "cols": 4, "large_tiles": true },
+	"arenas": { "frames": Vector2(4,4), "single_choice_mode": true, "cols": 5, "large_tiles": true },
 	"modes": { "frames": Vector2(4,4), "single_choice_mode": true, "cols": 4, "large_tiles": true },
 	"powerups": { "frames": Vector2(8,8), "single_choice_mode": false, "cols": 7, "large_tiles": false },
 	"throwables": { "frames": Vector2(4,4), "single_choice_mode": false, "cols": 4, "large_tiles": false },

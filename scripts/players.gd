@@ -6,6 +6,8 @@ const MIN_DIST_BETWEEN_PLAYERS : float = 400.0
 var num_players
 var player_scene = preload("res://scenes/player.tscn")
 
+var last_player_to_die
+
 onready var main_node = get_parent()
 onready var map = get_node("../Map")
 onready var spawner = get_node("../Spawner")
@@ -123,11 +125,12 @@ func get_all_within_range(pos, radius):
 		arr.append(p)
 	
 	return arr
+
+func player_died(node):
+	last_player_to_die = node
+
+func revive_last_dead():
+	if not last_player_to_die: return
 	
-	
-	
-	
-	
-	
-	
-	
+	last_player_to_die.modules.respawner.revive()
+	last_player_to_die = null
