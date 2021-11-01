@@ -53,6 +53,8 @@ var audio_preload = {
 	"switch": preload("res://assets/audio/switch.ogg"),
 	"teleport": preload("res://assets/audio/teleport.ogg"),
 	"balloonpop": preload("res://assets/audio/balloonpop.ogg"),
+	
+	"explosion": preload("res://assets/audio/explosion.ogg")
 }
 
 func _ready():

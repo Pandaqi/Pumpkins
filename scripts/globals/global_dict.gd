@@ -52,7 +52,8 @@ var arenas = {
 	"spooky_forest": { "frame": 0 },
 	"bogus_blackouts": { "frame": 7 },
 	"swimming_pool": { "frame": 6 },
-	"family_dinner": { "frame": 8, "ghost_part_target": 10 }
+	"family_dinner": { "frame": 8, "ghost_part_target": 10 },
+	"pirate_curse": { "frame": 9 }
 }
 
 var configurable_settings = {

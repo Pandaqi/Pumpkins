@@ -69,6 +69,7 @@ func poll_front_raycast():
 		# TO DO: Clean this shit up
 		if handled:
 			var custom_behavior = (hit_body.script and hit_body.has_method("on_knife_entered"))
+			
 			if custom_behavior:
 				hit_body.on_knife_entered(body)
 			else:
@@ -120,6 +121,8 @@ func get_stuck(result):
 	if body.modules.status.is_stuck: return true
 	if body.modules.status.type == "boomerang": return false
 	
+	var hit_body = result.collider
+	
 	body.modules.mover.set_velocity(Vector2.ZERO)
 	body.set_position(result.position)
 	body.set_rotation(-result.normal.angle())
@@ -132,7 +135,7 @@ func get_stuck(result):
 	body.modules.fakebody.reset_all()
 	body.modules.fakebody.reset_collision_exceptions()
 	
-	var hit_body = result.collider
+	
 	if not (hit_body is StaticBody2D):
 		var old_rotation = body.global_rotation
 		var old_position = body.global_position

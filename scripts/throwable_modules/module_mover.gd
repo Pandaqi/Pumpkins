@@ -93,6 +93,22 @@ func came_to_standstill():
 	stop()
 	body.modules.owner.remove()
 
+func overlapping_unreachable_location():
+	var space_state = get_world_2d().direct_space_state
+	
+	var shp = CircleShape2D.new()
+	shp.radius = body.modules.fakebody.knife_half_size
+	
+	var query_params = Physics2DShapeQueryParameters.new()
+	query_params.set_shape(shp)
+	query_params.transform.origin = body.global_position
+	query_params.collision_layer = 64
+	
+	var result = space_state.intersect_shape(query_params)
+	if not result: return false
+	
+	return true
+
 func move(dt):
 	if body.modules.status.is_stuck: return
 	if body.modules.status.being_held: return
@@ -103,8 +119,11 @@ func move(dt):
 		velocity = avg
 	
 	if velocity.length() <= MIN_SIGNIFICANT_VELOCITY:
-		came_to_standstill()
-		return
+		if overlapping_unreachable_location(): 
+			velocity = velocity.normalized() * (MIN_SIGNIFICANT_VELOCITY + 50.0)
+		else:
+			came_to_standstill()
+			return
 	
 	trail_particles.set_emitting(true)
 	trail_particles.process_material.direction = Vector3(velocity.x, velocity.y, 0)

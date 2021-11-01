@@ -87,6 +87,8 @@ func build_exclude_array():
 	
 	if body.modules.owner.has_none(): return exclude
 	if not body.modules.grabber.is_disabled_for_owner(): return exclude
+	if body.modules.grabber.forbidden_node:
+		exclude.append(body.modules.grabber.forbidden_node)
 	
 	exclude.append(body.modules.owner.get_owner())
 	return exclude

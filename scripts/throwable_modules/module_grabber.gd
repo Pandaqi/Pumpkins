@@ -6,25 +6,31 @@ onready var body = get_parent()
 onready var timer = $Timer
 
 var grabbing_by_owner_disabled : bool = false
+var forbidden_node = null
 
 func is_disabled_for_owner():
 	return grabbing_by_owner_disabled
 
-func disable():
+func disable(node):
+	forbidden_node = node
 	grabbing_by_owner_disabled = true
 	timer.wait_time = GRAB_DISABLE_DURATION
 	timer.start()
 
 func enable():
 	grabbing_by_owner_disabled = false
-
+	forbidden_node = null
+	
 func _on_Timer_timeout():
 	enable()
 
 func try_grabbing(other_body):
 	if body.modules.status.being_held and body.modules.owner.is_a_player(): return false
+	if body.modules.status.is_forbidden: return false
+	
 	if not other_body.is_in_group("Grabbers"): return false
 	if grabbing_by_owner_disabled and body.modules.owner.is_body(other_body): return false
+	
 	return check_valid_grab(other_body)
 
 func force_grab(other_body):

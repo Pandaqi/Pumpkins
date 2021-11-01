@@ -1,5 +1,7 @@
 extends Node2D
 
+const EXPLODE_FORCE : float = 1000.0
+
 export var wait_time : float = 15.0
 
 onready var timer = $Timer
@@ -18,14 +20,5 @@ func _on_Timer_timeout():
 func throw_away_all_throwables_we_own():
 	for child in body.get_children():
 		if child.is_in_group("Throwables"):
-			var old_pos = child.global_position
-			var old_rot = child.global_rotation
-			var vec = (old_pos - global_position).normalized() * 1000.0
-			
-			child.get_parent().remove_child(child)
-			map.knives.add_child(child)
-			
-			child.set_position(old_pos)
-			child.set_rotation(old_rot)
-			
-			child.modules.thrower.throw(null, vec)
+			child.modules.thrower.throw_from_object(self, EXPLODE_FORCE)
+

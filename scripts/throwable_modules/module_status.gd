@@ -9,6 +9,9 @@ var base_frame : int = 0
 
 var in_water : bool = false
 
+var is_forbidden : bool = false
+var forbidden_node = null
+
 onready var body = get_parent()
 onready var sprite = get_node("../Sprite")
 
@@ -52,6 +55,11 @@ func reset_to_held_and_stuck_state():
 	
 	is_stuck = true
 
+func reset_to_forbidden_held_state():
+	reset_to_held_state()
+	
+	is_forbidden = true
+
 func reset_to_held_state():
 	is_stuck = false
 	being_held = true
@@ -64,6 +72,7 @@ func reset_to_thrown_state():
 	num_succesful_actions = 0
 	is_stuck = false
 	being_held = false
+	is_forbidden = false
 	body.show_behind_parent = false
 
 func reset_to_stuck_state():

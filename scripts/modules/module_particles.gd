@@ -7,11 +7,15 @@ onready var body = get_parent()
 
 var is_moving : bool = false
 
+func _ready():
+	_on_Mover_movement_stopped()
+
 func disable():
 	self.queue_free()
 
 func update_team_num(num):
-	part.texture = load("res://assets/ui/TeamIcon-" + str(num+1) + ".png")
+	var texture_key = "res://assets/ui/TeamIcon-" + str(num+1) + ".png"
+	part.texture = load(texture_key)
 
 # NOTE: Don't use "set_visible(true/false)" as that immediately hides all particles, even those that were still happening
 # NOTE: Simply use "set_emitting(true/false)" to prevent NEW ones from spawning, but keep the old ones happening

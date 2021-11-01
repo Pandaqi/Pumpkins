@@ -1,0 +1,232 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://arenas/arena_skeleton.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/arenas/pirate_curse/bg.png" type="Texture" id=2]
+[ext_resource path="res://assets/arenas/pirate_curse/entities.png" type="Texture" id=3]
+[ext_resource path="res://assets/arenas/pirate_curse/overlay.png" type="Texture" id=4]
+[ext_resource path="res://scripts/arenas/pirate_curse/custom_logic.gd" type="Script" id=5]
+[ext_resource path="res://scripts/arenas/pirate_curse/sea.gd" type="Script" id=6]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 17.5606
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 52.5577
+
+[node name="PirateCurse" instance=ExtResource( 1 )]
+
+[node name="Bg" type="Sprite" parent="Map/BG" index="0"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Entities" type="Sprite" parent="Map/Entities" index="0"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Stone" type="StaticBody2D" parent="Map/Entities" index="1"]
+position = Vector2( 17.6734, 91.6807 )
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone" index="0"]
+polygon = PoolVector2Array( -23.0129, 5.39968, 1.68125, 16.6243, 15.1508, 16.6243, 31.9877, 5.96091, 30.8653, -0.212624, 7.29356, -8.06986, -23.5741, -19.8557 )
+
+[node name="Stone3" type="StaticBody2D" parent="Map/Entities" index="2"]
+position = Vector2( 1900.77, 995.786 )
+rotation = 3.14159
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone3" index="0"]
+polygon = PoolVector2Array( -23.0129, 5.39968, 1.68125, 16.6243, 15.1508, 16.6243, 31.9877, 5.96091, 30.8653, -0.212624, 7.29356, -8.06986, -23.5741, -19.8557 )
+
+[node name="Stone2" type="StaticBody2D" parent="Map/Entities" index="3"]
+position = Vector2( 179.869, 40.0475 )
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone2" index="0"]
+polygon = PoolVector2Array( 23.6519, -52.3124, 10.9527, -21.3581, -4.92134, -2.70614, -26.7481, 8.80251, -44.6064, 17.1364, -50.956, 26.6608, -43.019, 33.0104, -26.3513, 33.0104, -3.73079, 21.1049, 16.9054, 4.43716, 33.97, -16.1991, 45.8755, -47.5502 )
+
+[node name="Stone4" type="StaticBody2D" parent="Map/Entities" index="4"]
+position = Vector2( 1746.22, 1045.41 )
+rotation = 3.14159
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone4" index="0"]
+polygon = PoolVector2Array( 23.6519, -52.3124, 10.9527, -21.3581, -4.92134, -2.70614, -26.7481, 8.80251, -44.6064, 17.1364, -50.956, 26.6608, -43.019, 33.0104, -26.3513, 33.0104, -3.73079, 21.1049, 16.9054, 4.43716, 33.97, -16.1991, 45.8755, -47.5502 )
+
+[node name="Stone5" type="StaticBody2D" parent="Map/Entities" index="5"]
+position = Vector2( 733.44, 75.1083 )
+rotation = -2.56131
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone5" index="0"]
+polygon = PoolVector2Array( 44.4068, -30.6266, 45.9283, -41.2174, 40.4815, -47.8043, 28.027, -45.2825, 5.19244, -20.7194, -8.40216, -6.16403, -26.1761, 7.18106, -43.6387, 14.1147, -50.6859, 28.3279, -47.1029, 38.9581, -35.5604, 35.9057, -11.3751, 22.8719, 6.91632, 10.3162, 16.985, -5.3136, 29.3693, -15.6897 )
+
+[node name="Stone6" type="StaticBody2D" parent="Map/Entities" index="6"]
+position = Vector2( 1387.51, 908.048 )
+rotation = 0.374796
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone6" index="0"]
+polygon = PoolVector2Array( 44.4068, -30.6266, 45.9283, -41.2174, 40.4815, -47.8043, 28.027, -45.2825, 5.19244, -20.7194, -8.40216, -6.16403, -26.1761, 7.18106, -43.6387, 14.1147, -50.6859, 28.3279, -47.1029, 38.9581, -35.5604, 35.9057, -11.3751, 22.8719, 6.91632, 10.3162, 16.985, -5.3136, 29.3693, -15.6897 )
+
+[node name="Stone7" type="StaticBody2D" parent="Map/Entities" index="7"]
+position = Vector2( 83.7363, 705.638 )
+rotation = 0.374796
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone7" index="0"]
+polygon = PoolVector2Array( -48.6144, -23.9289, -31.141, -29.7885, -18.1609, -16.1305, -8.44897, -13.3582, 4.86349, -27.2167, 16.534, -29.7792, 27.1955, -9.12341, 20.0605, -2.76654, 26.3738, 11.9927, 24.0909, 28.105, 7.81232, 39.5803, -7.68808, 37.5638, -17.0611, 21.4725, -20.4874, 7.60608, -30.8259, 7.10889, -40.9269, 11.0825, -48.9468, 3.58759, -53.7408, -16.3336 )
+
+[node name="Stone8" type="StaticBody2D" parent="Map/Entities" index="8"]
+position = Vector2( 1769.43, 237.638 )
+rotation = -2.74928
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone8" index="0"]
+polygon = PoolVector2Array( -48.6144, -23.9289, -31.141, -29.7885, -18.1609, -16.1305, -8.44897, -13.3582, 4.86349, -27.2167, 16.534, -29.7792, 27.1955, -9.12341, 20.0605, -2.76654, 26.3738, 11.9927, 24.0909, 28.105, 7.81232, 39.5803, -7.68808, 37.5638, -17.0611, 21.4725, -20.4874, 7.60608, -30.8259, 7.10889, -40.9269, 11.0825, -48.9468, 3.58759, -53.7408, -16.3336 )
+
+[node name="Stone9" type="StaticBody2D" parent="Map/Entities" index="9"]
+position = Vector2( 1617.04, 428.126 )
+rotation = -2.74928
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone9" index="0"]
+polygon = PoolVector2Array( -20.6212, 41.2267, 4.39026, 24.8651, 20.0198, 0.360046, 18.5281, -13.625, 26.4945, -25.5109, 23.9154, -44.1998, 6.87036, -39.724, -8.17725, -28.3441, -23.6295, -1.33542, -29.194, 26.7356 )
+
+[node name="Stone10" type="StaticBody2D" parent="Map/Entities" index="10"]
+position = Vector2( 575.707, 675.761 )
+rotation = -2.74928
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone10" index="0"]
+polygon = PoolVector2Array( -9.44342, 39.1784, 5.22461, 33.1094, 3.6825, 14.8504, 14.456, 3.52106, 26.722, -18.7333, 25.8372, -31.2515, 5.8584, -25.562, -19.9876, -17.4447, -28.0302, 0.485229, -33.5688, 18.2383, -22.1387, 37.5596 )
+
+[node name="Stone11" type="StaticBody2D" parent="Map/Entities" index="11"]
+position = Vector2( 999.997, 303.104 )
+rotation = -2.74928
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone11" index="0"]
+polygon = PoolVector2Array( 51.8337, -1.90131, 28.7188, 12.8166, 10.9402, 17.5958, -26.5635, -0.385925, -42.8241, -16.8498, -48.0333, -33.5915, -41.4576, -50.9145, -33.5673, -56.7562, 0.0413818, -19.1247, 15.2908, -13.4089, 31.6281, -27.8993, 43.2865, -26.7104 )
+
+[node name="Stone12" type="StaticBody2D" parent="Map/Entities" index="12"]
+position = Vector2( 1064.07, 805.003 )
+rotation = -5.70384
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Stone12" index="0"]
+polygon = PoolVector2Array( 51.8337, -1.90131, 28.7188, 12.8166, 10.9402, 17.5958, -26.5635, -0.385925, -42.8241, -16.8498, -48.0333, -33.5915, -41.4576, -50.9145, -33.5673, -56.7562, 0.0413818, -19.1247, 15.2908, -13.4089, 31.6281, -27.8993, 43.2865, -26.7104 )
+
+[node name="PalmTrees" type="StaticBody2D" parent="Map/Entities" index="13"]
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="0"]
+position = Vector2( 293.665, 311.018 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="1"]
+position = Vector2( 371.085, 286.991 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="2"]
+position = Vector2( 439.162, 260.294 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="3"]
+position = Vector2( 488.551, 225.588 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="4"]
+position = Vector2( 1473.8, 832.248 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="5"]
+position = Vector2( 1526.85, 797.626 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="6"]
+position = Vector2( 1592.81, 759.275 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="7"]
+position = Vector2( 1667.62, 730.926 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="8"]
+position = Vector2( 1129.73, 751.153 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="9"]
+position = Vector2( 563.978, 433.314 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="Map/Entities/PalmTrees" index="10"]
+position = Vector2( 1239.92, 325.249 )
+shape = SubResource( 2 )
+
+[node name="Overlay" type="Sprite" parent="Map/Overlay" index="0"]
+texture = ExtResource( 4 )
+centered = false
+
+[node name="Water" type="Area2D" parent="Map/Overlay" index="1"]
+collision_layer = 42
+collision_mask = 42
+script = ExtResource( 6 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Water" index="0"]
+polygon = PoolVector2Array( 1893.19, 277.278, 1915.82, 280.106, 1921.47, 1007.01, 1853.59, 992.87, 1791.37, 1021.15, 1720.66, 1086.21, -7.51303, 1089.04, -4.6846, 684.571, 20.7712, 690.228, 40.5702, 755.282, 80.1682, 797.708, 196.134, 825.992, 377.153, 899.532, 552.516, 950.443, 826.873, 1009.84, 1092.75, 987.213, 1406.7, 913.674, 1618.83, 823.164, 1737.63, 693.056, 1856.42, 413.042 )
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Map/Overlay/Water" index="1"]
+polygon = PoolVector2Array( 17.9428, 687.4, 43.3986, 560.12, 125.423, 424.356, 198.962, 319.704, 394.124, 251.822, 575.143, 133.028, 736.363, 70.8024, 838.187, 70.8024, 1005.06, 104.744, 1109.72, 141.513, 1146.49, 161.312, 1454.78, 161.312, 1649.95, 161.312, 1777.22, 178.283, 1870.56, 215.052, 1890.36, 282.934, 1927.13, 277.278, 1915.82, -8.3936, 198.962, -2.73674, 159.364, 53.8318, 114.109, 79.2876, 77.3398, 99.0867, -13.1699, 99.0867, -7.51303, 701.542 )
+
+[node name="Node2D" type="Node2D" parent="Collectors" index="0"]
+position = Vector2( 76.3676, 31.1127 )
+
+[node name="Node2D2" type="Node2D" parent="Collectors" index="1"]
+position = Vector2( 1852.62, 1055 )
+
+[node name="Node2D3" type="Node2D" parent="Collectors" index="2"]
+position = Vector2( 299.813, 633.568 )
+
+[node name="Node2D4" type="Node2D" parent="Collectors" index="3"]
+position = Vector2( 1490.58, 497.803 )
+
+[node name="Node2D5" type="Node2D" parent="Collectors" index="4"]
+position = Vector2( 848.528, 322.441 )
+
+[node name="Node2D6" type="Node2D" parent="Collectors" index="5"]
+position = Vector2( 848.528, 772.161 )
+
+[node name="Node2D7" type="Node2D" parent="Collectors" index="6"]
+position = Vector2( 1750.8, 67.8824 )
+
+[node name="Node2D8" type="Node2D" parent="Collectors" index="7"]
+position = Vector2( 121.622, 1001.26 )
+
+[node name="Node2D" type="Node2D" parent="Dumplings" index="0"]
+position = Vector2( 1012.58, 132.936 )
+
+[node name="Node2D2" type="Node2D" parent="Dumplings" index="1"]
+position = Vector2( 347.897, 919.239 )
+
+[node name="Node2D3" type="Node2D" parent="Dumplings" index="2"]
+position = Vector2( 1759.28, 557.2 )
+
+[node name="CustomLogic" parent="." index="3"]
+script = ExtResource( 5 )
+
+[connection signal="body_entered" from="Map/Overlay/Water" to="Map/Overlay/Water" method="_on_Water_body_entered"]
+[connection signal="body_exited" from="Map/Overlay/Water" to="Map/Overlay/Water" method="_on_Water_body_exited"]

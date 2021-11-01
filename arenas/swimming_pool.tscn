@@ -148,6 +148,8 @@ centered = false
 "Stuckables",
 ]]
 position = Vector2( 167.017, 2.02472 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Shrub" index="0"]
 polygon = PoolVector2Array( -117.101, -6.11693, -99.6395, 19.2815, -71.8599, 51.8232, -26.619, 64.5224, 27.3526, 64.5224, 86.0865, 44.6799, 117.834, 3.40748, 119.422, -12.4665 )
@@ -157,6 +159,8 @@ polygon = PoolVector2Array( -117.101, -6.11693, -99.6395, 19.2815, -71.8599, 51.
 ]]
 position = Vector2( -6.73523, 292.318 )
 rotation = -1.5708
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Shrub2" index="0"]
 polygon = PoolVector2Array( -117.101, -6.11693, -99.6395, 19.2815, -71.8599, 51.8232, -26.619, 64.5224, 27.3526, 64.5224, 86.0865, 44.6799, 117.834, 3.40748, 119.422, -12.4665 )
@@ -166,6 +170,8 @@ polygon = PoolVector2Array( -117.101, -6.11693, -99.6395, 19.2815, -71.8599, 51.
 ]]
 position = Vector2( 1917.25, 764.838 )
 rotation = 1.5708
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Shrub3" index="0"]
 polygon = PoolVector2Array( -117.101, -6.11693, -99.6395, 19.2815, -71.8599, 51.8232, -26.619, 64.5224, 27.3526, 64.5224, 86.0865, 44.6799, 117.834, 3.40748, 119.422, -12.4665 )
@@ -175,6 +181,8 @@ polygon = PoolVector2Array( -117.101, -6.11693, -99.6395, 19.2815, -71.8599, 51.
 ]]
 position = Vector2( 1732.9, 1084.8 )
 rotation = 3.14159
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Shrub4" index="0"]
 polygon = PoolVector2Array( -117.101, -6.11693, -99.6395, 19.2815, -71.8599, 51.8232, -26.619, 64.5224, 27.3526, 64.5224, 86.0865, 44.6799, 117.834, 3.40748, 119.422, -12.4665 )
@@ -184,6 +192,8 @@ polygon = PoolVector2Array( -117.101, -6.11693, -99.6395, 19.2815, -71.8599, 51.
 ]]
 position = Vector2( 8.55292, 1080.04 )
 rotation = 3.14159
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Shrub5" index="0"]
 polygon = PoolVector2Array( -88.2479, -3.96179, -83.4911, 23.39, -57.3285, 55.4987, -37.112, 75.7151, 5.69944, 91.1748, 22.3483, 91.1748, 19.9699, -15.8539 )
@@ -192,11 +202,15 @@ polygon = PoolVector2Array( -88.2479, -3.96179, -83.4911, 23.39, -57.3285, 55.49
 "Stuckables",
 ]]
 position = Vector2( 1907.23, -0.275055 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Shrub6" index="0"]
 polygon = PoolVector2Array( -88.2479, -3.96179, -83.4911, 23.39, -57.3285, 55.4987, -37.112, 75.7151, 5.69944, 91.1748, 22.3483, 91.1748, 19.9699, -15.8539 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Map/Entities" index="7"]
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Entities/StaticBody2D" index="0"]
 position = Vector2( 2.76015, 747.252 )
