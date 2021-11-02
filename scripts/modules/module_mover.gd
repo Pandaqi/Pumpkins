@@ -7,6 +7,8 @@ var speed_multiplier : float = 1.0
 onready var body : KinematicBody2D = get_parent()
 
 var moving_enabled : bool = true
+var force_move_override : bool = false
+
 var reversed : bool = false
 var ice : bool = false
 
@@ -103,11 +105,19 @@ func move_regular(vec):
 	
 	emit_signal("moved", dist_moved)
 
-func _on_Input_button_press():
+func disable():
 	moving_enabled = false
 
-func _on_Input_button_release():
+func enable():
 	moving_enabled = true
+
+func _on_Input_button_press():
+	if force_move_override: return
+	disable()
+
+func _on_Input_button_release():
+	if force_move_override: return
+	enable()
 
 func change_speed_multiplier(val):
 	speed_multiplier = clamp(speed_multiplier*val, 0.2, 3.0)
