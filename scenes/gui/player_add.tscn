@@ -25,7 +25,7 @@ hframes = 8
 position = Vector2( -2.0769, 114.939 )
 scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 1 )
-hframes = 8
+hframes = 12
 vframes = 2
 
 [node name="ExtraButtons" type="Node2D" parent="."]

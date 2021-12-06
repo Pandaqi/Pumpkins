@@ -25,6 +25,8 @@ onready var mode = get_node("/root/Main/ModeManager")
 onready var guide = $Guide
 onready var timer = $Timer
 
+onready var reloader = $Reloader
+
 var disabled : bool = false
 
 func activate():
@@ -130,7 +132,7 @@ func remove_specific(obj):
 	
 	unsnap_knife_angle(obj.rotation)
 	knives_held.erase(obj)
-	obj.queue_free()
+	obj.modules.status.delete()
 
 func count():
 	return knives_held.size()
@@ -192,10 +194,14 @@ func check_for_collectibles(obj, change):
 	
 	body.modules.collector.collect(change)
 
+# TO DO: what ... should we actually do here?
+func cancel_throw():
+	pass
+
 func throw_first_knife():
 	var first_knife = get_first_knife()
 	if not first_knife: 
-		particles.general_feedback(body.global_position, "No Throwables!")
+		particles.general_feedback(body.global_position, "Empty!")
 		return
 	
 	throw_knife(first_knife)
@@ -214,9 +220,15 @@ func move_first_knife_to_back():
 	unhighlight_knife(first)
 	highlight_first_knife()
 
+func is_reloading():
+	return reloader.is_reloading
+
 func throw_knife(knife):
 	if disabled: return
 	if knife_overlaps_problematic_body(knife): return
+	if is_reloading(): 
+		particles.general_feedback(body.global_position, "Reloading!")
+		return
 
 	knives_held.erase(knife)
 	unsnap_knife_angle(knife.rotation)
@@ -254,6 +266,9 @@ func throw_knife(knife):
 	
 	unhighlight_knife(knife)
 	highlight_first_knife()
+	
+	if GlobalDict.cfg.limit_fire_rate:
+		reloader.on_throw()
 
 func unhighlight_knife(knife):
 	knife.get_node("AnimationPlayer").stop(true)
@@ -281,13 +296,15 @@ func highlight_first_knife():
 	if not first_knife: return
 	first_knife.get_node("AnimationPlayer").play("Highlight")
 
+	if GlobalDict.cfg.knife_always_in_front:
+		move_knife(first_knife, 0)
+
 	if guide:
 		guide.set_visible(true)
 		guide.set_position(first_knife.get_position())
 		guide.set_rotation(first_knife.get_rotation())
 	
-	if GlobalDict.cfg.knife_always_in_front:
-		move_knife(first_knife, 0)
+	
 
 #
 # Positioning the knives
@@ -388,7 +405,7 @@ func _on_Shaper_shape_updated():
 func destroy_knives():
 	for knife in knives_held:
 		unhighlight_knife(knife)
-		knife.queue_free()
+		knife.modules.status.delete()
 	
 	knives_held = []
 

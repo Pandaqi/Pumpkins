@@ -1,32 +1,38 @@
 extends Node2D
 
-const PLAYER_SENSOR_RANGE : float = INF
+const PLAYER_SENSOR_RANGE : float = 900.0
 const THROWABLE_VIEW_DISTANCE : float = 600.0
-const MIN_SEPARATION_WITH_TARGET : float = 30.0
+const MIN_SEPARATION_WITH_TARGET : float = 100.0
+
+const POWERUP_SENSOR_DIST : float = 300.0
 
 onready var players = get_node("/root/Main/Players")
 onready var mode = get_node("/root/Main/ModeManager")
 onready var body = get_parent()
 
-onready var nav = get_node("/root/Main/Navigation/Navigation2D")
+onready var nav = get_node("/root/Main/Navigation")
 
 var player_num : int = -1
 var use_navigation : bool = true
 
 var vel : Vector2
 var is_throwing : bool
+
 var unstuck_mode : bool = false
+var unstuck_vec : Vector2 = Vector2.ZERO
 
 var num_knives : int
 var active_knife_vec : Vector2
 
 var throwables_hostile : Array
 var throwables_friendly : Array
+var last_chosen_throwable_target = null
 var vec_away_from_throwables : Vector2
 var vec_to_throwable_resource : Vector2
 
 var collectibles : Array
 var vec_to_collectible : Vector2
+var last_chosen_collectible = null
 
 var targets : Array
 
@@ -43,6 +49,11 @@ var params = {}
 var debug_draw : bool = false
 var debug_path = null
 var debug_raycasts = []
+
+const IDLE_FRAMES_UNTIL_ACTION : int = 300
+var movement_last_X_frames = []
+
+var ignore_best_option : bool = false
 
 signal move_vec(vec, dt)
 
@@ -61,12 +72,36 @@ func determine_personality():
 func _physics_process(dt):
 	debug_raycasts = []
 	
+	check_for_standstill()
+	
 	read_situation()
 	assemble_movement_vector()
 	go_around_obstacles(dt)
 	apply_chosen_input(dt)
 	
 	update()
+
+func check_for_standstill():
+	if movement_last_X_frames.size() < (IDLE_FRAMES_UNTIL_ACTION-10): return
+	if unstuck_mode: return
+	if is_throwing: return
+	
+	var amount_moved = 0.0
+	for vec in movement_last_X_frames:
+		amount_moved += vec.length()
+	
+	var avg_amount_moved = amount_moved/float(movement_last_X_frames.size())
+	var ideal_avg_amount_moved = body.modules.mover.ideal_movement_per_frame
+
+	if avg_amount_moved > 0.5*ideal_avg_amount_moved: return
+
+	var vec = -body.modules.mover.last_velocity
+	if vec.length() <= 0.03:
+		var rot = body.rotation
+		vec = -Vector2(cos(rot), sin(rot))
+	
+	enable_unstuck_mode(vec)
+	movement_last_X_frames = []
 
 func read_situation():
 	var pos = body.get_global_position()
@@ -100,21 +135,31 @@ func read_situation():
 		else:
 			throwables_hostile.append(t)
 	
+	# also include throwables from powerups, as those are just as good as picking up an existing knife
+	var ps = get_tree().get_nodes_in_group("PowerupsRevealed")
+	var powerup_throwables = []
+	for p in ps:
+		if p.is_throwable: powerup_throwables.append(p)
+	
+	throwables_friendly += powerup_throwables
+	
 	throwables_friendly = sort_based_on_distance(throwables_friendly)
 	throwables_hostile = sort_based_on_distance(throwables_hostile)
 	
 	vec_away_from_throwables = Vector2.ZERO
-	var num_considered = 0
+	var total_weight : float = 0.0
 	for t in throwables_hostile:
-		if t.dist > THROWABLE_VIEW_DISTANCE: continue
+		if t.dist >= THROWABLE_VIEW_DISTANCE: continue
 		
-		var projected_vec = (t.projected_pos - body.global_position)
-		if projected_vec.length() > 80.0: continue
+		var away_from_projected_vec = (t.projected_pos - body.global_position)
+		if away_from_projected_vec.length() > 80.0: continue
 		
-		vec_away_from_throwables += projected_vec.normalized()
-		num_considered += 1
+		var weight = 1.0 - (t.dist / THROWABLE_VIEW_DISTANCE)
+		
+		vec_away_from_throwables += weight*away_from_projected_vec.normalized()
+		total_weight += weight
 	
-	if num_considered > 0: vec_away_from_throwables /= float(num_considered)
+	if total_weight > 0: vec_away_from_throwables /= total_weight
 	
 	#
 	# information about collectibles in the environment
@@ -124,6 +169,8 @@ func read_situation():
 	
 	for i in range(collectibles.size()-1,-1,-1):
 		var c = collectibles[i]
+		if c is Dictionary: c = c.body
+		
 		var collectible_is_already_mine = (c.modules.status.player_num == body.modules.status.player_num)
 		
 		if collectible_is_already_mine:
@@ -147,9 +194,10 @@ func read_situation():
 			continue
 		
 		# don't target anyone who still has a tutorial going
-		if t.body.modules.has('tutorial'):
-			targets.remove(i)
-			continue
+		if t.body.is_in_group("Players"):
+			if t.body.modules.has('tutorial'):
+				targets.remove(i)
+				continue
 		
 		# don't target our own teammates
 		# (this includes our own huge dumpling)
@@ -171,7 +219,7 @@ func read_situation():
 	# check opponents close to us
 	# (if their active knife is in our general direction, step out of there)
 	vec_away_from_players = Vector2.ZERO
-	num_considered = 0
+	total_weight = 0.0
 	for player in players_close:
 		var knife_vec = player.body.modules.knives.get_first_knife_vec()
 		if not knife_vec: continue
@@ -179,10 +227,14 @@ func read_situation():
 		var vec_to_us = -player.vec
 		if vec_to_us.dot(knife_vec) < 0.5: continue
 		
-		num_considered += 1
-		vec_away_from_players += (vec_to_us - knife_vec).normalized()
+		var vec_away = (vec_to_us - knife_vec)
+		var weight = 1.0 - (vec_away.length() / PLAYER_SENSOR_RANGE)
+		
+		vec_away_from_players += weight*vec_away.normalized()
+		total_weight += weight
 	
-	if num_considered > 0: vec_away_from_players /= float(num_considered)
+	if total_weight > 0: 
+		vec_away_from_players /= total_weight
 	
 	# information about winning player
 	# TO DO => if they are close to winning, make it a priority to attack them
@@ -207,11 +259,11 @@ func assemble_movement_vector():
 func check_immediate_danger():
 	var weight = 10
 	
-	params.vec += vec_away_from_throwables * weight
+	params.vec += vec_away_from_throwables.normalized() * weight
 	params.weight += weight
 	
 	weight = 10
-	params.vec += vec_away_from_players * weight
+	params.vec += vec_away_from_players.normalized() * weight
 	params.weight += weight
 	
 	# optional niceties
@@ -232,7 +284,12 @@ func stock_resources():
 		var path = null
 		var counter = 0
 		while not path and counter < throwables_friendly.size():
-			path = get_path_to_target(throwables_friendly[counter].body.global_position)
+			var t = throwables_friendly[counter]
+			if t == last_chosen_throwable_target and ignore_best_option:
+				counter += 1 
+				continue
+			
+			path = get_path_to_target(t.body.global_position)
 			if path.size() < 2:
 				path = null
 			else:
@@ -242,13 +299,19 @@ func stock_resources():
 		
 		debug_path = path
 
-		my_weight = 5
+		my_weight = 2
 		if num_knives <= 0: my_weight = 12
 		
 		vec_to_throwable_resource = vec_to_closest
 	
 		params.vec += vec_to_closest * my_weight
 		params.weight += my_weight
+		
+		var new_throwable_target = closest_throwable
+		if path:
+			new_throwable_target = throwables_friendly[counter-1]
+		
+		last_chosen_throwable_target = new_throwable_target
 	
 	#
 	# If the mode has collectibles
@@ -263,26 +326,70 @@ func stock_resources():
 		var counter = 0
 		
 		while not path and counter < collectibles.size():
-			path = get_path_to_target(collectibles[counter].body.global_position)
+			var c = collectibles[counter]
+			if c == last_chosen_collectible and ignore_best_option: 
+				counter += 1
+				continue
+			
+			path = get_path_to_target(c.body.global_position)
 			if path.size() < 2:
 				path = null
 			else:
-				vec_to_closest = get_next_vec_on_path(path)
+				var new_vec = get_next_vec_on_path(path)
+				if new_vec.length() > 0.03:
+					vec_to_closest = new_vec
 			
 			counter += 1
-
+		
 		my_weight = 12
 		params.vec += vec_to_closest * my_weight
 		params.weight += my_weight
 		
 		vec_to_collectible = vec_to_closest
 		
+		var new_collectible_target = closest_collectible
+		if path:
+			new_collectible_target = collectibles[counter-1]
+		
+		last_chosen_collectible = new_collectible_target
+		
 		# TO DO: Not sure about this, ALWAYS prevent attack if collectible is known? Seems a bit too strong
 		params.prevent_attack = true
 	
-	# optional niceties
-	# (purposefully avoid/grab/slash powerups)
-	# TO DO
+	#
+	# If the mode has powerups, we go for good ones (if revealed)
+	#
+	var powerups = get_tree().get_nodes_in_group("PowerupsRevealed")
+	var away_from_bad_ps_vec : Vector2 = Vector2.ZERO
+	var away_weight : float = 0.0
+	
+	var toward_good_ps_vec : Vector2 = Vector2.ZERO
+	var toward_weight : float = 0.0
+	
+	if powerups.size() > 0:
+		powerups = sort_based_on_distance(powerups)
+		
+		for p in powerups:
+			if p.dist >= POWERUP_SENSOR_DIST: break
+			
+			var vec = p.vec
+			var weight = 1.0 - (p.dist / POWERUP_SENSOR_DIST)
+			if p.body.get_data().has('bad'):
+				away_from_bad_ps_vec += weight*-1*vec
+				away_weight += weight
+			else:
+				toward_good_ps_vec += weight*vec
+				toward_weight += weight
+		
+		if toward_weight > 0: toward_good_ps_vec /= toward_weight
+		if away_weight > 0: away_from_bad_ps_vec /= away_weight
+		
+		var overall_weight = 2.0
+		params.vec += away_from_bad_ps_vec.normalized()*overall_weight
+		params.weight += overall_weight 
+		
+		params.vec += toward_good_ps_vec.normalized()*overall_weight
+		params.weight += overall_weight 
 
 func get_next_vec_on_path(path):
 	var our_pos = body.global_position
@@ -339,14 +446,16 @@ func attack():
 		closest_target = targets[0]
 
 	# we move closer, up to a certain limit
-	var move_closer = true
+	# (if within that, move further away instead)
+	var move_type = 'closer'
+	var move_vec = closest_target.vec
 	if closest_target.dist < MIN_SEPARATION_WITH_TARGET:
-		move_closer = false
+		move_type = 'further'
+		move_vec *= -1
 	
-	if move_closer:
-		var my_weight = 1
-		params.vec += closest_target.vec*my_weight
-		params.weight += my_weight
+	var my_weight = 1
+	params.vec += move_vec*my_weight
+	params.weight += my_weight
 
 	# if we're throwing and close enough, THROW IT
 	if not cant_reach:
@@ -354,9 +463,11 @@ func attack():
 			if closest_target.dot >= 0.94:
 				params.release_button = true
 		
-		# if we're not throwing, but a suitable candidate exists? START THROWING
+		# if we're not throwing, but a suitable candidate exists?
+		# (within right aim and distance)
+		# START THROWING
 		else:
-			if closest_target.dot >= 0.4:
+			if closest_target.dot >= 0.4 and not move_type == 'further':
 				params.press_button = true
 	
 	var active_knife_rotation = body.modules.knives.get_first_knife().rotation
@@ -425,7 +536,7 @@ func go_around_obstacles(_dt):
 	}
 	
 	if unstuck_mode: 
-		params.final_vec = body.modules.mover.last_velocity
+		params.final_vec = unstuck_vec
 		return
 	if is_throwing: return
 	
@@ -457,7 +568,7 @@ func go_around_obstacles(_dt):
 	
 	var is_mostly_surrounded = (original_vec.dot(final_vec) < 0.8)
 	if is_mostly_surrounded:
-		enable_unstuck_mode()
+		enable_unstuck_mode(final_vec)
 	
 	params.final_vec = final_vec
 
@@ -481,9 +592,13 @@ func apply_chosen_input(dt):
 func get_all_throwables():
 	return get_tree().get_nodes_in_group("Throwables")
 
-func enable_unstuck_mode():
+func enable_unstuck_mode(vec):
 	$UnstuckTimer.start()
+	$OptionIgnoreTimer.start()
+	unstuck_vec = vec
 	unstuck_mode = true
+	
+	ignore_best_option = true
 
 func disable_unstuck_mode():
 	unstuck_mode = false
@@ -512,13 +627,18 @@ func _draw():
 func get_path_to_target(target_pos):
 	# NOTE: third parameter is optimize => has issues
 	var our_pos = body.global_position
-	var new_path = nav.get_simple_path(our_pos, target_pos)
+	var nav_data = nav.get_fitting_nav(body)
+	
+	var nav_poly = nav_data.poly
+	var nav_margin = nav_data.margin
+	
+	var new_path = nav_poly.get_simple_path(our_pos, target_pos)
 	
 	var max_tries = 10
 	var num_tries = 0
 	while path_contains_bounds(new_path) and num_tries < max_tries:
 		target_pos = 0.5*(our_pos + target_pos)
-		new_path = nav.get_simple_path(our_pos, target_pos)
+		new_path = nav_poly.get_simple_path(our_pos, target_pos)
 		num_tries += 1
 	
 	# if there's simply no path, return that
@@ -527,9 +647,9 @@ func get_path_to_target(target_pos):
 		return []
 	
 	# if we're going to end too far away from our wanted path, it's considered an invalid path
-	if (new_path[new_path.size()-1] - target_pos).length() > (nav.get_parent().BODY_SAFE_MARGIN + 10):
-		print("NO PATH POSSIBLE; too far away")
-		return []
+#	if (new_path[new_path.size()-1] - target_pos).length() > (nav_margin + 10):
+#		print("NO PATH POSSIBLE; too far away")
+#		return []
 	
 	return new_path
 	
@@ -583,3 +703,12 @@ func distance_sort(a,b):
 # (Because a HIGHER dot product means our knife vector is MORE CLOSELY ALIGNED, and thus better)
 func target_sort(a,b):
 	return a.dot > b.dot
+
+func _on_Mover_moved(amount):
+	movement_last_X_frames.append(amount)
+	
+	if movement_last_X_frames.size() >= IDLE_FRAMES_UNTIL_ACTION:
+		movement_last_X_frames.pop_front()
+
+func _on_OptionIgnoreTimer_timeout():
+	ignore_best_option = false

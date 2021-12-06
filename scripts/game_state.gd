@@ -106,6 +106,8 @@ func game_over(team_num):
 	handout_awards()
 	show_gameover_gui(team_num)
 	start_delay.game_over(team_num)
+	
+	if has_node("../AreaShrink"): get_node("../AreaShrink").game_over()
 
 func handout_awards():
 	# Step 1: create list of each statistic (val, player) and sort them

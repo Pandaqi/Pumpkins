@@ -10,10 +10,7 @@
 [sub_resource type="PhysicsMaterial" id=1]
 bounce = 0.7
 
-[node name="PlayerPart" type="RigidBody2D" groups=[
-"Parts",
-"Sliceables",
-]]
+[node name="PlayerPart" type="RigidBody2D" groups=["Parts", "Sliceables"]]
 collision_layer = 4
 collision_mask = 4
 physics_material_override = SubResource( 1 )
@@ -31,10 +28,9 @@ script = ExtResource( 2 )
 [node name="Drawer" type="Node2D" parent="."]
 light_mask = 3
 script = ExtResource( 1 )
+use_outline = false
 
-[node name="ShadowLocation" type="Node2D" parent="." groups=[
-"ShadowMakers",
-]]
+[node name="ShadowLocation" type="Node2D" parent="." groups=["ShadowMakers"]]
 script = ExtResource( 5 )
 
 [node name="Fader" type="Node" parent="."]

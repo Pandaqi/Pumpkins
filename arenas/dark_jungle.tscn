@@ -64,9 +64,7 @@ centered = false
 [node name="Poles" type="Node2D" parent="Map/Entities" index="3"]
 position = Vector2( 0, -1 )
 
-[node name="Pole" type="StaticBody2D" parent="Map/Entities/Poles" index="0" groups=[
-"Stuckables",
-]]
+[node name="Pole" type="StaticBody2D" parent="Map/Entities/Poles" index="0" groups=["Stuckables"]]
 position = Vector2( 970, 325 )
 collision_layer = 5
 collision_mask = 5
@@ -79,9 +77,7 @@ light_mask = 2
 occluder = SubResource( 1 )
 light_mask = 2
 
-[node name="Pole2" type="StaticBody2D" parent="Map/Entities/Poles" index="1" groups=[
-"Stuckables",
-]]
+[node name="Pole2" type="StaticBody2D" parent="Map/Entities/Poles" index="1" groups=["Stuckables"]]
 position = Vector2( 1154.9, 268.404 )
 collision_layer = 5
 collision_mask = 5
@@ -95,9 +91,7 @@ position = Vector2( -0.746094, 0.256073 )
 occluder = SubResource( 2 )
 light_mask = 2
 
-[node name="Pole3" type="StaticBody2D" parent="Map/Entities/Poles" index="2" groups=[
-"Stuckables",
-]]
+[node name="Pole3" type="StaticBody2D" parent="Map/Entities/Poles" index="2" groups=["Stuckables"]]
 position = Vector2( 1143.38, 704.393 )
 collision_layer = 5
 collision_mask = 5
@@ -111,9 +105,7 @@ position = Vector2( -0.996338, 8.2605 )
 occluder = SubResource( 3 )
 light_mask = 2
 
-[node name="Pole4" type="StaticBody2D" parent="Map/Entities/Poles" index="3" groups=[
-"Stuckables",
-]]
+[node name="Pole4" type="StaticBody2D" parent="Map/Entities/Poles" index="3" groups=["Stuckables"]]
 position = Vector2( 968.88, 644.393 )
 collision_layer = 5
 collision_mask = 5
@@ -127,9 +119,7 @@ position = Vector2( 1.96082, 2.67059 )
 occluder = SubResource( 4 )
 light_mask = 2
 
-[node name="Pole5" type="StaticBody2D" parent="Map/Entities/Poles" index="4" groups=[
-"Stuckables",
-]]
+[node name="Pole5" type="StaticBody2D" parent="Map/Entities/Poles" index="4" groups=["Stuckables"]]
 position = Vector2( 1043.13, 820.005 )
 collision_layer = 5
 collision_mask = 5
@@ -143,9 +133,7 @@ position = Vector2( -11.7468, -5.60345 )
 occluder = SubResource( 5 )
 light_mask = 2
 
-[node name="Pole6" type="StaticBody2D" parent="Map/Entities/Poles" index="5" groups=[
-"Stuckables",
-]]
+[node name="Pole6" type="StaticBody2D" parent="Map/Entities/Poles" index="5" groups=["Stuckables"]]
 position = Vector2( 541.958, 801.505 )
 collision_layer = 5
 collision_mask = 5
@@ -159,9 +147,7 @@ position = Vector2( 0.0256348, 0.282837 )
 occluder = SubResource( 6 )
 light_mask = 2
 
-[node name="Pole7" type="StaticBody2D" parent="Map/Entities/Poles" index="6" groups=[
-"Stuckables",
-]]
+[node name="Pole7" type="StaticBody2D" parent="Map/Entities/Poles" index="6" groups=["Stuckables"]]
 position = Vector2( 643.707, 924.276 )
 collision_layer = 5
 collision_mask = 5
@@ -440,9 +426,7 @@ position = Vector2( -452.402, -13.4543 )
 occluder = SubResource( 10 )
 light_mask = 2
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Map/Overlay" index="4" groups=[
-"Stuckables",
-]]
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/Overlay" index="4" groups=["Stuckables"]]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D" index="0"]
 position = Vector2( 36.1675, 1050.1 )

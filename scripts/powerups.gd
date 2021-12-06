@@ -16,6 +16,9 @@ onready var spawner = get_node("/root/Main/Spawner")
 onready var throwables = get_node("/root/Main/Throwables")
 onready var mode = get_node("/root/Main/ModeManager")
 
+onready var auto_reveal_timer = $AutoRevealTimer
+var forced_slices = []
+
 var powerup_scene = preload("res://scenes/powerup.tscn")
 
 var available_powerups = []
@@ -80,7 +83,10 @@ func get_random_type():
 		if GlobalDict.powerups[key].weight >= target:
 			return key
 
-func place_powerup(cur_num_powerups):
+func place_powerup(cur_num_powerups = 0, forced_params = {}):
+	var not_initialized_yet = (not placement_params)
+	if not_initialized_yet: return
+	
 	var p = powerup_scene.instance()
 	
 	var pos = spawner.get_valid_pos(placement_params)
@@ -100,6 +106,10 @@ func place_powerup(cur_num_powerups):
 	if not rand_type: rand_type = "knife" # if all else fails, default to just giving more knives
 	
 	var params = check_required_type(rand_type, is_throwable)
+	
+	if forced_params.has('make_knife'):
+		params.is_throwable = true
+		params.rand_type = 'knife'
 
 	p.set_throwable(params.is_throwable)
 	p.set_type(params.rand_type)
@@ -108,6 +118,11 @@ func place_powerup(cur_num_powerups):
 	p.set_shape(rand_shape)
 	
 	tween_bounce_appear(p)
+	
+	if forced_params.has('immediate_slice'):
+		auto_reveal_timer.wait_time = 0.2
+		auto_reveal_timer.start()
+		forced_slices.append(p)
 
 func check_required_type(rand_type, is_throwable):
 	var params = {
@@ -164,6 +179,13 @@ func _on_AutoRevealTimer_timeout():
 	var ps = get_tree().get_nodes_in_group("PowerupsUnrevealed")
 	if ps.size() <= 0: return
 	if not GlobalDict.cfg.auto_slice_powerups: return
+
+	if forced_slices.size() > 0:
+		for s in forced_slices:
+			if not s or not is_instance_valid(s): continue
+			s.auto_slice()
+		forced_slices = []
+		return
 	
 	var rand_powerup = ps[randi() % ps.size()]
 	rand_powerup.auto_slice()

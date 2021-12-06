@@ -6,10 +6,7 @@
 [ext_resource path="res://scripts/modules/module_flat_color_drawer.gd" type="Script" id=4]
 [ext_resource path="res://scripts/modules/module_navigation.gd" type="Script" id=5]
 
-[node name="Vine" type="StaticBody2D" groups=[
-"IgnoreNavs",
-"Sliceables",
-]]
+[node name="Vine" type="StaticBody2D" groups=["IgnoreNavs", "Sliceables"]]
 position = Vector2( 93.1978, 520.706 )
 rotation = 1.32401
 script = ExtResource( 2 )
@@ -22,6 +19,8 @@ texture = ExtResource( 1 )
 
 [node name="Status" type="Node2D" parent="."]
 script = ExtResource( 3 )
+REGROW_DURATION = 20
+MAX_REGROWS = Vector2( 1, 2 )
 
 [node name="RegrowTimer" type="Timer" parent="Status"]
 wait_time = 8.0

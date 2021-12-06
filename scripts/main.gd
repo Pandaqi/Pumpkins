@@ -9,6 +9,7 @@ onready var arena = $ArenaLoader
 onready var mode = $ModeManager
 onready var navigation = $Navigation
 onready var start_delay = $StartDelay
+onready var area_shrink = $AreaShrink
 onready var map = $Map
 
 var game_officially_started : bool = false
@@ -28,6 +29,7 @@ func _ready():
 	powerups.activate()
 	game_state.activate()
 	
+	area_shrink.activate()
 	start_delay.activate()
 	
 	if not GlobalDict.cfg.light_effects:
@@ -60,5 +62,5 @@ func player_died(node, num):
 	players.player_died(node)
 	game_state.player_died(num)
 
-func player_progression(node, num):
+func player_progression(_node, num):
 	game_state.player_progression(num)

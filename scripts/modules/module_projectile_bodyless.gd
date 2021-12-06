@@ -56,11 +56,14 @@ func poll_front_raycast():
 		handled = slice_through_body(hit_body)
 	
 	if body.modules.status.type == "ghost_knife": 
-		if handled and hit_body.is_in_group("Players"): body.queue_free()
+		var ghost_knife_random_removal_prob = 0.05 # to prevent ghost knives from lingering around too long and be annoying
+		if handled and (hit_body.is_in_group("Players") or randf() <= ghost_knife_random_removal_prob):
+			body.queue_free()
 		return
 	
 	if handled: 
-		if hit_body.is_in_group("ThrowableDeleters"): body.queue_free()
+		if hit_body.is_in_group("ThrowableDeleters"): 
+			body.modules.status.delete()
 		return
 	
 	if hit_body.is_in_group("Stuckables"):
@@ -156,11 +159,19 @@ func check_repellant_powerup(obj):
 	return true
 
 func slice_through_body(obj):
+	var is_player = obj.is_in_group("Players")
+	
 	# projectiles with a real body can NEVER slice something
 	if body.modules.fakebody.has_real_body: return false
 	
+	# an invincible player obviously also cannot be sliced
+	# TO DO: might give issues when someone isn't sliced at first, yet then becomes vincible again while knife is inside??
+	if is_player and obj.modules.specialstatus.invincibility.is_invincible: 
+		particles.general_feedback(body.global_position, "Invincible!")
+		return false
+	
 	# if the object has the same (team) owner as the throwable, never slice
-	if obj.is_in_group("Players") and obj.modules.knives.is_mine(body): return false
+	if is_player and obj.modules.knives.is_mine(body): return false
 	
 	# if the object is also in the stuckables group, only make slicing succesful if speed high enough
 	if obj.is_in_group("Stuckables") and not body.modules.mover.at_high_speed(): return false
@@ -168,7 +179,7 @@ func slice_through_body(obj):
 	# if the distance traveled was too low, tell player that, do nothing
 	# (only applicable to players, as using it on powerups/environment as well would just be annoying)
 	var dist_traveled = body.modules.distancetracker.calculate()
-	if obj.is_in_group("Players"):
+	if is_player and GlobalDict.cfg.deflect_knives_if_too_close:
 		if dist_traveled < MIN_DIST_BEFORE_SLICE:
 			particles.general_feedback(body.global_position, "Too close!")
 			return false
@@ -194,7 +205,7 @@ func slice_through_body(obj):
 	# so make sure we invalidate any info afterwards
 	body.modules.fakebody.reset_all()
 	
-	var hit_a_player = obj.is_in_group("Players")
+	var hit_a_player = is_player
 	var my_owner = body.modules.owner.get_owner()
 	var result = slicer.slice_bodies_hitting_line(start, end, [], [obj], body)
 	if result.size() <= 0: return false
@@ -242,3 +253,7 @@ func deflect(res):
 	body.modules.mover.set_velocity(VELOCITY_LEFT_AFTER_DEFLECTION*new_vel)
 	
 	last_deflection_time = OS.get_ticks_msec()
+	
+	var hit_body = res.collider
+	if hit_body.script and hit_body.has_method("on_deflect"):
+		hit_body.on_deflect(body)

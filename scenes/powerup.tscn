@@ -26,21 +26,13 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[node name="Powerup" type="StaticBody2D" groups=[
-"Powerups",
-"PowerupsUnrevealed",
-"Pullables",
-"Sliceables",
-]]
+[node name="Powerup" type="StaticBody2D" groups=["Powerups", "PowerupsUnrevealed", "Pullables", "Sliceables"]]
 position = Vector2( 1020.85, 410.357 )
 collision_layer = 8
 collision_mask = 8
 script = ExtResource( 3 )
 
-[node name="RevealedPowerup" type="Node2D" parent="." groups=[
-"Powerups",
-"PowerupsRevealed",
-]]
+[node name="RevealedPowerup" type="Node2D" parent="." groups=["Powerups", "PowerupsRevealed"]]
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="RevealedPowerup"]
@@ -68,9 +60,7 @@ vframes = 3
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
 
-[node name="ShadowLocation" type="Node2D" parent="." groups=[
-"ShadowMakers",
-]]
+[node name="ShadowLocation" type="Node2D" parent="." groups=["ShadowMakers"]]
 script = ExtResource( 5 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

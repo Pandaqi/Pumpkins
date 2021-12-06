@@ -1,8 +1,15 @@
 extends Node2D
 
-const BODY_SAFE_MARGIN : float = 35.0
+var cur_margin
+var MARGINS = {
+	'small': 20,
+	'medium': 35,
+	'big': 50
+}
 
-onready var nav_2d = $Navigation2D
+onready var nav_small = $Small
+onready var nav_medium = $Medium
+onready var nav_big = $Big
 onready var map = get_node("../Map")
 
 var polygons = []
@@ -13,21 +20,37 @@ var debug_draw : bool = false
 var full_screen_poly = PoolVector2Array([Vector2(0,0), Vector2(1920, 0), Vector2(1920, 1080), Vector2(0, 1080)])
 
 func activate():
-	build_navigation_mesh()
+	build_navigation_mesh(nav_small, 'small')
+	build_navigation_mesh(nav_medium, 'medium')
+	build_navigation_mesh(nav_big, 'big')
 
-func move_into_bounds(p):
-	var epsilon = 0.01
-	if p.x <= 1.0 + epsilon:
-		p.x = 1.0 + epsilon
-	elif p.x >= 1920.0 - 1.0 - epsilon:
-		p.x = 1920.0 - 1.0 - epsilon
+func get_fitting_nav(body):
+	var largest_size = body.modules.shaper.get_largest_side()
 	
-	if p.y <= 1.0 + epsilon:
-		p.y = 1.0 + epsilon
-	elif p.y >= 1080.0 - 1.0 - epsilon:
-		p.y = 1080.0 - 1.0 - epsilon
+	if debug_draw:
+		nav_small.set_visible(false)
+		nav_medium.set_visible(false)
+		nav_big.set_visible(false)
 	
-	return p
+	var padding = 5
+	var poly
+	var margin
+	if largest_size <= MARGINS.small + padding:
+		poly = nav_small
+		margin = MARGINS.small
+	elif largest_size <= MARGINS.medium + padding:
+		poly = nav_medium
+		margin = MARGINS.medium
+	else:
+		poly = nav_big
+		margin = MARGINS.big
+	
+	if debug_draw: poly.set_visible(true)
+	
+	return {
+		'poly': poly,
+		'margin': margin
+	}
 
 func scale_shape(shape, val : float = 1.0):
 	return Geometry.offset_polygon_2d(shape, val)[0]
@@ -74,13 +97,13 @@ func convert_body_into_nav_mesh(node):
 	if is_col_shape:
 		var col_shape = node.shape
 		if col_shape is CircleShape2D:
-			polygon = make_global(scale_shape(create_circle_polygon(col_shape.radius), BODY_SAFE_MARGIN), trans)
+			polygon = make_global(scale_shape(create_circle_polygon(col_shape.radius), cur_margin), trans)
 		
 		elif col_shape is RectangleShape2D:
-			polygon = make_global(scale_shape(create_rect_polygon(col_shape.extents), BODY_SAFE_MARGIN), trans)
+			polygon = make_global(scale_shape(create_rect_polygon(col_shape.extents), cur_margin), trans)
 			
 	elif is_col_poly:
-		polygon = make_global(scale_shape(node.polygon, BODY_SAFE_MARGIN), trans)
+		polygon = make_global(scale_shape(node.polygon, cur_margin), trans)
 	
 	polygon = PoolVector2Array(polygon)
 	
@@ -90,11 +113,6 @@ func convert_body_into_nav_mesh(node):
 		'body': node.get_parent()
 	}
 	polygons.append(obj)
-
-func keep_shape_within_bounds(shp):
-	for i in range(shp.size()):
-		shp[i] = move_into_bounds(shp[i])
-	return shp
 
 func cut_holes_in_mesh(nav_poly):
 	var index = 0
@@ -151,9 +169,11 @@ func cut_offscreen_bits():
 
 		polygons[i].poly = Geometry.offset_polygon_2d(intersect_polys[0], -0.2)[0]
 
-func build_navigation_mesh():
+func build_navigation_mesh(container, size):
 	var nav_poly_node = NavigationPolygonInstance.new()
 	var nav_poly = NavigationPolygon.new()
+	
+	cur_margin = MARGINS[size]
 	
 	var full_screen = full_screen_poly
 	nav_poly.add_outline(full_screen)
@@ -165,7 +185,7 @@ func build_navigation_mesh():
 	
 	nav_poly.make_polygons_from_outlines()
 	nav_poly_node.navpoly = nav_poly
-	nav_2d.add_child(nav_poly_node)
+	container.add_child(nav_poly_node)
 	
 	update()
 

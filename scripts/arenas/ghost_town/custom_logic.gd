@@ -13,6 +13,8 @@ onready var throwables = get_node("/root/Main/Throwables")
 onready var timer = $Timer
 onready var tween = $Tween
 
+const LENGTH_OF_DAY = 26.0
+
 var dead_players = []
 
 func activate():
@@ -23,6 +25,7 @@ func activate():
 	is_day = false
 	change_mode()
 	
+	timer.wait_time = LENGTH_OF_DAY
 	timer.start()
 
 func on_player_death(p) -> Dictionary:
@@ -81,7 +84,13 @@ func make_ghost_knives_appear():
 	ghost_knives = []
 	
 	# make them appear
-	for pos in cave_positions:
+	var temp_pos = cave_positions + []
+	temp_pos.shuffle()
+	
+	var num_knives = 1 + randi() % (temp_pos.size())
+	
+	for i in range(num_knives):
+		var pos = temp_pos[i]
 		var gk = throwables.create("ghost_knife")
 		gk.set_position(pos)
 		ghost_knives.append(gk)

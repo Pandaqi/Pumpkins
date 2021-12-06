@@ -2,6 +2,7 @@ extends Node2D
 
 onready var teleport_timer = $TeleportTimer
 onready var body = get_parent()
+onready var particles = get_node("/root/Main/Particles")
 
 var forced_teleport_allowed : bool = true
 
@@ -13,6 +14,8 @@ func teleport(pos):
 	
 	teleport_timer.start()
 	forced_teleport_allowed = false
+	
+	particles.general_feedback(body.global_position, "Teleport!")
 
 # NOTE: we use "set_deferred" to ensure this triggers AFTER the "body_enter" signal on the other teleport
 # (as this variable will now only reset at the END of this frame)

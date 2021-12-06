@@ -1,13 +1,13 @@
 extends Node2D
 
-func get_valid_pos(params):
+func get_valid_pos(params = {}):
 	var pos
 	var bad_choice = true
 	var num_tries = 0
 	var max_tries = 600
 	
 	while bad_choice:
-		pos = get_random_inner_position()
+		pos = get_random_inner_position(params)
 		num_tries += 1
 		
 		if params.has('body_radius'):
@@ -22,6 +22,9 @@ func get_valid_pos(params):
 		if params.has('avoid_targets'):
 			if num_tries < 300 and too_close_to_group(pos, params.avoid_targets, "Targets"): continue
 		
+		if params.has('avoid_group'):
+			if num_tries < 300 and too_close_to_group(pos, params.avoid_group_dist, params.avoid_group): continue
+		
 		bad_choice = false
 		
 		if num_tries >= max_tries: break
@@ -32,8 +35,11 @@ func out_of_bounds(pos):
 	var margin = 30
 	return pos.x < margin or pos.x > (1920.0 - margin) or pos.y < margin or pos.y > (1080.0 - margin)
 
-func get_random_inner_position():
+func get_random_inner_position(params = {}):
 	var edge_margin = 60
+	if params.has('edge_margin'):
+		edge_margin = params.edge_margin
+	
 	var vp_without_edge = Vector2(1920-2*edge_margin,1080-2*edge_margin) 
 	return Vector2(randf(), randf())*vp_without_edge + Vector2(1,1)*edge_margin
 

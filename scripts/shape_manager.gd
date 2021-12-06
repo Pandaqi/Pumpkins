@@ -1,7 +1,6 @@
 extends Node
 
-const PREDEFINED_SHAPE_SIZE : float = 100.0
-const STARTING_PLAYER_MAX_SIZE : float = 100.0
+var STARTING_PLAYER_SIZE : float = 140.0
 
 var predefined_shape_scene = preload("res://scenes/predefined_shape_list.tscn")
 var available_shapes = []
@@ -9,11 +8,21 @@ var available_shapes = []
 var pumpkin_shape_scene = preload("res://PumpkinShapes.tscn")
 var pumpkin_shapes = []
 
+onready var players = get_node("/root/Main/Players")
+
 func activate():
+	determine_starting_size()
+	
 	load_predefined_shapes()
 	load_pumpkin_shapes()
 	
 	available_shapes = GlobalDict.predefined_shapes.keys()
+
+func determine_starting_size():
+	var num_players = players.count_total_num_players()
+	var threshold = 4
+	if num_players > threshold:
+		STARTING_PLAYER_SIZE -= 10.0*(num_players - threshold)
 
 func load_pumpkin_shapes():
 	var arr = []
@@ -21,7 +30,7 @@ func load_pumpkin_shapes():
 	var ps = pumpkin_shape_scene.instance()
 	for child in ps.get_children():
 		if not (child is CollisionPolygon2D): continue
-		arr.append(scale_shape_absolutely(Array(child.polygon), STARTING_PLAYER_MAX_SIZE))
+		arr.append(scale_shape_absolutely(Array(child.polygon), STARTING_PLAYER_SIZE))
 		
 	pumpkin_shapes = arr
 
@@ -37,7 +46,7 @@ func get_random_shape():
 # Predefined shapes
 func load_predefined_shapes():
 	var list = predefined_shape_scene.instance()
-	var shape_size = PREDEFINED_SHAPE_SIZE
+	var shape_size = STARTING_PLAYER_SIZE
 	
 	# ModeManager not loaded yet, need to grab it this way
 	var mode_data = GlobalDict.modes[GlobalDict.cfg.game_mode]

@@ -8,7 +8,7 @@ var base_cfg = {
 	
 	'use_cartoony_coloring': true,
 	
-	'max_players': 6,
+	'max_players': 8,
 	'auto_pickup_powerups': false,
 	'auto_slice_powerups': true,
 	
@@ -25,6 +25,20 @@ var base_cfg = {
 	'add_default_settings_buttons': true,
 	
 	'predefined_powerup_locations': null,
+	
+	# version 2 improvement settings
+	'invincibility_after_hit': true,
+	'invincibility_depends_on_distance': true,
+	
+	'stun_after_hit': true,
+	'stun_depends_on_distance': true,
+	
+	'move_faster_if_close': false,
+	'scale_damage_with_distance': false, # TO DO: check the rules I'd already implemented for this, put them behind this toggle and modify
+	'repel_instead_of_throw_when_close': false,
+	'deflect_knives_if_too_close': true,
+	'limit_fire_rate': true,
+	
 }
 
 var cfg = {}
@@ -36,7 +50,7 @@ var modes = {
 
 	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 20, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3, "max_teams": 4 },
 	
-	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 5, "max_knife_capacity": 5, "collectible_group": "Dumplings", "inverse_dumpling_behaviour": true, "required_throwable_type": "dumpling" },
+	"frightening_feast": { "frame": 3, "win": "collection", "target_num": 5, "max_knife_capacity": 5, "collectible_group": "Dumplings", "inverse_dumpling_behaviour": true, "required_throwable_type": "dumpling", "fade_rubble": true },
 	
 	"dwarfing_dumplings": { "frame": 4, "win": "survival", "fade_rubble": true, "target_group": "Dumplings", "players_can_die": true, "max_teams": 3, "starting_shape_scale": 0.66, "required_throwable_type": "dumpling", "respawn_on_death": true },
 	
@@ -60,9 +74,9 @@ var arenas = {
 var configurable_settings = {
 	"tutorial": { "frame": 0, "def": true, "ignore_default_buttons": true },
 	"aim_helper": { "frame": 1, "def": false },
-	"knife_always_in_front": { "frame": 2, "def": false },
+	"knife_always_in_front": { "frame": 2, "def": true },
 	"disable_flashing_effects": { "frame": 3, "def": false },
-	"shrink_area": { "frame": 4, "def": false },
+	"shrink_area": { "frame": 4, "def": true },
 	"show_guides": { "frame": 5, "def": true },
 	"everyone_starts_pumpkin": { "frame": 6, "def": false },
 	"stuck_reset": { "frame": 7, "def": true },
@@ -72,11 +86,11 @@ var configurable_settings = {
 
 var throwables = {
 	"knife": { "body": false, "owner": "auto", "base_frame": 0, "frame": 0, "def": true, "prob": 5, "category": "knife" },
-	"boomerang": { "body": false, "owner": "auto", "base_frame": 9, "frame": 1, "prob": 3, "def": true, "category": "knife" },
+	"boomerang": { "body": false, "owner": "auto", "base_frame": 9, "frame": 1, "prob": 3, "def": false, "category": "knife" },
 	"curve": { "body": false, "owner": "auto", "base_frame": 18, "frame": 2, "prob": 2, "category": "knife" },
 	"ghost_knife": { "body": false, "owner": "hostile", "base_frame": 27, "frame": 3, "category": "knife" },
 	
-	"dumpling": { "body": true, "owner": "friendly", "base_frame": 28, "prob": 4, "frame": 4, "category": "dumpling", "def": true }, 
+	"dumpling": { "body": true, "owner": "friendly", "base_frame": 28, "prob": 4, "frame": 4, "category": "dumpling", "def": false }, 
 	"dumpling_poisoned": { "body": true, "owner": "friendly", "base_frame": 29, "prob": 2, "frame": 5, "category": "dumpling" },
 	"dumpling_double": { "body": true, "owner": "friendly", "base_frame": 30, "frame": 6, "category": "dumpling" },
 	"dumpling_downgrade": { "body": true, "owner": "friendly", "base_frame": 31, "frame": 7, "category": "dumpling" },
@@ -138,7 +152,7 @@ var predefined_shapes = {
 
 var powerups = {
 	"grow": { "frame": 0, "category": "shape", "prob": 5 },
-	"shrink": { "frame": 1, "category": "shape", "prob": 5 },
+	"shrink": { "frame": 1, "category": "shape", "prob": 5, "bad": true },
 	"morph": { "frame": 2, "category": "shape" },
 	"ghost": { "frame": 3, "temporary": true, "category": "shape" },
 	"hungry": { "frame": 4, "temporary": true, "category": "shape" },
@@ -146,18 +160,18 @@ var powerups = {
 	#"grow_range": { "frame": 5, "category": "slashing" },
 	#"shrink_range": { "frame": 6, "category": "slashing" },
 	"repel_knives": { "frame": 7, "temporary": true, "category": "slashing", "prob": 3 },
-	"lose_knife": { "frame": 8, "category": "slashing" },
-	"faster_throw": { "frame": 11, "category": "slashing" },
-	"slower_throw": { "frame": 12, "category": "slashing"},
+	"lose_knife": { "frame": 8, "category": "slashing", "bad": true },
+	"faster_throw": { "frame": 11, "temporary": true, "category": "slashing" },
+	"slower_throw": { "frame": 12, "temporary": true, "category": "slashing", "bad": true },
 	
-	"faster_move": { "frame": 13, "category": "moving" },
-	"slower_move": { "frame": 14, "category": "moving" },
-	"reversed_controls": { "frame": 15, "temporary": true, "category": "moving" },
-	"ice": { "frame": 16, "temporary": true, "category": "moving" },
+	"faster_move": { "frame": 13, "temporary": true, "category": "moving" },
+	"slower_move": { "frame": 14, "temporary": true, "category": "moving", "bad": true },
+	"reversed_controls": { "frame": 15, "temporary": true, "category": "moving", "bad": true },
+	"ice": { "frame": 16, "temporary": true, "category": "moving", "bad": true },
 	
 	"magnet": { "frame": 17, "temporary": true, "category": "collecting" },
 	"duplicator": { "frame": 18, "temporary": true, "category": "collecting" },
-	"clueless": { "frame": 19, "temporary": true, "category": "collecting" },
+	"clueless": { "frame": 19, "temporary": true, "category": "collecting", "bad": true },
 	"auto_unwrap": { "frame": 20, "temporary": true, "category": "collecting" },
 }
 

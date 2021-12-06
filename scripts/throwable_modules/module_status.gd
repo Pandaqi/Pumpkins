@@ -14,6 +14,7 @@ var forbidden_node = null
 
 onready var body = get_parent()
 onready var sprite = get_node("../Sprite")
+onready var throwables = get_node("/root/Main/Throwables")
 
 func set_type(tp):
 	type = tp
@@ -88,3 +89,7 @@ func exit_water():
 
 func react_to_areas():
 	return not being_held
+
+func delete():
+	throwables.change_count(-1)
+	body.queue_free()

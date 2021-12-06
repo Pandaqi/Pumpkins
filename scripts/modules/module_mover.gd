@@ -1,6 +1,6 @@
 extends Node
 
-const MOVE_SPEED : float = 320.0
+const MOVE_SPEED : float = 300.0
 const SLIDY_MOVEMENT_DAMPING : float = 0.996
 var speed_multiplier : float = 1.0
 
@@ -18,12 +18,14 @@ var state = "stopped"
 var last_velocity : Vector2
 var move_audio_player = null
 
+var ideal_movement_per_frame
+
 signal movement_stopped()
 signal movement_started()
 
 signal moved(amount)
 
-func _on_Input_move_vec(vec : Vector2, _dt : float):
+func _on_Input_move_vec(vec : Vector2, dt : float):
 	if not moving_enabled and GlobalDict.cfg.use_slidy_throwing:
 		continue_on_last_velocity()
 		return
@@ -42,7 +44,7 @@ func _on_Input_move_vec(vec : Vector2, _dt : float):
 	
 	if reversed: vec *= -1
 	
-	move_regular(vec)
+	move_regular(vec, dt)
 	
 	if not move_audio_player or not is_instance_valid(move_audio_player):
 		create_move_audio()
@@ -71,7 +73,7 @@ func continue_on_last_velocity():
 	body.move_and_slide(last_velocity)
 	last_velocity *= SLIDY_MOVEMENT_DAMPING
 
-func move_regular(vec):
+func move_regular(vec, dt):
 	body.slowly_orient_towards_vec(vec)
 	
 	var in_water = body.modules.status.in_water
@@ -87,6 +89,8 @@ func move_regular(vec):
 	
 	var final_speed = speed_multiplier*MOVE_SPEED*speed_penalty_for_size*speed_penalty_water
 	var final_vec = forward_vec*final_speed
+	
+	ideal_movement_per_frame = (final_vec * dt).length()
 	
 	var old_pos = body.get_global_position()
 	
@@ -110,6 +114,15 @@ func disable():
 
 func enable():
 	moving_enabled = true
+
+func force_disable():
+	force_move_override = true
+	last_velocity = Vector2.ZERO
+	disable()
+
+func force_enable():
+	force_move_override = false
+	enable()
 
 func _on_Input_button_press():
 	if force_move_override: return

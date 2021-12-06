@@ -26,4 +26,4 @@ func shoot_boulder():
 	b.set_direction(Vector2.LEFT)
 	map.entities.add_child(b)
 	
-	wall.bodies_created.append(b)
+	wall.register_body(b)

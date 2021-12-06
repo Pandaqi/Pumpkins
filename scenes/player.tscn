@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=2]
@@ -33,6 +33,11 @@
 [ext_resource path="res://scenes/modules/teleporter.tscn" type="PackedScene" id=31]
 [ext_resource path="res://scripts/modules/module_respawner.gd" type="Script" id=32]
 [ext_resource path="res://assets/particles/water_circle.png" type="Texture" id=33]
+[ext_resource path="res://scripts/modules/module_reloader.gd" type="Script" id=34]
+[ext_resource path="res://scenes/outline_progress.tscn" type="PackedScene" id=35]
+[ext_resource path="res://scripts/modules/module_invincibility.gd" type="Script" id=36]
+[ext_resource path="res://scripts/modules/module_specialstatus.gd" type="Script" id=37]
+[ext_resource path="res://scripts/modules/module_stun.gd" type="Script" id=38]
 
 [sub_resource type="Animation" id=15]
 length = 0.001
@@ -65,6 +70,9 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.498039 ) ]
 }
+
+[sub_resource type="CircleShape2D" id=24]
+radius = 94.5086
 
 [sub_resource type="Shader" id=13]
 code = "shader_type canvas_item;
@@ -319,12 +327,7 @@ tracks/0/keys = {
 "values": [ 0.5 ]
 }
 
-[node name="Player" type="KinematicBody2D" groups=[
-"Grabbers",
-"KeepAlives",
-"Players",
-"Sliceables",
-]]
+[node name="Player" type="KinematicBody2D" groups=["Grabbers", "KeepAlives", "Players", "Sliceables"]]
 collision_layer = 67
 collision_mask = 3
 script = ExtResource( 5 )
@@ -336,6 +339,27 @@ polygon = PoolVector2Array( -0.173355, -15.0607, -14.3155, -3.39339, -15.0226, 7
 
 [node name="Status" type="Node" parent="."]
 script = ExtResource( 2 )
+
+[node name="SpecialStatus" type="Node2D" parent="."]
+position = Vector2( 0, 1 )
+script = ExtResource( 37 )
+
+[node name="Invincibility" type="Node2D" parent="SpecialStatus"]
+position = Vector2( 0, -1 )
+script = ExtResource( 36 )
+
+[node name="Timer" type="Timer" parent="SpecialStatus/Invincibility"]
+one_shot = true
+
+[node name="Stun" type="Node2D" parent="SpecialStatus"]
+position = Vector2( 0, -1 )
+script = ExtResource( 38 )
+
+[node name="Timer" type="Timer" parent="SpecialStatus/Stun"]
+one_shot = true
+
+[node name="OutlineProgress" parent="SpecialStatus/Stun" instance=ExtResource( 35 )]
+color = Color( 0.933333, 1, 0.145098, 1 )
 
 [node name="Respawner" type="Node2D" parent="."]
 script = ExtResource( 32 )
@@ -364,6 +388,15 @@ script = ExtResource( 19 )
 wait_time = 0.4
 one_shot = true
 
+[node name="OptionIgnoreTimer" type="Timer" parent="Bot"]
+wait_time = 2.0
+one_shot = true
+
+[node name="Area2D" type="Area2D" parent="Bot"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bot/Area2D"]
+shape = SubResource( 24 )
+
 [node name="Mover" type="Node" parent="."]
 script = ExtResource( 7 )
 
@@ -387,6 +420,14 @@ modulate = Color( 1, 1, 1, 0.403922 )
 [node name="Sprite" type="Sprite" parent="Knives/AutoThrow"]
 texture = ExtResource( 23 )
 
+[node name="Reloader" type="Node2D" parent="Knives"]
+script = ExtResource( 34 )
+
+[node name="Timer" type="Timer" parent="Knives/Reloader"]
+one_shot = true
+
+[node name="OutlineProgress" parent="Knives/Reloader" instance=ExtResource( 35 )]
+
 [node name="Shaper" type="Node" parent="."]
 script = ExtResource( 3 )
 
@@ -407,6 +448,7 @@ script = ExtResource( 14 )
 [node name="Drawer" type="Node2D" parent="."]
 light_mask = 3
 script = ExtResource( 1 )
+is_player = true
 
 [node name="Slasher" type="Node2D" parent="."]
 script = ExtResource( 4 )
@@ -453,12 +495,12 @@ script = ExtResource( 26 )
 [node name="Node2D" type="Node2D" parent="Tutorial"]
 
 [node name="BG" type="Sprite" parent="Tutorial/Node2D"]
-scale = Vector2( 0.25, 0.25 )
+scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 27 )
 hframes = 4
 
 [node name="Sprite" type="Sprite" parent="Tutorial/Node2D"]
-scale = Vector2( 0.25, 0.25 )
+scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 25 )
 hframes = 5
 vframes = 3
@@ -494,9 +536,7 @@ collision_mask = 15
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collector/MagnetArea"]
 shape = SubResource( 2 )
 
-[node name="ShadowLocation" type="Node2D" parent="." groups=[
-"ShadowMakers",
-]]
+[node name="ShadowLocation" type="Node2D" parent="." groups=["ShadowMakers"]]
 script = ExtResource( 18 )
 extents = Vector2( 100, 20 )
 
@@ -538,6 +578,8 @@ autoplay = "LightFLicker"
 anims/LightFLicker = SubResource( 8 )
 anims/RESET = SubResource( 9 )
 
+[connection signal="timeout" from="SpecialStatus/Invincibility/Timer" to="SpecialStatus/Invincibility" method="_on_Timer_timeout"]
+[connection signal="timeout" from="SpecialStatus/Stun/Timer" to="SpecialStatus/Stun" method="_on_Timer_timeout"]
 [connection signal="timeout" from="Respawner/RespawnTimer" to="Respawner" method="_on_RespawnTimer_timeout"]
 [connection signal="button_press" from="Input" to="Mover" method="_on_Input_button_press"]
 [connection signal="button_press" from="Input" to="Slasher" method="_on_Input_button_press"]
@@ -552,14 +594,17 @@ anims/RESET = SubResource( 9 )
 [connection signal="move_vec" from="Bot" to="Mover" method="_on_Input_move_vec"]
 [connection signal="move_vec" from="Bot" to="Slasher" method="_on_Input_move_vec"]
 [connection signal="timeout" from="Bot/UnstuckTimer" to="Bot" method="_on_UnstuckTimer_timeout"]
+[connection signal="timeout" from="Bot/OptionIgnoreTimer" to="Bot" method="_on_OptionIgnoreTimer_timeout"]
+[connection signal="moved" from="Mover" to="Bot" method="_on_Mover_moved"]
 [connection signal="moved" from="Mover" to="Tutorial" method="_on_Mover_moved"]
 [connection signal="movement_started" from="Mover" to="Particles" method="_on_Mover_movement_started"]
 [connection signal="movement_stopped" from="Mover" to="Particles" method="_on_Mover_movement_stopped"]
 [connection signal="timeout" from="Knives/Timer" to="Knives" method="_on_Timer_timeout"]
-[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
+[connection signal="timeout" from="Knives/Reloader/Timer" to="Knives/Reloader" method="_on_Timer_timeout"]
 [connection signal="shape_updated" from="Shaper" to="Knives" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Topping" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="ShadowLocation" method="_on_Shaper_shape_updated"]
 [connection signal="timeout" from="Shaper/StatTimer" to="Shaper" method="_on_StatTimer_timeout"]
 [connection signal="timeout" from="Grower/Timer" to="Grower" method="_on_Timer_timeout"]
 [connection signal="aim" from="Slasher" to="Tutorial" method="_on_Slasher_aim"]

@@ -75,9 +75,7 @@ centered = false
 texture = ExtResource( 2 )
 centered = false
 
-[node name="Walls" type="StaticBody2D" parent="Map/Entities" groups=[
-"Stuckables",
-]]
+[node name="Walls" type="StaticBody2D" parent="Map/Entities" groups=["Stuckables"]]
 collision_layer = 5
 collision_mask = 5
 
@@ -148,9 +146,7 @@ position = Vector2( 730.576, 462.627 )
 rotation = 1.5708
 shape = SubResource( 6 )
 
-[node name="Caves" type="StaticBody2D" parent="Map/Entities" groups=[
-"Stuckables",
-]]
+[node name="Caves" type="StaticBody2D" parent="Map/Entities" groups=["Stuckables"]]
 collision_layer = 5
 collision_mask = 5
 
@@ -319,9 +315,7 @@ light_mask = 3
 [node name="CanvasModulate" type="CanvasModulate" parent="CustomLogic"]
 color = Color( 0.0392157, 0.235294, 0.0392157, 1 )
 
-[node name="Light2D" type="Light2D" parent="CustomLogic" groups=[
-"KeepLights",
-]]
+[node name="Light2D" type="Light2D" parent="CustomLogic" groups=["KeepLights"]]
 position = Vector2( 316.784, 322.441 )
 texture = ExtResource( 4 )
 texture_scale = 2.0
@@ -329,9 +323,7 @@ range_item_cull_mask = 3
 shadow_enabled = true
 shadow_item_cull_mask = 2
 
-[node name="Light2D2" type="Light2D" parent="CustomLogic" groups=[
-"KeepLights",
-]]
+[node name="Light2D2" type="Light2D" parent="CustomLogic" groups=["KeepLights"]]
 position = Vector2( 458.205, 825.901 )
 texture = ExtResource( 4 )
 texture_scale = 2.0
@@ -339,9 +331,7 @@ range_item_cull_mask = 3
 shadow_enabled = true
 shadow_item_cull_mask = 2
 
-[node name="Light2D3" type="Light2D" parent="CustomLogic" groups=[
-"KeepLights",
-]]
+[node name="Light2D3" type="Light2D" parent="CustomLogic" groups=["KeepLights"]]
 position = Vector2( 1168.14, 650.538 )
 texture = ExtResource( 4 )
 texture_scale = 2.0
@@ -349,9 +339,7 @@ range_item_cull_mask = 3
 shadow_enabled = true
 shadow_item_cull_mask = 2
 
-[node name="Light2D4" type="Light2D" parent="CustomLogic" groups=[
-"KeepLights",
-]]
+[node name="Light2D4" type="Light2D" parent="CustomLogic" groups=["KeepLights"]]
 position = Vector2( 1318.05, 302.642 )
 texture = ExtResource( 4 )
 texture_scale = 2.0
@@ -359,9 +347,7 @@ range_item_cull_mask = 3
 shadow_enabled = true
 shadow_item_cull_mask = 2
 
-[node name="Light2D5" type="Light2D" parent="CustomLogic" groups=[
-"KeepLights",
-]]
+[node name="Light2D5" type="Light2D" parent="CustomLogic" groups=["KeepLights"]]
 position = Vector2( 1813.02, 330.926 )
 texture = ExtResource( 4 )
 texture_scale = 2.0

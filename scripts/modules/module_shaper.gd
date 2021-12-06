@@ -1,6 +1,6 @@
 extends Node
 
-const MAX_AREA : float = 4500.0
+const MAX_AREA : float = 5500.0
 const MIN_AREA : float = 400.0
 
 var area : float = 0.0
@@ -99,6 +99,11 @@ func recalculate_area():
 
 func approximate_radius():
 	return sqrt(area / PI)
+
+func get_largest_side():
+	var x = abs(bounding_box.x.min) + abs(bounding_box.x.max)
+	var y = abs(bounding_box.y.min) + abs(bounding_box.y.max)
+	return max(x,y)
 
 # Helper functions
 func get_average_centroid(shp_list):

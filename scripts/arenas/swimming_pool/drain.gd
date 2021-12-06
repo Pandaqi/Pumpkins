@@ -25,4 +25,4 @@ func attract(b, dt):
 	
 	if vec.length() <= DELETE_RANGE:
 		particles.general_feedback(b.global_position, "Destroyed!")
-		b.queue_free()
+		b.modules.status.delete()

@@ -10,7 +10,10 @@ onready var tween = $Tween
 var player_num = -1
 var num_regrows : int = 0
 
-func delete(attacking_throwable):
+func is_from_a_player():
+	return false
+
+func delete(_attacking_throwable):
 	GlobalAudio.play_dynamic_sound(body, "window")
 	
 	if num_regrows >= MAX_REGROWS:

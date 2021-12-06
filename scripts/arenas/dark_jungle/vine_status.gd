@@ -1,19 +1,21 @@
 extends Node2D
 
 export var REGROW_DURATION : int = 15
-export var MAX_REGROWS : int = 6
+export var MAX_REGROWS : Vector2 = Vector2(2,4)
 
 onready var body = get_parent()
 onready var regrow_timer = $RegrowTimer
 onready var tween = $Tween
 
 var player_num = -1
+var max_regrows : int = 0
 var num_regrows : int = 0
 
 var occluder = null
 
 func _ready():
 	model_occluder_after_body()
+	max_regrows = randi() % int(MAX_REGROWS.y - MAX_REGROWS.x) + MAX_REGROWS.x
 
 func model_occluder_after_body():
 	if not body.has_node("LightOccluder2D"): return
@@ -28,10 +30,10 @@ func model_occluder_after_body():
 	
 	print("MODELLING OCCLUDER AFTER BODY")
 
-func delete():
+func delete(attacking_throwable):
 	GlobalAudio.play_dynamic_sound(body, "vine")
 	
-	if num_regrows >= MAX_REGROWS:
+	if num_regrows >= max_regrows:
 		body.queue_free()
 	
 	body.collision_layer = 0

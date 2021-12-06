@@ -47,12 +47,13 @@ shader = SubResource( 1 )
 code = "shader_type canvas_item;
 
 uniform float radius = 3000.0;
+uniform float alpha = 0.5;
 
 void fragment() {
 	vec2 real_uv = UV * vec2(1920.0, 1080.0);
 	float dist = length(real_uv - 0.5*vec2(1920.0, 1080.0));
 	if(dist > radius) {
-		COLOR = vec4(0,0,0,1.0);
+		COLOR = vec4(0,0,0,alpha);
 	} else {
 		COLOR = vec4(0,0,0,0.0);
 	}
@@ -61,10 +62,11 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=4]
 shader = SubResource( 3 )
 shader_param/radius = 3000.0
+shader_param/alpha = 0.5
 
 [sub_resource type="Animation" id=5]
 resource_name = "FadeIn"
-length = 8.0
+length = 18.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("StartDelay/ColorRect:color")
 tracks/0/interp = 1
@@ -72,7 +74,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 6, 7 ),
+"times": PoolRealArray( 0, 16.1, 17.1 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
@@ -84,7 +86,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 6, 6.8, 6.9, 7 ),
+"times": PoolRealArray( 0, 16.1, 16.9, 17, 17.1 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
@@ -96,7 +98,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 6, 7, 8 ),
+"times": PoolRealArray( 16.1, 17.1, 18.1 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
@@ -108,7 +110,7 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 6, 7, 8 ),
+"times": PoolRealArray( 16.1, 17.1, 18.1 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "values": [ {
 "args": [  ],
@@ -140,7 +142,7 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0, 3, 3.2, 3.3 ),
+"times": PoolRealArray( 0, 7.675, 7.875, 7.975 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
@@ -152,7 +154,7 @@ tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 6, 6.8 ),
+"times": PoolRealArray( 0, 16.1, 16.9 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
@@ -164,7 +166,7 @@ tracks/7/loop_wrap = true
 tracks/7/imported = false
 tracks/7/enabled = true
 tracks/7/keys = {
-"times": PoolRealArray( 0, 6, 6.8 ),
+"times": PoolRealArray( 0, 16.1, 16.9 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
@@ -176,7 +178,7 @@ tracks/8/loop_wrap = true
 tracks/8/imported = false
 tracks/8/enabled = true
 tracks/8/keys = {
-"times": PoolRealArray( 0, 0.6, 0.9, 6, 6.3 ),
+"times": PoolRealArray( 0, 0.6, 0.9, 16.1, 16.4 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 1e-05, 1e-05 ) ]
@@ -404,6 +406,10 @@ script = ExtResource( 16 )
 [node name="Throwables" type="Node2D" parent="."]
 script = ExtResource( 23 )
 
+[node name="Timer" type="Timer" parent="Throwables"]
+wait_time = 6.0
+autostart = true
+
 [node name="Spawner" type="Node2D" parent="."]
 script = ExtResource( 9 )
 
@@ -470,7 +476,11 @@ script = ExtResource( 5 )
 [node name="Navigation" type="Node2D" parent="."]
 script = ExtResource( 20 )
 
-[node name="Navigation2D" type="Navigation2D" parent="Navigation"]
+[node name="Small" type="Navigation2D" parent="Navigation"]
+
+[node name="Medium" type="Navigation2D" parent="Navigation"]
+
+[node name="Big" type="Navigation2D" parent="Navigation"]
 
 [node name="DramaticSlice" type="CanvasLayer" parent="."]
 pause_mode = 2
@@ -643,6 +653,7 @@ anims/FadeIn = SubResource( 5 )
 anims/RESET = SubResource( 6 )
 anims/TextFlash = SubResource( 8 )
 
+[connection signal="timeout" from="Throwables/Timer" to="Throwables" method="_on_Timer_timeout"]
 [connection signal="timeout" from="Powerups/Timer" to="Powerups" method="_on_Timer_timeout"]
 [connection signal="timeout" from="Powerups/AutoRevealTimer" to="Powerups" method="_on_AutoRevealTimer_timeout"]
 [connection signal="timeout" from="DramaticSlice/Timer" to="DramaticSlice" method="_on_Timer_timeout"]

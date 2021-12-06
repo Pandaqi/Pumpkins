@@ -20,6 +20,7 @@ onready var players = get_node("/root/Main/Players")
 
 var velocity : Vector2 = Vector2.ZERO
 var curve_force : Vector3 = Vector3.ZERO # NOTE: fake 3D vector makes calculating forces easier for 2D
+var constant_velocity : bool = false
 
 var total_override_vec : Vector2
 var total_override_influencers : int
@@ -51,6 +52,9 @@ func rotate_velocity_to(target_vel, factor):
 
 func set_velocity(vel):
 	velocity = vel
+
+func make_constant():
+	constant_velocity = true
 
 func at_high_speed():
 	return velocity.length() >= HIGH_SPEED_THRESHOLD
@@ -84,9 +88,10 @@ func _physics_process(dt):
 
 func stop():
 	velocity = Vector2.ZERO
+	constant_velocity = false
 	trail_particles.set_emitting(false)
 	
-	# TESTING IF THIS IS BETTER/MORE CONSISTENT
+	# TESTING IF THIS IS BETTER/MORE CONSISTENT => YES.
 	body.modules.status.is_stuck = true
 
 func came_to_standstill():
@@ -140,7 +145,8 @@ func move(dt):
 	if body.modules.status.in_water:
 		damping = WATER_DAMPING
 	
-	velocity *= damping
+	if not constant_velocity:
+		velocity *= damping
 	
 	var new_pos = body.global_position
 	var distance_traveled = (new_pos - old_pos).length()

@@ -13,6 +13,8 @@ onready var particles = get_node("/root/Main/Particles")
 onready var mode = get_node("/root/Main/ModeManager")
 onready var arena = get_node("/root/Main/ArenaLoader")
 
+onready var main_node = get_node("/root/Main")
+
 export var powerup_part_color : Color = Color(0.0, 204.0/255.0, 72.0/255.0)
 
 var starting_position : Vector2
@@ -95,7 +97,7 @@ func make_powerup_leftover():
 func make_dumpling_leftover():
 	player_num = -1
 
-func delete(attacking_throwable):
+func delete(_attacking_throwable):
 	body.queue_free()
 
 func can_die():
@@ -120,6 +122,8 @@ func die(forced  = false):
 		return
 
 	is_dead = true
+	particles.general_feedback(body.global_position, "You died!")
+	
 	make_ghost(true)
 
 	var params = {}
@@ -139,6 +143,9 @@ func die(forced  = false):
 	if not params.has('keep_throwing_ability'):
 		body.modules.slasher.disable()
 		body.modules.knives.disable()
+	
+	# NOW ask the main node to check game over, because the "dying" has finished
+	main_node.player_died(body, player_num)
 
 func hide_completely():
 	body.modulate.a = 0.0
@@ -155,6 +162,9 @@ func show_again():
 
 func make_ghost(forced = false):
 	if is_dead and not forced: return
+	
+	if not is_dead:
+		particles.general_feedback(body.global_position, "You're a ghost!")
 	
 	body.modulate.a = 0.6
 	
@@ -184,6 +194,8 @@ func undo_ghost():
 	body.remove_from_group("NonSolids")
 
 func same_team(other_body):
+	if not other_body.get('modules') or not other_body.modules.has('status'): return false
+	
 	var our_team = team_num
 	var their_team = other_body.modules.status.team_num
 	return (our_team == their_team)
@@ -198,6 +210,8 @@ func exit_water():
 	in_water = false
 	
 	if not is_instance_valid(body): return
+	if not is_instance_valid(body.modules.mover): return
+	if not is_instance_valid(body.modules.particles): return
 	
 	body.modules.mover.recreate_move_audio()
 	body.modules.particles.exit_water()

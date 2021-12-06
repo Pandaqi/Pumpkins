@@ -14,9 +14,17 @@ var original_volume : float
 var active : bool = false
 var skipped : bool = false
 
+const TIME_BEFORE_SKIP_ALLOWED = 0.37 # to prevent accidental insta-skips
+const SKIP_TARGET_TIME = 16.1
+
 func _input(ev):
 	if not active: return
 	if not ev.is_action_pressed("skip_reminders"): return
+	
+	print(anim_player.current_animation_position)
+	
+	var too_soon = (anim_player.current_animation_position < TIME_BEFORE_SKIP_ALLOWED)
+	if too_soon: return
 	
 	skip()
 
@@ -26,7 +34,7 @@ func skip():
 	if skipped: return
 	
 	skipped = true
-	$AnimationPlayer.seek(6.0, true)
+	anim_player.seek(SKIP_TARGET_TIME, true)
 
 func play_game_sound():
 	GlobalAudio.play_static_sound("game_start")

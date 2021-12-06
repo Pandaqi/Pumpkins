@@ -1,6 +1,8 @@
 extends Node
 
 const KNIFE_SHOOT_VEL : float = 1000.0
+const GHOST_KNIFE_PROBABILITY : float = 0.05
+const HOSTILE_KNIFE_PROBABILITY : float = 0.1
 
 onready var wall = get_parent()
 onready var throwables = get_node("/root/Main/Throwables")
@@ -18,20 +20,32 @@ func _on_Timer_timeout():
 
 func get_random_player():
 	var players = get_tree().get_nodes_in_group("Players")
+	if players.size() <= 0: return null
+	
 	players.shuffle()
 	return players[0]
 
 func shoot_knife():
-	var k = throwables.create('knife')
+	var type = 'knife'
+	if randf() <= GHOST_KNIFE_PROBABILITY:
+		type = 'ghost_knife'
+	
+	var k = throwables.create(type)
 	
 	var margin = 20
 	var rand_pos = Vector2(0, randf()*(1080-2*margin) + margin)
 	k.set_position(rand_pos)
 	
-	k.set_velocity(Vector2.RIGHT * KNIFE_SHOOT_VEL)
-	k.modules.owner.set_owner(get_random_player())
+	k.modules.mover.set_velocity(Vector2.RIGHT * KNIFE_SHOOT_VEL)
+	k.modules.mover.make_constant()
 	
-	wall.bodies_created.append(k)
+	wall.register_body(k)
 	
-	# TO DO: similarly, create "hostile" knives in any case
-	# TO DO: with some (high) probability, just create a ghost knife? Or some other throwable?
+	var owner = get_random_player()
+	if not owner: return
+	
+	k.modules.owner.set_owner(owner)
+	
+	if randf() <= HOSTILE_KNIFE_PROBABILITY:
+		k.modules.owner.remove()
+		k.modules.owner.set_mode("hostile")

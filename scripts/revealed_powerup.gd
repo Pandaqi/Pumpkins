@@ -6,6 +6,7 @@ var is_throwable : bool = false
 
 onready var sprite = $Sprite
 onready var powerups = get_node("/root/Main/Powerups")
+onready var throwables = get_node("/root/Main/Throwables")
 
 func reveal(pos : Vector2):
 	set_position(pos)
@@ -14,18 +15,23 @@ func reveal(pos : Vector2):
 	still_inside = false
 	
 	powerups.tween_revealed_powerup(self)
+	
+	if is_throwable:
+		throwables.change_count(+1)
 
 func unreveal():
 	set_visible(false)
 
+func get_data():
+	if is_throwable:
+		return GlobalDict.throwables[type]
+	else:
+		return GlobalDict.powerups[type]
+
 func set_type(tp):
 	type = tp
 	
-	var frame = -1
-	if is_throwable:
-		frame = GlobalDict.throwables[type].frame
-	else:
-		frame = GlobalDict.powerups[type].frame
+	var frame = get_data().frame
 	sprite.set_frame(frame)
 
 func _on_Area2D_body_entered(body):

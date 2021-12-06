@@ -22,8 +22,9 @@ func activate():
 	trap_voting_node = get_node(trap_voting_node_path)
 	trap_wall_container = get_node(trap_wall_path)
 	
-	for child in trap_wall_container.get_children():
-		child.deactivate()
+	for i in range(4):
+		var node = trap_wall_container.get_node("Wall" + str(i))
+		node.deactivate()
 	
 	change_trap()
 
@@ -56,8 +57,12 @@ func change_trap():
 	
 	var new_trap = trap_wall_container.get_node("Wall" + str(voted_option))
 	
-	if active_trap: active_trap.deactivate()
+	if active_trap: 
+		active_trap.deactivate()
+		trap_voting_node.get_node("VoteButton" + str(active_index)).enable()
+	
 	new_trap.activate()
+	trap_voting_node.get_node("VoteButton" + str(voted_option)).disable()
 	
 	active_trap = new_trap
 
@@ -69,15 +74,16 @@ func play_switch_effect():
 	actual_switch_timer.wait_time = 0.25
 	actual_switch_timer.start()
 
-	tween.interpolate_property(canvas_mod, "color",
-		Color(0,0,0), Color(2,2,2), 0.1,
-		Tween.TRANS_LINEAR, Tween.EASE_OUT,
-		0.25)
-	
-	tween.interpolate_property(canvas_mod, "color",
-		Color(2,2,2), Color(0,0,0), 0.1,
-		Tween.TRANS_LINEAR, Tween.EASE_OUT,
-		0.35)
+	if not GlobalDict.cfg.disable_flashing_effects:
+		tween.interpolate_property(canvas_mod, "color",
+			Color(0,0,0), Color(2,2,2), 0.1,
+			Tween.TRANS_LINEAR, Tween.EASE_OUT,
+			0.25)
+		
+		tween.interpolate_property(canvas_mod, "color",
+			Color(2,2,2), Color(0,0,0), 0.1,
+			Tween.TRANS_LINEAR, Tween.EASE_OUT,
+			0.35)
 	
 	tween.interpolate_property(canvas_mod, "color",
 		Color(0,0,0), regular_canvas_modulate, 0.5,

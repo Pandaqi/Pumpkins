@@ -55,6 +55,7 @@ func auto_slice():
 	var vec = Vector2(cos(rot), sin(rot))
 	var bottom_left = get_global_position() - vec*100
 	var top_right = get_global_position() + vec*100
+	
 	slicer.slice_bodies_hitting_line(bottom_left, top_right, [], [self], null)
 
 func reveal_powerup(attacker):

@@ -4,25 +4,26 @@
 [ext_resource path="res://assets/fonts/im_fell_english.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="DynamicFont" id=2]
+size = 24
 font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=3]
-size = 32
+size = 48
 font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=1]
-size = 9
+size = 14
 font_data = ExtResource( 4 )
 
 [node name="Container" type="Node2D"]
 
 [node name="BG" type="Sprite" parent="."]
-scale = Vector2( 0.25, 0.25 )
+scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 1 )
 hframes = 4
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 0.25, 0.25 )
+scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 1 )
 hframes = 4
 frame = 3
@@ -30,10 +31,10 @@ frame = 3
 [node name="Labels" type="Node2D" parent="."]
 
 [node name="Title" type="Label" parent="Labels"]
-margin_left = -36.0
-margin_top = -58.0
-margin_right = 57.0
-margin_bottom = -10.0
+margin_left = -59.0
+margin_top = -90.0
+margin_right = 87.0
+margin_bottom = -24.0
 custom_fonts/font = SubResource( 2 )
 text = "Distance Traveled"
 align = 1
@@ -44,10 +45,10 @@ __meta__ = {
 }
 
 [node name="Number" type="Label" parent="Labels"]
-margin_left = -52.6986
-margin_top = -36.6778
-margin_right = 75.3014
-margin_bottom = 28.3222
+margin_left = -59.0
+margin_top = -30.5612
+margin_right = 88.0
+margin_bottom = 31.4388
 custom_colors/font_color = Color( 0.94902, 0.509804, 0.121569, 1 )
 custom_fonts/font = SubResource( 3 )
 text = "0.91"
@@ -59,10 +60,10 @@ __meta__ = {
 }
 
 [node name="Type" type="Label" parent="Labels"]
-margin_left = -56.0511
-margin_top = 4.58153
-margin_right = 71.9489
-margin_bottom = 29.5815
+margin_left = -59.0
+margin_top = 12.8572
+margin_right = 88.0
+margin_bottom = 37.8572
 custom_colors/font_color = Color( 0.462745, 0.733333, 1, 0.694118 )
 custom_fonts/font = SubResource( 1 )
 text = "(highest)"

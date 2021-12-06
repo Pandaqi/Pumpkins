@@ -26,6 +26,7 @@ func collect(dc):
 	if dc == 0: return
 	
 	num_collected += dc
+	num_collected = max(num_collected, 0)
 	
 	collectors.update_team_count(body.modules.status.team_num)
 	

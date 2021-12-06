@@ -4,7 +4,8 @@ const SLICE_EXPLODE_FORCE : float = 1000.0
 const MIN_AREA_FOR_SHAPE : float = 100.0
 
 # NOTE: if player falls below this size, they die
-const PLAYER_MIN_AREA_FOR_SHAPE : float = 950.0
+const PLAYER_MIN_AREA_FOR_SHAPE : float = 1250.0
+const PLAYER_MIN_AREA_GENERAL : float = 1000.0
 
 var player_part_scene = preload("res://scenes/player_part.tscn")
 
@@ -118,11 +119,13 @@ func slice_body(b, p1, p2, attacking_throwable):
 		'original_player_num': original_player_num,
 		'object_died': false, 
 		'is_keep_alive': false,
-		'is_powerup': false,
-		'is_player': false,
+		'is_powerup': b.is_in_group("Powerups"),
+		'is_player': b.is_in_group("Players"),
+		'is_dumpling': b.is_in_group("Dumplings"),
 		'attacking_throwable': attacking_throwable,
 		'attacker': attacker 
 	}
+
 	check_keep_alive(b, shape_layers, params)
 	handle_old_body_death(b, params)
 	
@@ -178,8 +181,11 @@ func check_keep_alive(b, shape_layers, params = {}):
 	
 	if object_too_small and b.modules.status.can_die():
 		params.object_died = true
+		return
 	
-	else:
+	var general_object_too_small = (biggest_area < PLAYER_MIN_AREA_GENERAL)
+	var too_small = (params.is_player and general_object_too_small)
+	if not too_small:
 		var new_shape_for_this_body = shape_layers[biggest_key]
 		shape_layers.erase(biggest_key)
 		
@@ -188,19 +194,16 @@ func check_keep_alive(b, shape_layers, params = {}):
 		
 		shoot_body_away_from_line(params.p1, params.p2, b)
 
-func handle_old_body_death(b, params = {}):
-	params.is_powerup = b.is_in_group("Powerups")
-	params.is_player = b.is_in_group("Players")
-	params.is_dumpling = b.is_in_group("Dumplings")
+	if params.is_player:
+		b.modules.specialstatus.on_being_sliced(params.attacking_throwable)
+
+func handle_old_body_death(b, params = {}):	
+	if b.script and b.has_method("on_slice"):
+		b.on_slice(params.attacking_throwable)
 	
 	if params.object_died:
 		# if we died, the body keeps existing, just in a differnt form
 		b.modules.status.die()
-		
-		# NOW ask the main node to check game over, because the "dying" has finished
-		var dying_was_succesful = b.modules.status.is_dead
-		if dying_was_succesful:
-			main_node.player_died(b, params.original_player_num)
 		return
 	
 	if params.is_keep_alive: return

@@ -47,7 +47,7 @@ func handle_functionality(attacking_throwable):
 			
 		"destroy":
 			fb = "Destroyed!"
-			attacking_throwable.queue_free()
+			attacking_throwable.modules.status.delete()
 		
 		"self_slice":
 			fb = "Sliced yourself!"

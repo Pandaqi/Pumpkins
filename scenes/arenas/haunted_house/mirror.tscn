@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scripts/modules/module_flat_color_drawer.gd" type="Script" id=1]
+[ext_resource path="res://assets/arenas/haunted_house/mirror_content.png" type="Texture" id=2]
+[ext_resource path="res://assets/arenas/haunted_house/mirror.png" type="Texture" id=3]
+[ext_resource path="res://scripts/arenas/haunted_house/mirror_status.gd" type="Script" id=4]
+[ext_resource path="res://scripts/arenas/haunted_house/mirror.gd" type="Script" id=5]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 10.3372, 13.9054 )
+
+[node name="Mirror" type="StaticBody2D" groups=[
+"Mirrors",
+]]
+position = Vector2( 409.848, 224.991 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -49.4575, 0.454468 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2( 50.6617, 0.454468 )
+shape = SubResource( 3 )
+
+[node name="Content" type="StaticBody2D" parent="."]
+show_behind_parent = true
+position = Vector2( -409.848, -224.991 )
+script = ExtResource( 5 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Content"]
+polygon = PoolVector2Array( 369.36, 214.561, 452.515, 213.931, 454.405, 217.396, 454.405, 233.145, 451.57, 237.239, 369.675, 235.664, 365.895, 231.885, 365.895, 217.396 )
+
+[node name="Sprite" type="Sprite" parent="Content"]
+position = Vector2( 409.848, 224.991 )
+texture = ExtResource( 2 )
+
+[node name="Status" type="Node2D" parent="Content"]
+script = ExtResource( 4 )
+
+[node name="Drawer" type="Node2D" parent="Content"]
+script = ExtResource( 1 )
+color = Color( 1, 1, 1, 1 )
+use_multi_color = false
+
+[node name="Timer" type="Timer" parent="Content"]
+wait_time = 4.0
+one_shot = true
+
+[connection signal="timeout" from="Content/Timer" to="Content" method="_on_Timer_timeout"]

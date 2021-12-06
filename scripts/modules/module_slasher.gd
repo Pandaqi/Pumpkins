@@ -110,10 +110,14 @@ func grow_strength_sprite():
 
 func _on_Input_button_press():
 	if disabled: return
+	if body.modules.specialstatus.stun.is_stunned: return
+	
 	start_slash()
 
 func _on_Input_button_release():
 	if disabled: return
+	if body.modules.specialstatus.stun.is_stunned: return
+	
 	finish_slash()
 
 func _on_Input_move_vec(vec : Vector2, dt : float):

@@ -8,6 +8,8 @@ var lights = []
 var bodies_created = []
 
 onready var functionality = $Functionality
+onready var walls = get_node("../Walls")
+var bounds = []
 
 func _ready():
 	for child in get_children():
@@ -18,7 +20,18 @@ func activate():
 	for light in lights:
 		light.set_visible(true)
 	
+	bounds = get_tree().get_nodes_in_group("LevelBounds")
+	
 	functionality.activate()
+
+func register_body(b):
+	if b is PhysicsBody2D:
+		b.add_collision_exception_with(walls)
+		
+		for bound in bounds:
+			b.add_collision_exception_with(bound)
+		
+	bodies_created.append(b)
 
 func update_progress(val):
 	tex_progress.set_value(val)
@@ -32,6 +45,8 @@ func deactivate():
 	functionality.deactivate()
 	
 	for b in bodies_created:
+		if not b or not is_instance_valid(b): continue
+		
 		var has_been_picked_up = (b.is_in_group("Throwables") and b.modules.status.being_held)
 		if has_been_picked_up: continue
 		

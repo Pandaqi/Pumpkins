@@ -1,5 +1,7 @@
 extends Node2D
 
+const BASE_ADD_SCALE = Vector2(1,1)*0.9
+
 onready var container = $Container
 onready var settings = $Settings
 
@@ -59,10 +61,10 @@ func change_team(player_num : int):
 	play_team_changed_tween(interface)
 
 func fill_container():
-	var num_cols = 3
+	var num_cols = 4
 	var num_rows = ceil(max_players / float(num_cols))
 	
-	var add_size = 420
+	var add_size = Vector2(320, 380)
 	var offset = -Vector2(0.5*(num_cols-1), 0.5*(num_rows-1))*add_size
 
 	# re-calculate how many bots were logged in before
@@ -92,7 +94,7 @@ func fill_container():
 func play_changed_tween(p):
 	
 	tween.interpolate_property(p, "scale", 
-		Vector2(1,1)*1.3, Vector2(1,1), 0.5,
+		BASE_ADD_SCALE*1.3, BASE_ADD_SCALE, 0.5,
 		Tween.TRANS_ELASTIC, Tween.EASE_OUT)
 	
 	tween.interpolate_property(p, "rotation", 
@@ -106,7 +108,7 @@ func play_appearance_tween(p):
 	
 	p.set_scale(Vector2.ZERO)
 	tween.interpolate_property(p, "scale", 
-		Vector2.ZERO, Vector2(1,1), 2*duration,
+		Vector2.ZERO, BASE_ADD_SCALE, 2*duration,
 		Tween.TRANS_ELASTIC, Tween.EASE_OUT)
 	
 	tween.interpolate_property(p, "rotation", 

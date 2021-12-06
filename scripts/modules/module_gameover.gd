@@ -5,6 +5,8 @@ onready var my_gui = get_node("Container")
 onready var instruc_gui = get_node("Container2")
 var gui_size = 256*0.35
 
+const FLIPPED_CONTENT_OFFSET = 54
+
 onready var body = get_parent()
 
 func _ready():
@@ -82,5 +84,6 @@ func position_gui(obj, offset_vec):
 	if obj.has_node("Labels"): obj.get_node("Labels").position.y = 0
 	
 	if obj.get_node("BG").flip_v:
-		obj.get_node("Sprite").position.y = 34
-		if obj.has_node("Labels"): obj.get_node("Labels").position.y = 34
+		obj.get_node("Sprite").position.y = FLIPPED_CONTENT_OFFSET
+		if obj.has_node("Labels"): 
+			obj.get_node("Labels").position.y = FLIPPED_CONTENT_OFFSET

@@ -47,6 +47,8 @@ func update_bot_status():
 	else:
 		frame = 2
 	
+	frame = player_num*3 + frame
+	
 	bot.set_frame(frame)
 
 func make_human():

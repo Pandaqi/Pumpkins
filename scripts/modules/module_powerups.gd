@@ -1,7 +1,7 @@
 extends Node2D
 
 const MAX_POWERUPS : int = 5
-const POWERUP_DURATION : float = 10.0 # in seconds
+const POWERUP_DURATION : float = 13.0 # in seconds
 
 const GROWTH_FACTOR : float = 0.2
 
@@ -49,7 +49,7 @@ func grab(obj, type, is_throwable):
 	show_feedback(type, false, is_throwable)
 	
 	if is_throwable:
-		activate_throwable(type)
+		activate_throwable(obj, type)
 	
 	else:
 		activate_effect(type)
@@ -63,8 +63,11 @@ func remove_powerup_if_already_exists(type : String):
 		temporary.erase(obj)
 		return
 
-func activate_throwable(type):
-	throwables.call_deferred("create_new_for", body, type)
+func activate_throwable(obj, type):
+	var count_it = false
+	if obj.still_inside: count_it = true
+	
+	throwables.call_deferred("create_new_for", body, type, count_it)
 
 func show_feedback(type, removal = false, is_throwable = false):
 	var fb = powerup_fb_scene.instance()

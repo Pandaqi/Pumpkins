@@ -3,7 +3,7 @@ extends Area2D
 onready var particles = get_node("/root/Main/Particles")
 export var exclude_types : Array = []
 
-var active : bool = false
+var active : bool = true
 
 func _ready():
 	collision_mask = 32
@@ -26,4 +26,4 @@ func _on_Area2D_body_entered(body):
 	if body.modules.status.type in exclude_types: return
 	
 	particles.general_feedback(body.global_position, "Destroyed!")
-	body.queue_free()
+	body.modules.status.delete()

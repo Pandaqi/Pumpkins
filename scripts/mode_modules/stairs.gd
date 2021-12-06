@@ -20,3 +20,6 @@ func _on_Stairs_body_entered(body):
 
 func _on_Stairs_body_exited(body):
 	body.modules.teleporter.reset_teleport()
+
+func _on_Timer_timeout():
+	self.queue_free()

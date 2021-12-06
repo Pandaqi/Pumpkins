@@ -10,7 +10,7 @@ const LINE_THICKNESS : float = 5.0
 const DIVISION_LINE_COLOR : Color = Color(64/255.0, 4/255.0, 0.0)
 const POINT_BOUNDS = { 'min': -5, 'max': 8 }
 
-const DIST_UNTIL_FULL_POINTS : float = 1400.0
+const DIST_UNTIL_FULL_POINTS : float = 1150.0
 
 var division_angles = []
 var division_points = []
@@ -50,16 +50,24 @@ func check_auto_rotating(dt):
 	if not is_rotating: return
 	rotate(ROTATE_SPEED*dt)
 
-func get_random_point_val():
+func get_random_point_val(positive = false):
 	var rand = randi() % (POINT_BOUNDS.max - POINT_BOUNDS.min) + POINT_BOUNDS.min
 	if rand == 0: rand = POINT_BOUNDS.max if randf() <= 0.5 else POINT_BOUNDS.min
+	
+	if positive: return randi() % (POINT_BOUNDS.max-1) + 1
 	return rand
 
 func create_divisions():
 	var total_ang = 0
 	while total_ang < (1.75*PI):
 		division_angles.append(total_ang)
-		division_points.append(get_random_point_val())
+		
+		# first one is always positive, to ensure we have those
+		var number = get_random_point_val()
+		if division_angles.size() == 1:
+			number = get_random_point_val(true)
+		
+		division_points.append(number)
 		
 		var ang_offset = randf()*(PI-0.33*PI) + 0.33*PI
 		total_ang += ang_offset
@@ -98,7 +106,7 @@ func on_knife_entered(body):
 	var multiplier = clamp(body.modules.distancetracker.calculate() / DIST_UNTIL_FULL_POINTS, 0.0, 1.0)
 	
 	num_points *= multiplier
-	num_points = floor(num_points)
+	num_points = round(num_points)
 	
 	player.modules.collector.collect(num_points)
 	
@@ -126,7 +134,7 @@ func check_for_destroy():
 	for knife in knives_inside:
 		var old_pos = knife.global_position
 		
-		remove_child(knife)
+		knife.get_parent().remove_child(knife)
 		map.knives.add_child(knife)
 		
 		knife.modules.mover.set_random_velocity()
