@@ -5,6 +5,7 @@ const SLIDY_MOVEMENT_DAMPING : float = 0.996
 var speed_multiplier : float = 1.0
 
 onready var body : KinematicBody2D = get_parent()
+onready var players = get_node("/root/Main/Players")
 
 var moving_enabled : bool = true
 var force_move_override : bool = false
@@ -19,6 +20,9 @@ var last_velocity : Vector2
 var move_audio_player = null
 
 var ideal_movement_per_frame
+
+# what distance constitutes "being too nearby/close another player"
+const NEARBY_DIST : float = 270.0
 
 signal movement_stopped()
 signal movement_started()
@@ -74,33 +78,54 @@ func continue_on_last_velocity():
 	last_velocity *= SLIDY_MOVEMENT_DAMPING
 
 func move_regular(vec, dt):
-	body.slowly_orient_towards_vec(vec)
+	var look_where_were_going = true
+	if GlobalDict.cfg.use_control_scheme_with_constant_moving:
+		if body.modules.slasher.slashing_enabled:
+			look_where_were_going = false
+	
+	if look_where_were_going:
+		body.slowly_orient_towards_vec(vec)
 	
 	var in_water = body.modules.status.in_water
 	var lerp_factor = 1.0
 	if in_water: lerp_factor = 0.0124
 	if ice: lerp_factor = 0.007
 	
-	forward_vec = lerp(forward_vec, body.get_forward_vec(), lerp_factor)
+	if look_where_were_going:
+		forward_vec = lerp(forward_vec, body.get_forward_vec(), lerp_factor)
+	else:
+		forward_vec = body.get_forward_vec()
 	
-	var speed_penalty_for_size = body.modules.shaper.get_size_as_ratio()*0.5 + 0.5
+	var speed_penalty_for_size = 1.0
+	if GlobalDict.cfg.move_faster_if_big:
+		body.modules.shaper.get_size_as_ratio()*0.5 + 0.5
+	
 	var speed_penalty_water = 1.0
 	if in_water: speed_penalty_water = 0.775
 	
-	var final_speed = speed_multiplier*MOVE_SPEED*speed_penalty_for_size*speed_penalty_water
-	var final_vec = forward_vec*final_speed
+	var speed_bonus_for_being_close = 1.0
+	if GlobalDict.cfg.move_faster_if_close:
+		var closest_player = players.get_closest_to(body.global_position, players.get_players_in_team(body.modules.status.team_num))
+		if closest_player and (closest_player.global_position - body.global_position).length() <= NEARBY_DIST:
+			speed_bonus_for_being_close = 1.66
+		
+	var final_speed = speed_multiplier*MOVE_SPEED*speed_penalty_for_size*speed_penalty_water*speed_bonus_for_being_close
+	var final_vec = forward_vec
+	if not look_where_were_going: final_vec = vec.normalized()
 	
-	ideal_movement_per_frame = (final_vec * dt).length()
+	var final_move_in_pixels = final_vec * final_speed
+	
+	ideal_movement_per_frame = (final_move_in_pixels * dt).length()
 	
 	var old_pos = body.get_global_position()
 	
 # warning-ignore:return_value_discarded
-	var result_vec = body.move_and_slide(final_vec, Vector2.ZERO)
+	var result_vec = body.move_and_slide(final_move_in_pixels, Vector2.ZERO)
 #
 #	if body.modules.status.is_bot:
 #		body.move_and_slide(result_vec)
 	
-	last_velocity = final_vec
+	last_velocity = final_move_in_pixels
 	
 	var new_pos = body.get_global_position()
 	var dist_moved = (new_pos - old_pos)
@@ -126,10 +151,12 @@ func force_enable():
 
 func _on_Input_button_press():
 	if force_move_override: return
+	if GlobalDict.cfg.use_control_scheme_with_constant_moving: return
 	disable()
 
 func _on_Input_button_release():
 	if force_move_override: return
+	if GlobalDict.cfg.use_control_scheme_with_constant_moving: return
 	enable()
 
 func change_speed_multiplier(val):

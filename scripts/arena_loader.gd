@@ -14,6 +14,9 @@ var custom_logic = null
 var dumpling_locations = []
 var huge_dumplings = []
 
+var teams_to_locations = {}
+var predefined_locations = []
+
 func activate():
 	load_arena()
 
@@ -31,6 +34,8 @@ func load_arena():
 					map.get_node(new_child.name).add_child(new_new_child)
 		
 		elif child.name == "Collectors":
+			for collec in child.get_children():
+				predefined_locations.append(collec)
 			collectors.place(child)
 		
 		elif child.name == "CustomLogic":
@@ -51,6 +56,20 @@ func load_arena():
 	
 	if GlobalDict.cfg.game_mode == "dwarfing_dumplings":
 		place_huge_dumplings()
+	
+	# some modes must place teams at specific locations, so calculate them in advance
+	assign_teams_to_locations()
+
+func assign_teams_to_locations():
+	var cur_loc = 0
+	for i in range(8):
+		for a in range(8):
+			if not GlobalDict.player_data[a].active: continue
+			if not GlobalDict.player_data[a].team == i: continue
+			
+			teams_to_locations[i] = cur_loc
+			cur_loc += 1
+			break
 
 func on_player_death(p):
 	return custom_logic.on_player_death(p)
@@ -73,3 +92,14 @@ func place_huge_dumplings():
 func get_ghost_part_target_num():
 	if not arena_data.has('ghost_part_target'): return -1
 	return arena_data.ghost_part_target
+
+func get_special_starting_pos(team_num):
+	if not arena_data.has('special_starting_positions'): return null
+	
+	var node_num = teams_to_locations[team_num]
+	var node = predefined_locations[node_num]
+	
+	var rand_rad = rand_range(20,60)
+	var rand_ang = 2*randf()*PI
+	
+	return node.position + Vector2(cos(rand_ang), sin(rand_ang))*rand_rad

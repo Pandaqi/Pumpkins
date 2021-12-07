@@ -3,9 +3,13 @@ extends Node2D
 onready var part : Particles2D = $Particles2D
 onready var water_part : Particles2D = $WaterParticles
 
+onready var particles = get_node("/root/Main/Particles")
+
 onready var body = get_parent()
 
 var is_moving : bool = false
+
+var last_continuous_feedback : float = -1
 
 func _ready():
 	_on_Mover_movement_stopped()
@@ -38,3 +42,11 @@ func _on_Mover_movement_stopped():
 	
 	part.set_emitting(false)
 	water_part.set_emitting(false)
+
+func continuous_feedback(txt):
+	var diff = OS.get_ticks_msec() - last_continuous_feedback
+	if diff < 500.0: return
+	
+	particles.general_feedback(body.global_position, txt)
+	last_continuous_feedback = OS.get_ticks_msec()
+	

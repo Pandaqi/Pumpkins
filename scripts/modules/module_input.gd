@@ -26,6 +26,9 @@ func determine_move_vec(dt):
 	var move_vec = Vector2(h,v).normalized()
 	
 	if body.modules.specialstatus.stun.is_stunned: 
+		if move_vec.length() > 0.5: 
+			body.modules.particles.continuous_feedback("Stunned!")
+		
 		move_vec = Vector2.ZERO
 	
 	emit_signal("move_vec", move_vec, dt)

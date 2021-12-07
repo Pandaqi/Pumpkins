@@ -1,0 +1,88 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/arenas/training_ravines/bg.png" type="Texture" id=1]
+[ext_resource path="res://arenas/arena_skeleton.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/arenas/training_ravines/diagonal_one.png" type="Texture" id=3]
+[ext_resource path="res://assets/arenas/training_ravines/diagonal_two.png" type="Texture" id=4]
+[ext_resource path="res://scripts/arenas/training_ravines/custom_logic.gd" type="Script" id=5]
+[ext_resource path="res://assets/arenas/training_ravines/diagonal_three.png" type="Texture" id=6]
+
+[node name="TrainingGround" instance=ExtResource( 2 )]
+
+[node name="Bg" type="Sprite" parent="Map/BG" index="0"]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="DiagonalThree" type="StaticBody2D" parent="Map/BG" index="1"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/BG/DiagonalThree" index="0"]
+polygon = PoolVector2Array( 925.324, 513.817, 1063.13, 430.756, 1244.35, 362.797, 1357.62, 315.604, 1608.69, 177.798, 1752.16, 85.2982, 1899.91, -63.85, 1971.14, -35.5177, 1953.79, 12.4774, 1829.56, 160.808, 1587.92, 292.951, 1365.17, 391.114, 1136.75, 508.154, 1048.03, 542.133, 963.779, 614.117, 842.553, 589.423 )
+
+[node name="DiagonalTwo" type="Sprite" parent="Map/BG/DiagonalThree" index="1"]
+texture = ExtResource( 4 )
+centered = false
+
+[node name="DiagonalTwo" type="StaticBody2D" parent="Map/BG" index="2"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/BG/DiagonalTwo" index="0"]
+polygon = PoolVector2Array( 925.324, 513.817, 1048.03, 542.133, 963.779, 614.117, 734.797, 782.486, 451.936, 944.121, 227.444, 1033.92, 45.6049, 1114.74, -98.0702, 1087.8, -35.2123, 1036.16, 81.5237, 991.264, 279.077, 903.712, 449.691, 840.854, 642.755, 726.363, 842.553, 589.423 )
+
+[node name="DiagonalThree" type="Sprite" parent="Map/BG/DiagonalTwo" index="1"]
+texture = ExtResource( 6 )
+centered = false
+
+[node name="DiagonalOne" type="StaticBody2D" parent="Map/BG" index="3"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/BG/DiagonalOne" index="0"]
+polygon = PoolVector2Array( -21.7427, -57.1152, 38.8702, -12.2167, 125.009, 71.5669, 174.397, 94.0162, 352.869, 237.691, 593.076, 376.877, 709.812, 453.204, 925.324, 513.817, 1048.03, 542.133, 1166.96, 593.103, 1355.73, 681.827, 1525.63, 761.112, 1618.13, 795.092, 1882.41, 968.765, 1954.15, 1014.07, 1962.77, 1108, 1884.2, 1132.69, 1823.58, 1060.86, 1666.44, 957.59, 1549.7, 874.528, 1349.91, 775.752, 1156.84, 690.444, 963.779, 614.117, 833.573, 575.953, 721.327, 553.504, 586.632, 470.442, 427.242, 367.175, 229.689, 248.194, 70.2991, 151.663, -53.1717, 32.6817 )
+
+[node name="DiagonalOne" type="Sprite" parent="Map/BG/DiagonalOne" index="1"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Node2D" type="Node2D" parent="Collectors" index="0"]
+position = Vector2( 902.459, 168.369 )
+
+[node name="Node2D2" type="Node2D" parent="Collectors" index="1"]
+position = Vector2( 969.807, 1007.97 )
+
+[node name="Node2D3" type="Node2D" parent="Collectors" index="2"]
+position = Vector2( 186.329, 561.231 )
+
+[node name="Node2D4" type="Node2D" parent="Collectors" index="3"]
+position = Vector2( 1690.43, 554.496 )
+
+[node name="Node2D5" type="Node2D" parent="Collectors" index="4"]
+position = Vector2( 906.949, 356.943 )
+
+[node name="Node2D6" type="Node2D" parent="Collectors" index="5"]
+position = Vector2( 958.583, 725.11 )
+
+[node name="Node2D7" type="Node2D" parent="Collectors" index="6"]
+position = Vector2( 576.945, 579.19 )
+
+[node name="Node2D8" type="Node2D" parent="Collectors" index="7"]
+position = Vector2( 1248.18, 547.761 )
+
+[node name="Node2D" type="Node2D" parent="Dumplings" index="0"]
+position = Vector2( 902.459, 168.369 )
+
+[node name="Node2D2" type="Node2D" parent="Dumplings" index="1"]
+position = Vector2( 184.084, 561.231 )
+
+[node name="Node2D3" type="Node2D" parent="Dumplings" index="2"]
+position = Vector2( 1692.67, 552.251 )
+
+[node name="CustomLogic" parent="." index="3"]
+script = ExtResource( 5 )
+
+[node name="Timer" type="Timer" parent="CustomLogic" index="0"]
+one_shot = true
+
+[connection signal="timeout" from="CustomLogic/Timer" to="CustomLogic" method="_on_Timer_timeout"]

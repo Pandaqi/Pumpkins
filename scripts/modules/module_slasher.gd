@@ -25,13 +25,14 @@ var range_multiplier : float = 1.0
 var slash_range : float
 onready var range_sprite = $Sprite
 
-const MAX_TIME_HELD : float = 700.0 # holding longer than this changing nothing anymore
-const THROW_STRENGTH_BOUNDS = { 'min': 1500, 'max': 2500 }
+const MAX_TIME_HELD : float = 1750.0 # holding longer than this changes nothing anymore
+const THROW_STRENGTH_BOUNDS = { 'min': 250, 'max': 2500 }
 var strength_multiplier : float = 1.0
 onready var throw_strength_sprite = $ThrowStrength
 
-const IDLE_PENALTY_INTERVAL : float = 9.5
-const IDLE_REMINDER_THRESHOLD : float = 2.0
+# seconds of being idle before it auto-throws your knife
+const IDLE_PENALTY_INTERVAL : float = 15.0
+const IDLE_REMINDER_THRESHOLD : float = 3.0
 
 onready var idle_timer = $IdleHourglass/IdleTimer
 onready var idle_hourglass = $IdleHourglass
@@ -62,6 +63,8 @@ func _ready():
 
 func disable():
 	disabled = true
+	
+	throw_strength_sprite.set_visible(false)
 
 func set_player_num(num):
 	player_num = num
@@ -105,24 +108,34 @@ func grow_strength_sprite():
 	
 	# NOTE: taking a square root (or more) means it _starts_ growing really quickly, but _slows down_ near 1.0
 	# Which looks really smooth and I should probably use it more ... 
-	var strength_ratio = clamp(pow(get_time_held() / MAX_TIME_HELD, 0.25), 0.0, 1.0)
+	var strength_ratio = clamp(pow(get_time_held() / MAX_TIME_HELD, 0.4), 0.0, 1.0)
 	throw_strength_sprite.material.set_shader_param("ratio", strength_ratio)
+	
+	if throw_strength_sprite.is_visible():
+		body.modules.knives.update_guide_material(strength_ratio)
 
 func _on_Input_button_press():
 	if disabled: return
-	if body.modules.specialstatus.stun.is_stunned: return
+	if body.modules.specialstatus.stun.is_stunned: 
+		body.modules.particles.continuous_feedback("Stunned!")
+		return
 	
 	start_slash()
 
 func _on_Input_button_release():
 	if disabled: return
-	if body.modules.specialstatus.stun.is_stunned: return
+	if body.modules.specialstatus.stun.is_stunned: 
+		body.modules.particles.continuous_feedback("Stunned!")
+		return
 	
 	finish_slash()
 
 func _on_Input_move_vec(vec : Vector2, dt : float):
 	if disabled: return
 	if not slashing_enabled: return
+	
+	if GlobalDict.cfg.use_control_scheme_with_constant_moving:
+		vec = Vector2.RIGHT
 	
 	if body.modules.status.in_water:
 		var rotate_dir = 1 if vec.x > 0 else -1
@@ -193,6 +206,7 @@ func finish_slash():
 	
 	execute_slash()
 	throw_strength_sprite.set_visible(false)
+	body.modules.knives.update_guide_material(0.0)
 	slashing_enabled = false
 
 func execute_slash():

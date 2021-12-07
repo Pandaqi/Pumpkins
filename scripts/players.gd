@@ -12,6 +12,7 @@ onready var main_node = get_parent()
 onready var map = get_node("../Map")
 onready var spawner = get_node("../Spawner")
 onready var mode = get_node("../ModeManager")
+onready var arena = get_node("../ArenaLoader")
 onready var shape_manager = get_node("../ShapeManager")
 onready var particles = get_node("../Particles")
 onready var collectors = get_node("../Collectors")
@@ -45,8 +46,12 @@ func create_players():
 		map.entities.add_child(p)
 		
 		var pos = spawner.get_valid_pos(params)
-		var home_base_pos = mode.get_pos_around_home_base(player_data[i].team)
+		var team_num = player_data[i].team
+		var home_base_pos = mode.get_pos_around_home_base(team_num)
 		if home_base_pos: pos = home_base_pos
+		
+		var special_arena_pos = arena.get_special_starting_pos(team_num)
+		if special_arena_pos: pos = special_arena_pos
 
 		p.set_position(pos)
 		
@@ -56,7 +61,7 @@ func create_players():
 		
 		p.modules.shaper.create_from_shape(new_shape)
 		p.modules.status.set_player_num(i)
-		p.modules.status.set_team_num(player_data[i].team)
+		p.modules.status.set_team_num(team_num)
 
 		if not mode.can_slice_players():
 			p.remove_from_group("Sliceables")

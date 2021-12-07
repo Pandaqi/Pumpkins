@@ -38,6 +38,9 @@ func activate():
 	if not GlobalDict.cfg.show_guides:
 		guide.queue_free()
 		guide = null
+	else:
+		guide.get_node("Sprite").material = guide.get_node("Sprite").material.duplicate(true)
+		guide.get_node("Sprite").material.set_shader_param('progress', 0.0)
 	
 	max_knives = mode.get_max_knife_capacity()
 	knives_by_snap_angle.resize(num_snap_angles)
@@ -117,6 +120,8 @@ func move_knife(knife, new_ang):
 
 	knife.set_position(new_position)
 	knife.set_rotation(new_ang)
+	
+	snap_vec_to_knife_angles(knife, vec)
 
 func lose_random():
 	if knives_held.size() <= 0: return
@@ -138,7 +143,9 @@ func count():
 	return knives_held.size()
 
 func at_max_capacity():
-	return (knives_held.size() >= max_knives)
+	var max_cap = (knives_held.size() >= max_knives)
+	if max_cap: particles.general_feedback(body.global_position, "Full!")
+	return max_cap
 
 func grab_knife(knife):
 	if at_max_capacity(): return
@@ -276,6 +283,11 @@ func unhighlight_knife(knife):
 	
 	if guide:
 		guide.set_visible(false)
+
+func update_guide_material(progress_ratio):
+	if not guide or not is_instance_valid(guide): return
+	
+	guide.get_node("Sprite").material.set_shader_param('progress', progress_ratio)
 
 func get_first_knife():
 	if knives_held.size() <= 0: return

@@ -17,7 +17,7 @@ var base_cfg = {
 	'starting_throwable_type': 'knife',
 	'auto_throw_if_idle': true,
 
-	'use_slidy_throwing': true,
+	'use_slidy_throwing': false,
 	'auto_throw_knives': false,
 	'allow_quick_slash': false,
 	
@@ -27,18 +27,21 @@ var base_cfg = {
 	'predefined_powerup_locations': null,
 	
 	# version 2 improvement settings
+	'use_control_scheme_with_constant_moving': true,
+	'limit_fire_rate': true,
+	
 	'invincibility_after_hit': true,
 	'invincibility_depends_on_distance': true,
 	
 	'stun_after_hit': true,
 	'stun_depends_on_distance': true,
 	
-	'move_faster_if_close': false,
-	'scale_damage_with_distance': false, # TO DO: check the rules I'd already implemented for this, put them behind this toggle and modify
-	'repel_instead_of_throw_when_close': false,
+	'scale_damage_with_distance': true,
 	'deflect_knives_if_too_close': true,
-	'limit_fire_rate': true,
 	
+	'move_faster_if_close': true,
+	'move_faster_if_big': true,
+	'repel_instead_of_throw_when_close': false,
 }
 
 var cfg = {}
@@ -60,7 +63,7 @@ var modes = {
 }
 
 var arenas = {
-	"dark_jungle": { "frame": 3, "num_starting_knives": 3, "def": true },
+	"dark_jungle": { "frame": 3, "num_starting_knives": 3 },
 	"ghost_town": { "frame": 2 },
 	"graveyard": { "frame": 1 },
 	"spooky_forest": { "frame": 0 },
@@ -68,7 +71,8 @@ var arenas = {
 	"swimming_pool": { "frame": 6 },
 	"family_dinner": { "frame": 8, "ghost_part_target": 10 },
 	"pirate_curse": { "frame": 9 },
-	"haunted_house": { "frame": 5 }
+	"haunted_house": { "frame": 5 },
+	"training_ravines": { "frame": 10, "def": true, "num_starting_knives": 3, "special_starting_positions": true }
 }
 
 var configurable_settings = {

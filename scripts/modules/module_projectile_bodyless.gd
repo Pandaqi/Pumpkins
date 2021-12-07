@@ -167,7 +167,7 @@ func slice_through_body(obj):
 	# an invincible player obviously also cannot be sliced
 	# TO DO: might give issues when someone isn't sliced at first, yet then becomes vincible again while knife is inside??
 	if is_player and obj.modules.specialstatus.invincibility.is_invincible: 
-		particles.general_feedback(body.global_position, "Invincible!")
+		body.modules.particles.continuous_feedback("Invincible!")
 		return false
 	
 	# if the object has the same (team) owner as the throwable, never slice
@@ -222,7 +222,7 @@ func slice_through_body(obj):
 		
 		my_owner.modules.statistics.record("players_sliced", 1)
 		
-		if dist_traveled > MIN_DIST_LONG_THROW_BONUS:
+		if dist_traveled > MIN_DIST_LONG_THROW_BONUS and GlobalDict.cfg.scale_damage_with_distance:
 			particles.general_feedback(body.global_position, "Long throw!")
 			
 			body.modules.mover.set_velocity(body.modules.distancetracker.get_original_velocity())

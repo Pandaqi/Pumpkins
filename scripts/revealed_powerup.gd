@@ -35,6 +35,8 @@ func set_type(tp):
 	sprite.set_frame(frame)
 
 func _on_Area2D_body_entered(body):
+	if not body.is_in_group("Players"): return
+	
 	if still_inside:
 		if not GlobalDict.cfg.auto_pickup_powerups and not body.modules.powerups.auto_unwrap:
 			return
