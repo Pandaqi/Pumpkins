@@ -22,6 +22,8 @@ func start(throwable):
 	timer.start()
 	
 	is_stunned = true
+	body.modules.topping.update_face()
+	body.modules.particles.on_stun_start()
 	
 	body.modules.knives.cancel_throw()
 	
@@ -31,6 +33,8 @@ func stop():
 	is_stunned = false
 	
 	outline_progress.stop()
+	body.modules.topping.update_face()
+	body.modules.particles.on_stun_end()
 
 func _on_Timer_timeout():
 	stop()

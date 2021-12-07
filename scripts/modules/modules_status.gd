@@ -88,7 +88,7 @@ func turn_into_player():
 
 func rotate_incrementally():
 	if is_bot: return false
-	return GlobalInput.is_keyboard_player(player_num)
+	return GlobalInput.is_keyboard_player(player_num) or (GlobalDict.cfg.use_control_scheme_with_constant_moving and not body.modules.status.is_bot)
 
 func make_powerup_leftover():
 	player_num = -1

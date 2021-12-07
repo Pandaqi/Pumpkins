@@ -2,6 +2,8 @@ extends Node2D
 
 onready var part : Particles2D = $Particles2D
 onready var water_part : Particles2D = $WaterParticles
+onready var stun_particles = $StunParticles
+onready var invincibility_particles = $InvincibilityParticles
 
 onready var particles = get_node("/root/Main/Particles")
 
@@ -10,8 +12,11 @@ onready var body = get_parent()
 var is_moving : bool = false
 
 var last_continuous_feedback : float = -1
+const CONTINUOUS_FEEDBACK_THRESHOLD : float = 750.0
 
 func _ready():
+	on_stun_end()
+	on_invincibility_end()
 	_on_Mover_movement_stopped()
 
 func disable():
@@ -45,8 +50,19 @@ func _on_Mover_movement_stopped():
 
 func continuous_feedback(txt):
 	var diff = OS.get_ticks_msec() - last_continuous_feedback
-	if diff < 500.0: return
+	if diff < CONTINUOUS_FEEDBACK_THRESHOLD: return
 	
 	particles.general_feedback(body.global_position, txt)
 	last_continuous_feedback = OS.get_ticks_msec()
-	
+
+func on_stun_start():
+	stun_particles.set_emitting(true)
+
+func on_stun_end():
+	stun_particles.set_emitting(false)
+
+func on_invincibility_start():
+	invincibility_particles.set_emitting(true)
+
+func on_invincibility_end():
+	invincibility_particles.set_emitting(false)

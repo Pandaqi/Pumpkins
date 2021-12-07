@@ -3,8 +3,8 @@ extends Node2D
 const THROW_TIME_THRESHOLD : float = 220.0 # milliseconds
 const QUICK_SLASH_COOLDOWN_DURATION : float = 3000.0 # milliseconds
 
-const ROTATE_SPEED : float = 1.0
-const WATER_ROTATE_SPEED : float = 0.87
+const ROTATE_SPEED : float = 0.75
+const WATER_ROTATE_SPEED : float = 0.66*ROTATE_SPEED
 const AIM_INTERP_FACTOR : float = 0.25
 
 onready var body = get_parent()
@@ -130,11 +130,13 @@ func _on_Input_button_release():
 	
 	finish_slash()
 
+# TO DO: This only works because a move vector is sent EVERY FRAME, even if you're not inputting anything
+# => not the cleanest way to do it
 func _on_Input_move_vec(vec : Vector2, dt : float):
 	if disabled: return
 	if not slashing_enabled: return
 	
-	if GlobalDict.cfg.use_control_scheme_with_constant_moving:
+	if GlobalDict.cfg.use_control_scheme_with_constant_moving and not body.modules.status.is_bot:
 		vec = Vector2.RIGHT
 	
 	if body.modules.status.in_water:
@@ -147,24 +149,12 @@ func _on_Input_move_vec(vec : Vector2, dt : float):
 	
 	emit_signal("aim")
 	
-	if GlobalDict.cfg.aim_helper:
-		var vec_to_closest_target = snap_to_closest_target(vec)
-		body.slowly_orient_towards_vec(vec_to_closest_target, 1.0)
-		return
-	
 	var long_hold = get_time_held() > MAX_TIME_HELD
 	if body.modules.status.rotate_incrementally():
 		var rotate_dir = 1 if vec.x > 0 else -1
 		var rotate_speed = ROTATE_SPEED
-		if long_hold: rotate_speed *= 0.25
-		
-		# up/down keys are for faster rotating
-		if vec.y > 0:
-			rotate_dir = 1
-			rotate_speed *= 2
-		elif vec.y < 0:
-			rotate_dir = -1
-			rotate_speed *= 2
+		if long_hold and GlobalDict.cfg.slow_down_aiming_over_time: 
+			rotate_speed *= 0.5
 		
 		body.rotate(rotate_dir*(2*PI)*rotate_speed*dt)
 	
@@ -172,6 +162,11 @@ func _on_Input_move_vec(vec : Vector2, dt : float):
 		var factor = AIM_INTERP_FACTOR
 		if long_hold: factor *= 0.25
 		body.slowly_orient_towards_vec(vec, factor)
+	
+	if GlobalDict.cfg.aim_helper:
+		var vec_to_closest_target = snap_to_closest_target(body.get_forward_vec())
+		body.slowly_orient_towards_vec(vec_to_closest_target, 1.0)
+		return
 
 func snap_to_closest_target(aim_vec):
 	var targets = mode.get_targets()

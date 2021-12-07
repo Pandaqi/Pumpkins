@@ -1,6 +1,6 @@
 extends Node2D
 
-const MAX_SLIDES : int = 3
+var MAX_SLIDES : int = 3
 
 onready var gui = get_node("/root/Main/GUI")
 onready var my_gui = $Node2D
@@ -14,6 +14,9 @@ var num_slashes : int = 0
 var num_frames_aimed : int = 0
 
 func activate(num):
+	if GlobalDict.cfg.use_control_scheme_with_constant_moving:
+		MAX_SLIDES = 2
+	
 	remove_child(my_gui)
 	gui.add_child(my_gui)
 	

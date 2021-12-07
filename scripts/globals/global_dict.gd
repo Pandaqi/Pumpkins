@@ -39,9 +39,11 @@ var base_cfg = {
 	'scale_damage_with_distance': true,
 	'deflect_knives_if_too_close': true,
 	
+	'slow_down_aiming_over_time': false,
+	
 	'move_faster_if_close': true,
 	'move_faster_if_big': true,
-	'repel_instead_of_throw_when_close': false,
+	'repel_instead_of_throw_when_close': false, # => doesn't really work with the game, not even implemented
 }
 
 var cfg = {}
@@ -85,7 +87,10 @@ var configurable_settings = {
 	"everyone_starts_pumpkin": { "frame": 6, "def": false },
 	"stuck_reset": { "frame": 7, "def": true },
 	"light_effects": { "frame": 8, "def": true },
-	"auto_throw_if_idle": { "frame": 9, "def": true }
+	"auto_throw_if_idle": { "frame": 9, "def": true },
+	"limit_fire_rate": { "frame": 10, "def": true },
+	"stun_after_hit": { "frame": 11, "def": true },
+	"invincibility_after_hit": { "frame": 12, "def": true }
 }
 
 var throwables = {
@@ -107,7 +112,7 @@ var nav_data = {
 	"modes": { "frames": Vector2(4,4), "single_choice_mode": true, "cols": 4, "large_tiles": true },
 	"powerups": { "frames": Vector2(8,8), "single_choice_mode": false, "cols": 7, "large_tiles": false },
 	"throwables": { "frames": Vector2(4,4), "single_choice_mode": false, "cols": 4, "large_tiles": false },
-	"settings": { "frames": Vector2(4,4), "single_choice_mode": false, "cols": 4, "large_tiles": false }
+	"settings": { "frames": Vector2(4,4), "single_choice_mode": false, "cols": 5, "large_tiles": false }
 }
 
 var player_colors = [

@@ -9,6 +9,9 @@ onready var outline_progress = $OutlineProgress
 onready var body = get_parent().get_parent()
 
 func on_throw():
+	# reloading as a ghost is both pointless and ugly
+	if body.modules.status.is_ghost: return
+	
 	is_reloading = true
 	
 	timer.wait_time = RELOAD_DURATION

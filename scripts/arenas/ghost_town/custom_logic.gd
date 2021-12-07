@@ -14,6 +14,7 @@ onready var timer = $Timer
 onready var tween = $Tween
 
 const LENGTH_OF_DAY = 26.0
+const LENGTH_OF_NIGHT = 10.0
 
 var dead_players = []
 
@@ -24,9 +25,6 @@ func activate():
 	
 	is_day = false
 	change_mode()
-	
-	timer.wait_time = LENGTH_OF_DAY
-	timer.start()
 
 func on_player_death(p) -> Dictionary:
 	dead_players.append(p)
@@ -107,3 +105,9 @@ func make_ghost_knives_appear():
 
 func _on_Timer_timeout():
 	change_mode()
+	
+	var dur = LENGTH_OF_DAY
+	if not is_day: dur = LENGTH_OF_NIGHT
+	
+	timer.wait_time = dur
+	timer.start()

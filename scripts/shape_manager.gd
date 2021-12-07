@@ -56,6 +56,10 @@ func load_predefined_shapes():
 	for child in list.get_children():
 		if not (child is CollisionPolygon2D): continue
 		
+		var temp_shape_size = shape_size
+		if child.name == "Square" or child.name == "Circle":
+			temp_shape_size *= 0.9
+		
 		var key = child.name.to_lower()
 		var val = scale_shape_absolutely( Array(child.polygon), shape_size)
 

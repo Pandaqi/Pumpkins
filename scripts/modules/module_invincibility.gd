@@ -21,14 +21,19 @@ func start(throwable):
 	timer.start()
 	
 	is_invincible = true
+	body.modules.topping.update_face()
+	body.modules.particles.on_invincibility_start()
 
-	# TO DO: get our own flicker animation to prevent this spaghetti code?
-	body.modules.respawner.anim_player.play("RespawnFlicker")
+	# flickering makes the outline progress look bad, and it's easy to miss, so just leave it out
+	# body.modules.respawner.anim_player.play("RespawnFlicker")
 
 func stop():
 	is_invincible = false
 	body.modules.respawner.anim_player.stop()
 	body.modulate.a = 1.0
+	
+	body.modules.topping.update_face()
+	body.modules.particles.on_invincibility_end()
 
 func _on_Timer_timeout():
 	stop()

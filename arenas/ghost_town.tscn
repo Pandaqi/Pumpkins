@@ -357,6 +357,7 @@ shadow_item_cull_mask = 2
 
 [node name="Timer" type="Timer" parent="CustomLogic"]
 wait_time = 20.0
+one_shot = true
 
 [node name="Tween" type="Tween" parent="CustomLogic"]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=2]
+[gd_scene load_steps=70 format=2]
 
 [ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=2]
@@ -38,6 +38,9 @@
 [ext_resource path="res://scripts/modules/module_invincibility.gd" type="Script" id=36]
 [ext_resource path="res://scripts/modules/module_specialstatus.gd" type="Script" id=37]
 [ext_resource path="res://scripts/modules/module_stun.gd" type="Script" id=38]
+[ext_resource path="res://assets/faces.png" type="Texture" id=39]
+[ext_resource path="res://assets/particles/stun_particle.png" type="Texture" id=40]
+[ext_resource path="res://assets/particles/invincibility_particle.png" type="Texture" id=41]
 
 [sub_resource type="Animation" id=15]
 length = 0.001
@@ -312,6 +315,12 @@ scale_random = 0.25
 scale_curve = SubResource( 20 )
 color_ramp = SubResource( 23 )
 
+[sub_resource type="Curve" id=27]
+_data = [ Vector2( 0.00303951, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=28]
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
 [sub_resource type="Animation" id=8]
 resource_name = "LightFLicker"
 loop = true
@@ -536,6 +545,11 @@ texture = ExtResource( 9 )
 hframes = 8
 vframes = 4
 
+[node name="Face" type="Sprite" parent="Topping/Sprite"]
+position = Vector2( 49.9467, 0 )
+texture = ExtResource( 39 )
+hframes = 3
+
 [node name="Collector" type="Node2D" parent="."]
 script = ExtResource( 15 )
 
@@ -582,6 +596,38 @@ randomness = 0.5
 local_coords = false
 process_material = SubResource( 21 )
 texture = ExtResource( 33 )
+
+[node name="StunParticles" type="CPUParticles2D" parent="Particles"]
+amount = 24
+lifetime = 2.0
+preprocess = 1.0
+local_coords = false
+texture = ExtResource( 40 )
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 80.0
+angular_velocity = 360.0
+angular_velocity_random = 1.0
+scale_amount = 0.25
+scale_amount_random = 0.2
+scale_amount_curve = SubResource( 27 )
+color_ramp = SubResource( 28 )
+
+[node name="InvincibilityParticles" type="CPUParticles2D" parent="Particles"]
+amount = 24
+lifetime = 2.0
+preprocess = 1.0
+local_coords = false
+texture = ExtResource( 41 )
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 80.0
+angular_velocity = 360.0
+angular_velocity_random = 1.0
+scale_amount = 0.25
+scale_amount_random = 0.2
+scale_amount_curve = SubResource( 27 )
+color_ramp = SubResource( 28 )
 
 [node name="Light2D" type="Light2D" parent="."]
 texture = ExtResource( 24 )
