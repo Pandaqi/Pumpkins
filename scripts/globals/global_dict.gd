@@ -39,19 +39,20 @@ var base_cfg = {
 	'scale_damage_with_distance': true,
 	'deflect_knives_if_too_close': true,
 	
-	'slow_down_aiming_over_time': false,
+	'slow_down_aiming_over_time': true,
 	
-	'move_faster_if_close': true,
 	'move_faster_if_big': true,
+	
+	'move_faster_if_close': true, # has no option toggle in settings as it's such a tiny thing
 	'repel_instead_of_throw_when_close': false, # => doesn't really work with the game, not even implemented
 }
 
 var cfg = {}
 
 var modes = {
-	"dicey_slicey": { "frame": 0, "win": "survival", "fade_rubble": true, "players_can_die": true, "def": true },
+	"dicey_slicey": { "frame": 0, "win": "survival", "fade_rubble": true, "players_can_die": true, "def": true, "demo": true },
 	
-	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 5, "auto_grow": true, "collectible_group": "PlayerParts" },
+	"collect_em_all": { "frame": 1, "win": "collection", "eat_player_parts": true, "target_num": 5, "auto_grow": true, "collectible_group": "PlayerParts", "demo": true },
 
 	"bulls_eye": { "frame": 2, "win": "collection", "target_num": 20, "fade_rubble": true, "auto_grow": true, "auto_spawns": "bullseye", "player_slicing_penalty": -1, "target_group": "Targets", "num_starting_knives": 3, "max_teams": 4 },
 	
@@ -65,8 +66,8 @@ var modes = {
 }
 
 var arenas = {
-	"dark_jungle": { "frame": 3, "num_starting_knives": 3 },
-	"ghost_town": { "frame": 2 },
+	"dark_jungle": { "frame": 3, "num_starting_knives": 3, "demo": true },
+	"ghost_town": { "frame": 2, "demo": true },
 	"graveyard": { "frame": 1 },
 	"spooky_forest": { "frame": 0 },
 	"bogus_blackouts": { "frame": 7 },
@@ -74,32 +75,34 @@ var arenas = {
 	"family_dinner": { "frame": 8, "ghost_part_target": 10 },
 	"pirate_curse": { "frame": 9 },
 	"haunted_house": { "frame": 5 },
-	"training_ravines": { "frame": 10, "def": true, "num_starting_knives": 3, "special_starting_positions": true }
+	"training_ravines": { "frame": 10, "def": true, "num_starting_knives": 3, "special_starting_positions": true, "demo": true }
 }
 
 var configurable_settings = {
-	"tutorial": { "frame": 0, "def": true, "ignore_default_buttons": true },
+	"tutorial": { "frame": 0, "def": true, "ignore_default_buttons": true, "demo": true },
 	"aim_helper": { "frame": 1, "def": false },
-	"knife_always_in_front": { "frame": 2, "def": true },
-	"disable_flashing_effects": { "frame": 3, "def": false },
+	"knife_always_in_front": { "frame": 2, "def": true, "demo": true },
+	"disable_flashing_effects": { "frame": 3, "def": false, "demo": true },
 	"shrink_area": { "frame": 4, "def": true },
 	"show_guides": { "frame": 5, "def": true },
 	"everyone_starts_pumpkin": { "frame": 6, "def": false },
 	"stuck_reset": { "frame": 7, "def": true },
-	"light_effects": { "frame": 8, "def": true },
+	"light_effects": { "frame": 8, "def": true, "demo": true },
 	"auto_throw_if_idle": { "frame": 9, "def": true },
 	"limit_fire_rate": { "frame": 10, "def": true },
 	"stun_after_hit": { "frame": 11, "def": true },
-	"invincibility_after_hit": { "frame": 12, "def": true }
+	"invincibility_after_hit": { "frame": 12, "def": true },
+	"move_faster_if_big": { "frame": 13, "def": true },
+	"use_control_scheme_with_constant_moving": { "frame": 14, "def": true, "demo": true }
 }
 
 var throwables = {
-	"knife": { "body": false, "owner": "auto", "base_frame": 0, "frame": 0, "def": true, "prob": 5, "category": "knife" },
-	"boomerang": { "body": false, "owner": "auto", "base_frame": 9, "frame": 1, "prob": 3, "def": false, "category": "knife" },
+	"knife": { "body": false, "owner": "auto", "base_frame": 0, "frame": 0, "def": true, "prob": 5, "category": "knife", "demo": true },
+	"boomerang": { "body": false, "owner": "auto", "base_frame": 9, "frame": 1, "prob": 3, "def": false, "category": "knife", "demo": true },
 	"curve": { "body": false, "owner": "auto", "base_frame": 18, "frame": 2, "prob": 2, "category": "knife" },
 	"ghost_knife": { "body": false, "owner": "hostile", "base_frame": 27, "frame": 3, "category": "knife" },
 	
-	"dumpling": { "body": true, "owner": "friendly", "base_frame": 28, "prob": 4, "frame": 4, "category": "dumpling", "def": false }, 
+	"dumpling": { "body": true, "owner": "friendly", "base_frame": 28, "prob": 4, "frame": 4, "category": "dumpling", "def": false, "demo": true }, 
 	"dumpling_poisoned": { "body": true, "owner": "friendly", "base_frame": 29, "prob": 2, "frame": 5, "category": "dumpling" },
 	"dumpling_double": { "body": true, "owner": "friendly", "base_frame": 30, "frame": 6, "category": "dumpling" },
 	"dumpling_downgrade": { "body": true, "owner": "friendly", "base_frame": 31, "frame": 7, "category": "dumpling" },
@@ -160,8 +163,8 @@ var predefined_shapes = {
 }
 
 var powerups = {
-	"grow": { "frame": 0, "category": "shape", "prob": 5 },
-	"shrink": { "frame": 1, "category": "shape", "prob": 5, "bad": true },
+	"grow": { "frame": 0, "category": "shape", "prob": 5, "demo": true },
+	"shrink": { "frame": 1, "category": "shape", "prob": 5, "bad": true, "demo": true },
 	"morph": { "frame": 2, "category": "shape" },
 	"ghost": { "frame": 3, "temporary": true, "category": "shape" },
 	"hungry": { "frame": 4, "temporary": true, "category": "shape" },
@@ -175,10 +178,10 @@ var powerups = {
 	
 	"faster_move": { "frame": 13, "temporary": true, "category": "moving" },
 	"slower_move": { "frame": 14, "temporary": true, "category": "moving", "bad": true },
-	"reversed_controls": { "frame": 15, "temporary": true, "category": "moving", "bad": true },
-	"ice": { "frame": 16, "temporary": true, "category": "moving", "bad": true },
+	"reversed_controls": { "frame": 15, "temporary": true, "category": "moving", "bad": true, "demo": true },
+	"ice": { "frame": 16, "temporary": true, "category": "moving", "bad": true, "demo": true },
 	
-	"magnet": { "frame": 17, "temporary": true, "category": "collecting" },
+	"magnet": { "frame": 17, "temporary": true, "category": "collecting", "demo": true },
 	"duplicator": { "frame": 18, "temporary": true, "category": "collecting" },
 	"clueless": { "frame": 19, "temporary": true, "category": "collecting", "bad": true },
 	"auto_unwrap": { "frame": 20, "temporary": true, "category": "collecting" },

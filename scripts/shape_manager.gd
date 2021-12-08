@@ -1,6 +1,6 @@
 extends Node
 
-var STARTING_PLAYER_SIZE : float = 140.0
+var STARTING_PLAYER_SIZE : float = 130.0
 
 var predefined_shape_scene = preload("res://scenes/predefined_shape_list.tscn")
 var available_shapes = []

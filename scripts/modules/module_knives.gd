@@ -230,13 +230,22 @@ func move_first_knife_to_back():
 func is_reloading():
 	return reloader.is_reloading
 
+func play_throw_tween():
+	body.modules.tween.interpolate_property(body, "scale", 
+		Vector2.ONE*1.35, Vector2.ONE, 0.5,
+		Tween.TRANS_ELASTIC, Tween.EASE_OUT)
+	body.modules.tween.start()
+
 func throw_knife(knife):
 	if disabled: return
-	if knife_overlaps_problematic_body(knife): return
 	if is_reloading(): 
 		particles.general_feedback(body.global_position, "Reloading!")
 		return
-
+	
+	play_throw_tween()
+	
+	if knife_overlaps_problematic_body(knife): return
+	
 	knives_held.erase(knife)
 	unsnap_knife_angle(knife.rotation)
 	

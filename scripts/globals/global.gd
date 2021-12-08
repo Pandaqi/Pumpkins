@@ -6,6 +6,8 @@ var scenes = {
 	"Main": preload("res://Main.tscn"),
 }
 
+var demo : bool = true
+
 var first_round : bool = true
 var is_restart : bool = false
 

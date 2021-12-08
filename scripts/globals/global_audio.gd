@@ -18,6 +18,7 @@ var audio_preload = {
 		preload("res://assets/audio/throw2.ogg"),
 		preload("res://assets/audio/throw3.ogg")
 	],
+	"ping": preload("res://assets/audio/ping.ogg"),
 	"windup_throw": preload("res://assets/audio/windup_throw.ogg"),
 	
 	"grab": preload("res://assets/audio/grab.ogg"),

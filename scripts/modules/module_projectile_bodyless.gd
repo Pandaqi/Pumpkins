@@ -224,6 +224,7 @@ func slice_through_body(obj):
 		
 		if dist_traveled > MIN_DIST_LONG_THROW_BONUS and GlobalDict.cfg.scale_damage_with_distance:
 			particles.general_feedback(body.global_position, "Long throw!")
+			GlobalAudio.play_dynamic_sound(body, "ping")
 			
 			body.modules.mover.set_velocity(body.modules.distancetracker.get_original_velocity())
 			

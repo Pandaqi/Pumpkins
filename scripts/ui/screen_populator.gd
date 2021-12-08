@@ -66,6 +66,13 @@ func _ready():
 
 func create_item_list_visuals():
 	var keys = item_list.keys()
+	
+	if Global.demo:
+		for i in range(keys.size()-1,-1,-1):
+			var temp_data = item_list[keys[i]]
+			if not temp_data.has("demo") or not temp_data.demo:
+				keys.remove(i)
+	
 	var total_num_items = keys.size()
 	if should_add_default_buttons(): total_num_items += 2
 	

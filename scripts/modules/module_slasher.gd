@@ -26,6 +26,7 @@ var slash_range : float
 onready var range_sprite = $Sprite
 
 const MAX_TIME_HELD : float = 1750.0 # holding longer than this changes nothing anymore
+const MAX_SLOWDOWN_TIME : float = 5000.0 # during this period, your rotating speed keeps slowing down
 const THROW_STRENGTH_BOUNDS = { 'min': 250, 'max': 2500 }
 var strength_multiplier : float = 1.0
 onready var throw_strength_sprite = $ThrowStrength
@@ -150,11 +151,12 @@ func _on_Input_move_vec(vec : Vector2, dt : float):
 	emit_signal("aim")
 	
 	var long_hold = get_time_held() > MAX_TIME_HELD
+	var slowdown_factor = clamp(1.0 - get_time_held() / MAX_SLOWDOWN_TIME, 0.45, 1.0)
 	if body.modules.status.rotate_incrementally():
 		var rotate_dir = 1 if vec.x > 0 else -1
 		var rotate_speed = ROTATE_SPEED
-		if long_hold and GlobalDict.cfg.slow_down_aiming_over_time: 
-			rotate_speed *= 0.5
+		if GlobalDict.cfg.slow_down_aiming_over_time: 
+			rotate_speed *= slowdown_factor
 		
 		body.rotate(rotate_dir*(2*PI)*rotate_speed*dt)
 	

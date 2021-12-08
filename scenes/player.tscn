@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=2]
+[gd_scene load_steps=72 format=2]
 
 [ext_resource path="res://scripts/modules/module_drawer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/modules/modules_status.gd" type="Script" id=2]
@@ -41,6 +41,38 @@
 [ext_resource path="res://assets/faces.png" type="Texture" id=39]
 [ext_resource path="res://assets/particles/stun_particle.png" type="Texture" id=40]
 [ext_resource path="res://assets/particles/invincibility_particle.png" type="Texture" id=41]
+
+[sub_resource type="Animation" id=29]
+resource_name = "Invincibility"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("../Drawer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0.9, 1.4, 0.9, 1 ) ]
+}
+
+[sub_resource type="Animation" id=30]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../Drawer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
 
 [sub_resource type="Animation" id=15]
 length = 0.001
@@ -385,6 +417,10 @@ one_shot = true
 
 [node name="OutlineProgress" parent="SpecialStatus/Stun" instance=ExtResource( 35 )]
 color = Color( 0.933333, 1, 0.145098, 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SpecialStatus"]
+anims/Invincibility = SubResource( 29 )
+anims/RESET = SubResource( 30 )
 
 [node name="Respawner" type="Node2D" parent="."]
 script = ExtResource( 32 )

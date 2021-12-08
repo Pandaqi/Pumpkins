@@ -7,6 +7,7 @@ var is_invincible : bool = false
 
 onready var timer = $Timer
 onready var body = get_parent().get_parent()
+onready var anim_player = get_parent().get_node("AnimationPlayer")
 
 func start(throwable):
 	var dist = throwable.modules.distancetracker.last_throw_dist
@@ -24,8 +25,8 @@ func start(throwable):
 	body.modules.topping.update_face()
 	body.modules.particles.on_invincibility_start()
 
-	# flickering makes the outline progress look bad, and it's easy to miss, so just leave it out
-	# body.modules.respawner.anim_player.play("RespawnFlicker")
+	# NOTE: Do not flicker the ALPHA, as that just makes everything (and especially the outline progress) look bad
+	anim_player.play("Invincibility")
 
 func stop():
 	is_invincible = false
@@ -34,6 +35,7 @@ func stop():
 	
 	body.modules.topping.update_face()
 	body.modules.particles.on_invincibility_end()
+	anim_player.stop()
 
 func _on_Timer_timeout():
 	stop()
