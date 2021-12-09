@@ -23,7 +23,7 @@ func get_path_to_target(target_pos):
 		num_tries += 1
 	
 	if num_tries >= max_tries:
-		print("NO PATH POSSIBLE")
+		#print("NO PATH POSSIBLE")
 		return []
 	
 	return new_path

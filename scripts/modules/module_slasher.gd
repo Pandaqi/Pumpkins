@@ -361,11 +361,17 @@ func use_idle_timer():
 	if no_first_knife: return false
 	return true
 
-func self_slice():
+func self_slice(attacking_throwable = null):
 	var center = body.global_position
 	var rot = 2*PI*randf()
 	var rand_vec = Vector2(cos(rot), sin(rot))
 	var start = center + rand_vec * 400
 	var end = center - rand_vec*400
 	
-	slicer.slice_bodies_hitting_line(start, end, [], [body], null)
+	var result = slicer.slice_bodies_hitting_line(start, end, [], [body], null)
+	
+	# if we sliced something, create exceptions between us and whatever we sliced
+	if attacking_throwable and result:
+		attacking_throwable.modules.fakebody.add_collision_exception(body)
+		for sliced_body in result:
+			attacking_throwable.modules.fakebody.add_collision_exception(sliced_body)

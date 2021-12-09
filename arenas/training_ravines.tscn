@@ -13,7 +13,7 @@
 texture = ExtResource( 1 )
 centered = false
 
-[node name="DiagonalThree" type="StaticBody2D" parent="Map/BG" index="1"]
+[node name="DiagonalThree" type="StaticBody2D" parent="Map/BG" index="1" groups=["ThrowableOnly"]]
 collision_layer = 2
 collision_mask = 0
 
@@ -24,7 +24,7 @@ polygon = PoolVector2Array( 925.324, 513.817, 1063.13, 430.756, 1244.35, 362.797
 texture = ExtResource( 4 )
 centered = false
 
-[node name="DiagonalTwo" type="StaticBody2D" parent="Map/BG" index="2"]
+[node name="DiagonalTwo" type="StaticBody2D" parent="Map/BG" index="2" groups=["ThrowableOnly"]]
 collision_layer = 2
 collision_mask = 0
 
@@ -35,7 +35,7 @@ polygon = PoolVector2Array( 925.324, 513.817, 1048.03, 542.133, 963.779, 614.117
 texture = ExtResource( 6 )
 centered = false
 
-[node name="DiagonalOne" type="StaticBody2D" parent="Map/BG" index="3"]
+[node name="DiagonalOne" type="StaticBody2D" parent="Map/BG" index="3" groups=["ThrowableOnly"]]
 collision_layer = 2
 collision_mask = 0
 

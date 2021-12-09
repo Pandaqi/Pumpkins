@@ -9,11 +9,14 @@ onready var body = get_parent()
 var player_num : int
 var cur_slide = -1
 
+var is_active : bool = false
+
 var amount_moved : float = 0.0
 var num_slashes : int = 0
 var num_frames_aimed : int = 0
 
 func activate(num):
+	is_active = true
 	if GlobalDict.cfg.use_control_scheme_with_constant_moving:
 		MAX_SLIDES = 2
 	
@@ -24,6 +27,7 @@ func activate(num):
 	load_next_slide()
 
 func self_destruct():
+	is_active = false
 	if my_gui: my_gui.queue_free()
 	self.queue_free()
 	if body and body.modules:

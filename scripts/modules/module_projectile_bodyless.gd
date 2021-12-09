@@ -231,7 +231,7 @@ func slice_through_body(obj):
 			my_owner.modules.grower.grow(0.2)
 			
 			var perform_extra_slice = (randf() <= LONG_THROW_EXTRA_SLICE_PROB)
-			if perform_extra_slice: obj.modules.slasher.self_slice()
+			if perform_extra_slice: obj.modules.slasher.self_slice(body)
 
 	return true
 

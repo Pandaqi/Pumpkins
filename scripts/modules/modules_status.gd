@@ -81,6 +81,9 @@ func turn_into_player():
 	bot.get_parent().remove_child(bot)
 	bot.queue_free()
 	
+	print("IS TUT?")
+	print(GlobalDict.cfg.tutorial)
+	
 	if (not GlobalDict.cfg.tutorial) or Global.is_restart: 
 		var tutorial = get_node("../Tutorial")
 		tutorial.get_parent().remove_child(tutorial)
@@ -88,7 +91,9 @@ func turn_into_player():
 
 func rotate_incrementally():
 	if is_bot: return false
-	return GlobalInput.is_keyboard_player(player_num) or (GlobalDict.cfg.use_control_scheme_with_constant_moving and not body.modules.status.is_bot)
+	if GlobalInput.is_keyboard_player(player_num): return true
+	if GlobalDict.cfg.use_control_scheme_with_constant_moving: return true
+	return false
 
 func make_powerup_leftover():
 	player_num = -1

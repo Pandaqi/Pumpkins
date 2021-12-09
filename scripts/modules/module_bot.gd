@@ -193,18 +193,18 @@ func read_situation():
 			targets.remove(i)
 			continue
 		
-		# don't target anyone who still has a tutorial going
-		if t.body.is_in_group("Players"):
-			if t.body.modules.has('tutorial'):
-				targets.remove(i)
-				continue
-		
 		# don't target our own teammates
 		# (this includes our own huge dumpling)
 		if body.modules.status.same_team(t.body):
 			targets.remove(i)
 			continue
-	
+		
+		# don't target anyone who still has a tutorial going
+		if t.body.is_in_group("Players"):
+			if t.body.modules.has('tutorial') and t.body.modules.tutorial.is_active:
+				targets.remove(i)
+				continue
+
 	#
 	# general information about players
 	#
@@ -354,7 +354,7 @@ func stock_resources():
 		last_chosen_collectible = new_collectible_target
 		
 		# TO DO: Not sure about this, ALWAYS prevent attack if collectible is known? Seems a bit too strong
-		params.prevent_attack = true
+		# params.prevent_attack = true
 	
 	#
 	# If the mode has powerups, we go for good ones (if revealed)
@@ -411,12 +411,16 @@ func attack():
 	if num_knives <= 0: return
 	if params.prevent_attack: return
 	if targets.size() <= 0: return
-	
+
 	var our_pos = body.get_global_position()
 	var closest_target = null
 	var cant_reach = true
 	var counter = 0
 	var sliceable_in_the_way = false
+	
+	# don't hit ourself (raycast starts from us)
+	# and ignore bodies that are solid BUT marked as something that does let through throwables
+	var exclusion = [body] + get_tree().get_nodes_in_group("ThrowableOnly")
 	
 	while cant_reach and counter < targets.size():
 		closest_target = targets[counter]
@@ -424,7 +428,6 @@ func attack():
 		
 		var start = our_pos
 		var end = closest_target.body.global_position
-		var exclusion = [body]
 		var rc_params = shoot_raycast(start, end, exclusion, 1 + 2 + 4 + 8, closest_target.body)
 		
 		if not rc_params.result: continue
@@ -583,6 +586,14 @@ func apply_chosen_input(dt):
 	# button press/release
 	if params.press_button:
 		emit_signal("button_press")
+	
+	# delay releasing if we're currently not able to do so
+	if body.modules.knives.is_reloading(): 
+		params.release_button = false
+	if body.modules.specialstatus.stun.is_stunned: 
+		params.release_button = false
+		final_vec = Vector2.ZERO
+	
 	if params.release_button:
 		if not is_throwing: emit_signal("button_press")
 		emit_signal("button_release")
@@ -643,7 +654,7 @@ func get_path_to_target(target_pos):
 	
 	# if there's simply no path, return that
 	if num_tries >= max_tries:
-		print("NO PATH POSSIBLE; simply not possible")
+		#print("NO PATH POSSIBLE; simply not possible")
 		return []
 	
 	# if we're going to end too far away from our wanted path, it's considered an invalid path

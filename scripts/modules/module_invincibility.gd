@@ -10,6 +10,8 @@ onready var body = get_parent().get_parent()
 onready var anim_player = get_parent().get_node("AnimationPlayer")
 
 func start(throwable):
+	if body.modules.status.is_dead: return
+	
 	var dist = throwable.modules.distancetracker.last_throw_dist
 	var ratio = (1.0 - min(dist / DIST_FOR_MIN_INVINCIBILITY, 1.0))
 	var raw_duration = ratio * DURATION.max
@@ -29,6 +31,8 @@ func start(throwable):
 	anim_player.play("Invincibility")
 
 func stop():
+	if body.modules.status.is_dead: return
+	
 	is_invincible = false
 	body.modules.respawner.anim_player.stop()
 	body.modulate.a = 1.0

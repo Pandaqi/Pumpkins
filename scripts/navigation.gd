@@ -2,9 +2,9 @@ extends Node2D
 
 var cur_margin
 var MARGINS = {
-	'small': 20,
-	'medium': 35,
-	'big': 50
+	'small': 30,
+	'medium': 45,
+	'big': 60
 }
 
 onready var nav_small = $Small

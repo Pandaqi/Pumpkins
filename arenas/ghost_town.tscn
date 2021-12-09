@@ -174,6 +174,8 @@ shape = SubResource( 16 )
 
 [node name="Barrel" parent="Map/Entities" instance=ExtResource( 7 )]
 position = Vector2( 413.066, 199.798 )
+collision_layer = 5
+collision_mask = 5
 color = Color( 0.607843, 0.329412, 0.168627, 1 )
 
 [node name="Sprite" type="Sprite" parent="Map/Entities/Barrel"]
@@ -188,6 +190,8 @@ light_mask = 2
 
 [node name="Barrel2" parent="Map/Entities" instance=ExtResource( 7 )]
 position = Vector2( 825.105, 758.153 )
+collision_layer = 5
+collision_mask = 5
 color = Color( 0.607843, 0.329412, 0.168627, 1 )
 
 [node name="Sprite" type="Sprite" parent="Map/Entities/Barrel2"]
@@ -202,6 +206,8 @@ light_mask = 2
 
 [node name="Barrel3" parent="Map/Entities" instance=ExtResource( 7 )]
 position = Vector2( 1142.96, 315.842 )
+collision_layer = 5
+collision_mask = 5
 color = Color( 0.607843, 0.329412, 0.168627, 1 )
 
 [node name="Sprite" type="Sprite" parent="Map/Entities/Barrel3"]
