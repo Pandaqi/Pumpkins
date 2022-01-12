@@ -50,6 +50,7 @@ func update_bot_status():
 	frame = player_num*3 + frame
 	
 	bot.set_frame(frame)
+	on_change()
 
 func make_human():
 	is_bot = false
@@ -65,9 +66,21 @@ func make_bot():
 func update_team_icon():
 	team.set_frame(cur_team)
 
+func set_team(t):
+	cur_team = t
+	update_team_icon()
+	on_change()
+
 func change_team():
 	cur_team = (cur_team + 1) % GlobalDict.cfg.max_players
 	update_team_icon()
+	on_change()
+
+# Immediately update the dictionary with the new settings
+# So teams and stuff always stays the same as before, even if we move away
+# (Used to only save configuration once you started the game)
+func on_change():
+	GlobalDict.player_data[player_num] = get_data()
 
 func disable():
 	bg.set_frame(1)
@@ -76,6 +89,7 @@ func disable():
 	extra_buttons.set_visible(false)
 	
 	state = "disabled"
+	on_change()
 
 func open():
 	bg.set_frame(0)
@@ -91,6 +105,7 @@ func enable():
 	extra_buttons.set_visible(true)
 	
 	state = "enabled"
+	on_change()
 
 func show_extra_buttons(type):
 	if type == 'controller':

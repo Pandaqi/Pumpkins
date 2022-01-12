@@ -17,7 +17,7 @@ var num_frames_aimed : int = 0
 
 func activate(num):
 	is_active = true
-	if GlobalDict.cfg.use_control_scheme_with_constant_moving:
+	if not GlobalDict.cfg.use_control_scheme_with_joystick_aim:
 		MAX_SLIDES = 2
 	
 	remove_child(my_gui)

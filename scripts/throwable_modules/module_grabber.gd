@@ -38,7 +38,7 @@ func force_grab(other_body):
 
 func check_valid_grab(other_body):
 	if not other_body.modules.knives.is_mine(body): return false
-	if other_body.modules.knives.at_max_capacity(): return false
+	if other_body.modules.knives.at_max_capacity(body): return false
 	complete_grab(other_body)
 	return true
 

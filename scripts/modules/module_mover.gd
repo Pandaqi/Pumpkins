@@ -79,7 +79,7 @@ func continue_on_last_velocity():
 
 func move_regular(vec, dt):
 	var look_where_were_going = true
-	if GlobalDict.cfg.use_control_scheme_with_constant_moving and body.modules.slasher.slashing_enabled:
+	if not GlobalDict.cfg.use_control_scheme_with_joystick_aim and body.modules.slasher.slashing_enabled:
 		look_where_were_going = false
 	if body.modules.status.is_bot:
 		look_where_were_going = true
@@ -152,12 +152,12 @@ func force_enable():
 
 func _on_Input_button_press():
 	if force_move_override: return
-	if GlobalDict.cfg.use_control_scheme_with_constant_moving and (not body.modules.status.is_bot): return
+	if not GlobalDict.cfg.use_control_scheme_with_joystick_aim and (not body.modules.status.is_bot): return
 	disable()
 
 func _on_Input_button_release():
 	if force_move_override: return
-	if GlobalDict.cfg.use_control_scheme_with_constant_moving and (not body.modules.status.is_bot): return
+	if not GlobalDict.cfg.use_control_scheme_with_joystick_aim and (not body.modules.status.is_bot): return
 	enable()
 
 func change_speed_multiplier(val):

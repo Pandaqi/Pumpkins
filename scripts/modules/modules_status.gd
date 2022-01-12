@@ -92,7 +92,7 @@ func turn_into_player():
 func rotate_incrementally():
 	if is_bot: return false
 	if GlobalInput.is_keyboard_player(player_num): return true
-	if GlobalDict.cfg.use_control_scheme_with_constant_moving: return true
+	if not GlobalDict.cfg.use_control_scheme_with_joystick_aim: return true
 	return false
 
 func make_powerup_leftover():
@@ -125,6 +125,10 @@ func die(forced  = false):
 	if mode.respawn_on_death() and not forced:
 		body.modules.respawner.respawn()
 		return
+
+	# NOTE: must come before is_dead = true, because I somehow made it dependent on that?!
+	if body.modules.has('specialstatus'):
+		body.modules.specialstatus.disable()
 
 	is_dead = true
 	particles.general_feedback(body.global_position, "You died!")

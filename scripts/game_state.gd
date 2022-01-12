@@ -19,7 +19,8 @@ var awards = {
 	"distance_traveled": "Distance Traveled (km)",
 	"average_size": "Average Size (m)",
 	"quick_stabs": "Quick Stabs",
-	"long_throws": "Long Throws"
+	"long_throws": "Long Throws",
+	"passive": "Did Nothing"
 }
 
 func activate():
@@ -114,7 +115,10 @@ func handout_awards():
 	var players = get_tree().get_nodes_in_group("Players")
 	var final_results = {}
 	
+	print(players)
+	
 	for stat in awards:
+		if stat == "passive": continue
 		final_results[stat] = []
 		
 		for p in players:
@@ -129,35 +133,38 @@ func handout_awards():
 			final_results[stat].append(obj)
 		
 		final_results[stat].sort_custom(self, "award_sort")
-	
+
 	# Step 2: for each player, find lists where they are either FIRST or LAST
+	var last_index = players.size() - 1
 	for p in players:
 		var wins = []
 		var num = p.modules.status.player_num
 		
 		for stat in final_results:
 			var list = final_results[stat]
+			var its_a_tie = (list[0].val == list[1].val) or (list[last_index].val == list[last_index-1].val)
+			if its_a_tie: continue
+			
 			if list[0].num == num:
 				var obj = { 
 					'stat': stat, 
-					'type': 'high', 
+					'type': 'low', 
 					'val': list[0].val 
 				}
 				
 				wins.append(obj)
-			elif list[list.size() - 1].num == num:
+			elif list[last_index].num == num:
 				var obj = { 
 					'stat': stat, 
-					'type': 'low', 
-					'val': list[list.size() - 1].val
+					'type': 'high', 
+					'val': list[last_index].val
 				}
 				wins.append(obj)
 		
 		var no_award_possible = (wins.size() <= 0)
 		if no_award_possible:
-			wins = [{ 'stat': 'passive', 'type': 'high', 'val': INF }]
-			continue
-	
+			wins = [{ 'stat': 'passive', 'type': 'high', 'val': 0 }]
+
 		# Step 3: pick a random one and assign it to the my_award variable on the player
 		var random_choice = wins[randi() % wins.size()]
 		
@@ -185,6 +192,9 @@ func show_gameover_gui(team_num):
 		if p.modules.status.is_dead:
 			p.modules.status.show_again()
 
+func make_input_available():
+	interface_available = true
+
 func _input(ev):
 	if not game_over_state: return
 	if not interface_available: return
@@ -196,3 +206,6 @@ func _input(ev):
 	elif ev.is_action_released("exit"):
 		GlobalAudio.play_static_sound("ui_button_press")
 		Global.load_menu()
+
+func award_sort(a,b):
+	return a.val < b.val

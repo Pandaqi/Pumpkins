@@ -8,6 +8,9 @@ onready var timer = $Timer
 
 func activate():
 	curtains = get_tree().get_nodes_in_group("Curtains")
+	for c in curtains:
+		c.close()
+	
 	_on_Timer_timeout()
 
 func on_player_death(_p) -> Dictionary:

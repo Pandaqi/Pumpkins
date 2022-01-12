@@ -141,7 +141,6 @@ frame = 1
 [node name="Croissant3" parent="Map/Entities/Food" index="5" instance=ExtResource( 7 )]
 position = Vector2( 390.344, 314.901 )
 rotation = 2.38409
-scale = Vector2( 1, 1 )
 color = Color( 1, 0.423529, 0.164706, 1 )
 create_collectible_parts = true
 
@@ -170,7 +169,6 @@ frame = 2
 [node name="Aubergine2" parent="Map/Entities/Food" index="7" instance=ExtResource( 7 )]
 position = Vector2( 1640.51, 744.513 )
 rotation = -2.57506
-scale = Vector2( 1, 1 )
 color = Color( 0.47451, 0.0666667, 0.439216, 1 )
 create_collectible_parts = true
 
@@ -185,7 +183,6 @@ frame = 2
 [node name="Aubergine3" parent="Map/Entities/Food" index="8" instance=ExtResource( 7 )]
 position = Vector2( 1667.53, 778.681 )
 rotation = 1.47279
-scale = Vector2( 1, 1 )
 color = Color( 0.47451, 0.0666667, 0.439216, 1 )
 create_collectible_parts = true
 
@@ -213,7 +210,6 @@ frame = 3
 [node name="Apple2" parent="Map/Entities/Food" index="10" instance=ExtResource( 7 )]
 position = Vector2( 1536.15, 1013.35 )
 rotation = -1.06679
-scale = Vector2( 1, 1 )
 color = Color( 0.729412, 0.101961, 0.0352941, 1 )
 create_collectible_parts = true
 
@@ -322,7 +318,7 @@ texture = ExtResource( 8 )
 hframes = 6
 frame = 5
 
-[node name="Table" type="StaticBody2D" parent="Map/Entities" index="2"]
+[node name="Table" type="StaticBody2D" parent="Map/Entities" index="2" groups=["NonSolids"]]
 position = Vector2( 310, 196 )
 collision_layer = 5
 collision_mask = 5
@@ -330,7 +326,7 @@ collision_mask = 5
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Table" index="0"]
 polygon = PoolVector2Array( 2, -181, 85, -181, 112, -168, 131, -141, 128, 137, 115, 167, 87, 184, -77, 184, -109, 170, -122, 143, -122, -141, -104, -171, -77, -181 )
 
-[node name="Table2" type="StaticBody2D" parent="Map/Entities" index="3"]
+[node name="Table2" type="StaticBody2D" parent="Map/Entities" index="3" groups=["NonSolids"]]
 position = Vector2( 1594.34, 876.226 )
 collision_layer = 5
 collision_mask = 5
@@ -338,7 +334,7 @@ collision_mask = 5
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Entities/Table2" index="0"]
 polygon = PoolVector2Array( 2, -181, 85, -181, 112, -168, 131, -141, 128, 137, 115, 167, 87, 184, -77, 184, -109, 170, -122, 143, -122, -141, -104, -171, -77, -181 )
 
-[node name="Table3" type="StaticBody2D" parent="Map/Entities" index="4"]
+[node name="Table3" type="StaticBody2D" parent="Map/Entities" index="4" groups=["NonSolids"]]
 position = Vector2( 954.303, 518.409 )
 collision_layer = 5
 collision_mask = 5
@@ -416,9 +412,7 @@ rotation = 0.342911
 occluder = SubResource( 4 )
 light_mask = 2
 
-[node name="FamilyMember" type="StaticBody2D" parent="Map/Entities" index="13" groups=[
-"Stuckables",
-]]
+[node name="FamilyMember" type="StaticBody2D" parent="Map/Entities" index="13" groups=["Stuckables"]]
 position = Vector2( 765.127, 388.913 )
 collision_layer = 5
 collision_mask = 5
@@ -456,9 +450,7 @@ light_mask = 2
 occluder = SubResource( 2 )
 light_mask = 2
 
-[node name="FamilyMember2" type="StaticBody2D" parent="Map/Entities" index="14" groups=[
-"Stuckables",
-]]
+[node name="FamilyMember2" type="StaticBody2D" parent="Map/Entities" index="14" groups=["Stuckables"]]
 position = Vector2( 1058.8, 684.08 )
 collision_layer = 5
 collision_mask = 5

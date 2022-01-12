@@ -4,7 +4,7 @@ const SLICE_EXPLODE_FORCE : float = 1000.0
 const MIN_AREA_FOR_SHAPE : float = 100.0
 
 # NOTE: if player falls below this size, they die
-const PLAYER_MIN_AREA_FOR_SHAPE : float = 1250.0
+const PLAYER_MIN_AREA_FOR_SHAPE : float = 1375.0
 const PLAYER_MIN_AREA_GENERAL : float = 1000.0
 
 var player_part_scene = preload("res://scenes/player_part.tscn")

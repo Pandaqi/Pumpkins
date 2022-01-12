@@ -145,7 +145,8 @@ func move(dt):
 	if body.modules.status.in_water:
 		damping = WATER_DAMPING
 	
-	if not constant_velocity:
+	var keep_pushing_through_non_solid = (body.modules.fakebody.nonsolids_hit.size() > 0)
+	if not constant_velocity and not keep_pushing_through_non_solid:
 		velocity *= damping
 	
 	var new_pos = body.global_position

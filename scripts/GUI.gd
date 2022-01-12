@@ -18,6 +18,3 @@ func tween_appearance(obj, use_delay = true):
 		delay)
 	
 	tween.start()
-
-func _on_Tween_tween_all_completed():
-	game_state.interface_available = true

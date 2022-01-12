@@ -32,11 +32,6 @@ func update_times_opened():
 		settings_hint_text.set_visible(false)
 		settings_anim_player.stop()
 
-func save_configuration():
-	for i in range(max_players):
-		var interface = interfaces[i]
-		GlobalDict.player_data[i] = interface.get_data()
-
 func count_total_teams():
 	var teams = []
 	for i in range(max_players):
@@ -87,6 +82,9 @@ func fill_container():
 		p.set_player_num(i)
 		play_appearance_tween(p)
 		interfaces.append(p)
+		
+		# NOTE: HAVE to do it here, don't know why it doesn't work in "update_interface()", but it DOES NOT
+		p.set_team(GlobalDict.player_data[i].team)
 	
 	update_interface(false)
 	play_appearance_tween(settings)

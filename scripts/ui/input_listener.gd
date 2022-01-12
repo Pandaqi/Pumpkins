@@ -42,8 +42,6 @@ func check_navigation(ev):
 		exit()
 
 func start_game():
-	main.save_configuration()
-	
 	if main.count_total_players() <= 1:
 		particles.general_feedback(screen_center, "Can't play solo!", main)
 		return

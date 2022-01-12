@@ -1,7 +1,7 @@
 extends Node
 
-const NUMBERS = { 'min': 0, 'max': 3 }
-const SPAWN_TIMES = { 'min': 2.0, 'max': 5.0 }
+const NUMBERS = { 'min': 0, 'max': 2 }
+const SPAWN_TIMES = { 'min': 3.0, 'max': 6.0 }
 const POWERUP_SIZE : float = 64.0 # 0.5*128
 const MIN_DIST_TO_PLAYER : float = 100.0
 const MIN_DIST_TO_OTHER_POWERUP : float = 200.0
@@ -27,6 +27,8 @@ var pre_locs = null
 var placement_params
 
 var spawns_since_last_req_type : int = 0
+
+var powerups_spawned_per_type = {}
 
 func activate():
 	available_powerups = GlobalDict.cfg.powerups
@@ -111,8 +113,9 @@ func place_powerup(cur_num_powerups = 0, forced_params = {}):
 		params.is_throwable = true
 		params.rand_type = 'knife'
 
+	var final_type = params.rand_type
 	p.set_throwable(params.is_throwable)
-	p.set_type(params.rand_type)
+	p.set_type(final_type)
 	
 	var rand_shape = shape_manager.get_random_shape()
 	p.set_shape(rand_shape)
@@ -123,6 +126,27 @@ func place_powerup(cur_num_powerups = 0, forced_params = {}):
 		auto_reveal_timer.wait_time = 0.2
 		auto_reveal_timer.start()
 		forced_slices.append(p)
+	
+	record_used_type(final_type)
+
+func record_used_type(tp : String):
+	if not GlobalDict.powerups.has(tp): return
+	
+	print("RECORDED POWERUP TYPE")
+	print(tp)
+	
+	if not powerups_spawned_per_type.has(tp):
+		powerups_spawned_per_type[tp] = 0
+	
+	powerups_spawned_per_type[tp] += 1
+	
+	var maximum = INF
+	if GlobalDict.powerups[tp].has("max_per_game"):
+		maximum = GlobalDict.powerups[tp].max_per_game
+	
+	if powerups_spawned_per_type[tp] >= maximum:
+		available_powerups.erase(tp)
+		precalculate_powerup_probabilities()
 
 func check_required_type(rand_type, is_throwable):
 	var params = {

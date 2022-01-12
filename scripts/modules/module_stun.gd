@@ -42,3 +42,7 @@ func stop():
 
 func _on_Timer_timeout():
 	stop()
+
+func disable():
+	timer.stop()
+	stop()

@@ -11,6 +11,8 @@ var stones = []
 onready var map = get_node("/root/Main/Map")
 onready var players = get_node("/root/Main/Players")
 
+var ravines_to_remove = ["DiagonalTwo", "DiagonalThree", "DiagonalOne"]
+
 func activate():
 	place_tutorial_stones()
 	restart_timer()
@@ -53,3 +55,11 @@ func _on_Timer_timeout():
 func restart_timer():
 	timer.wait_time = rand_range(TIMER.min, TIMER.max)
 	timer.start()
+
+
+func _on_RemovalTimer_timeout():
+	if ravines_to_remove.size() <= 0: return
+	
+	var cur_ravine = ravines_to_remove.pop_front()
+	if map.bg.has_node(cur_ravine):
+		map.bg.get_node(cur_ravine).queue_free()

@@ -48,12 +48,15 @@ code = "shader_type canvas_item;
 
 uniform float radius = 3000.0;
 uniform float alpha = 0.5;
+uniform float border_thickness = 20.0;
 
 void fragment() {
 	vec2 real_uv = UV * vec2(1920.0, 1080.0);
 	float dist = length(real_uv - 0.5*vec2(1920.0, 1080.0));
 	if(dist > radius) {
 		COLOR = vec4(0,0,0,alpha);
+	} else if (dist > (radius - border_thickness)) {
+		COLOR = vec4(1,0.25,0.25,0.95);
 	} else {
 		COLOR = vec4(0,0,0,0.0);
 	}
@@ -63,6 +66,7 @@ void fragment() {
 shader = SubResource( 3 )
 shader_param/radius = 3000.0
 shader_param/alpha = 0.5
+shader_param/border_thickness = 20.0
 
 [sub_resource type="Animation" id=5]
 resource_name = "FadeIn"
@@ -384,6 +388,20 @@ tracks/5/keys = {
 "update": 0,
 "values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.862745 ), Color( 0, 0, 0, 0.862745 ), Color( 0, 0, 0, 0 ) ]
 }
+tracks/6/type = "method"
+tracks/6/path = NodePath("GameState")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 4 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "make_input_available"
+} ]
+}
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -657,5 +675,4 @@ anims/TextFlash = SubResource( 8 )
 [connection signal="timeout" from="Powerups/Timer" to="Powerups" method="_on_Timer_timeout"]
 [connection signal="timeout" from="Powerups/AutoRevealTimer" to="Powerups" method="_on_AutoRevealTimer_timeout"]
 [connection signal="timeout" from="DramaticSlice/Timer" to="DramaticSlice" method="_on_Timer_timeout"]
-[connection signal="tween_all_completed" from="GUI/Tween" to="GUI" method="_on_Tween_tween_all_completed"]
 [connection signal="tween_all_completed" from="PauseMenu/Tween" to="PauseMenu" method="_on_Tween_tween_all_completed"]

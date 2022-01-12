@@ -37,7 +37,7 @@ func grab(obj, type, is_throwable):
 	if disabled: return
 	
 	var already_full = at_max_capacity()
-	if is_throwable: already_full = body.modules.knives.at_max_capacity()
+	if is_throwable: already_full = body.modules.knives.at_max_capacity(body)
 	if already_full: return
 	
 	GlobalAudio.play_dynamic_sound(body, "collect")

@@ -1,0 +1,49 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="vine_data" version="1.3.0" audacityversion="2.3.3" sel0="0.2610833333" sel1="0.5192083333" vpos="0" h="0.0000000000" zoom="739.1774891775" rate="48000.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags>
+		<tag name="ALBUM" value="FesliyanStudios.com"/>
+		<tag name="Band" value="FesliyanStudios.com"/>
+		<tag name="ARTIST" value="FesliyanStudios.com"/>
+		<tag name="TITLE" value="FesliyanStudios.com"/>
+		<tag name="COMMENTS" value="FesliyanStudios.com"/>
+		<tag name="Composer" value="FesliyanStudios.com"/>
+		<tag name="GENRE" value="sound Clip"/>
+	</tags>
+	<wavetrack name="Hitting-Tree-Branch-C-www.fesliyanstudios.com" isSelected="1" height="150" minimized="0" channel="0" linked="1" mute="0" solo="0" rate="48000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="11182">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808c09.au" len="11182" min="-0.430748" max="0.707978" rms="0.046628"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="0.26108333" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="12390">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808d2f.au" len="12390" min="-0.707952" max="0.629461" rms="0.054301"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Hitting-Tree-Branch-C-www.fesliyanstudios.com" isSelected="1" height="150" minimized="0" channel="1" linked="0" mute="0" solo="0" rate="48000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="11182">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808aaf.au" len="11182" min="-0.430748" max="0.707978" rms="0.046628"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="0.26108333" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="12390">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808be6.au" len="12390" min="-0.707952" max="0.629461" rms="0.054301"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>

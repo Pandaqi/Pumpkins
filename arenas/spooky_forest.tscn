@@ -77,9 +77,7 @@ centered = false
 texture = ExtResource( 3 )
 centered = false
 
-[node name="EdgeTrees" type="StaticBody2D" parent="Map/Entities" groups=[
-"Deflectables",
-]]
+[node name="EdgeTrees" type="StaticBody2D" parent="Map/Entities" groups=["Deflectables"]]
 collision_layer = 5
 collision_mask = 5
 
@@ -202,11 +200,7 @@ position = Vector2( 1425.53, 418.607 )
 [node name="Light2D4" parent="Map/Entities" instance=ExtResource( 5 )]
 position = Vector2( 1697.06, 953.18 )
 
-[node name="SliceTrunk" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 124.925, 527.613 )
 collision_layer = 5
 collision_mask = 5
@@ -224,11 +218,7 @@ use_multi_color = false
 position = Vector2( -2.53226, -2.07489 )
 texture = ExtResource( 8 )
 
-[node name="SliceTrunk2" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk2" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 162.706, 744.466 )
 collision_layer = 5
 collision_mask = 5
@@ -246,11 +236,7 @@ use_multi_color = false
 position = Vector2( -2.94489, -5.71002 )
 texture = ExtResource( 18 )
 
-[node name="SliceTrunk3" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk3" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 497.951, 1856.86 )
 collision_layer = 5
 collision_mask = 5
@@ -269,11 +255,7 @@ use_multi_color = false
 position = Vector2( -253.181, -933.057 )
 texture = ExtResource( 19 )
 
-[node name="SliceTrunk4" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk4" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 586.909, 717.601 )
 collision_layer = 5
 collision_mask = 5
@@ -291,11 +273,7 @@ use_multi_color = false
 position = Vector2( -2.94489, -5.71002 )
 texture = ExtResource( 11 )
 
-[node name="SliceTrunk5" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk5" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 1169.57, 743.057 )
 collision_layer = 5
 collision_mask = 5
@@ -313,11 +291,7 @@ use_multi_color = false
 position = Vector2( -2.94489, -5.71002 )
 texture = ExtResource( 12 )
 
-[node name="SliceTrunk6" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk6" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 1401.5, 948.118 )
 collision_layer = 5
 collision_mask = 5
@@ -335,11 +309,7 @@ use_multi_color = false
 position = Vector2( -2.94489, -5.71002 )
 texture = ExtResource( 13 )
 
-[node name="SliceTrunk7" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk7" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 1336.4, 234.184 )
 collision_layer = 5
 collision_mask = 5
@@ -357,11 +327,7 @@ use_multi_color = false
 position = Vector2( -2.94489, -5.71002 )
 texture = ExtResource( 14 )
 
-[node name="SliceTrunk8" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk8" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 1742.68, 256.91 )
 collision_layer = 5
 collision_mask = 5
@@ -379,11 +345,7 @@ use_multi_color = false
 position = Vector2( -2.94489, -5.71002 )
 texture = ExtResource( 15 )
 
-[node name="SliceTrunk9" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk9" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 578.03, 127.938 )
 collision_layer = 5
 collision_mask = 5
@@ -401,11 +363,7 @@ use_multi_color = false
 position = Vector2( -2.94489, -5.71002 )
 texture = ExtResource( 16 )
 
-[node name="SliceTrunk10" type="StaticBody2D" parent="Map/Entities" groups=[
-"Sliceables",
-"Stuckables",
-"ThrowableDeleters",
-]]
+[node name="SliceTrunk10" type="StaticBody2D" parent="Map/Entities" groups=["Sliceables", "Stuckables", "ThrowableDeleters"]]
 position = Vector2( 453.438, 150.591 )
 collision_layer = 5
 collision_mask = 5
@@ -585,48 +543,40 @@ collision_mask = 5
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/StaticBody2D21"]
 polygon = PoolVector2Array( -7.52271, -36.871, 52.7985, -20.9969, 40.8929, 34.5621, 21.8442, 49.6423, -17.0471, 56.7856, -52.7637, 32.181, -35.3022, -6.71033 )
 
-[node name="Lantern" type="StaticBody2D" parent="Map/Overlay" groups=[
-"Stuckables",
-]]
+[node name="Lantern" type="StaticBody2D" parent="Map/Overlay" groups=["Stuckables"]]
 position = Vector2( 1681.34, 930.44 )
 collision_layer = 5
 collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern"]
-polygon = PoolVector2Array( -5.93579, -73.778, -35.0038, -36.3623, -63.577, 46.9763, -25.4794, 83.4865, 60.2402, 18.403, 58.6528, -20.4883, 27.3997, -53.1417 )
+polygon = PoolVector2Array( -2.33997, -58.44, -26.34, -30.44, -45.34, 38.56, -23.34, 71.56, 42.66, 12.56, 44.66, -11.44, 21.66, -44.44 )
 
-[node name="Lantern2" type="StaticBody2D" parent="Map/Overlay" groups=[
-"Stuckables",
-]]
+[node name="Lantern2" type="StaticBody2D" parent="Map/Overlay" groups=["Stuckables"]]
 position = Vector2( 1417.83, 425.647 )
 rotation = 2.00724
 collision_layer = 5
 collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern2"]
-polygon = PoolVector2Array( -5.93579, -73.778, -49.9858, -9.87695, -62.4601, 30.9734, -55.1451, 51.6267, -28.5202, 75.5724, 37.3199, 43.986, 69.7896, -0.936523, 50.0428, -45.1493, 17.8263, -74.7878 )
+polygon = PoolVector2Array( -0.405792, -58.4803, -36.3582, -19.642, -43.4319, 10.14, -43.7999, 40.1044, -21.5113, 59.5009, 30.991, 37.2184, 57.458, 1.70081, 42.3618, -35.3951, 26.1738, -48.8096 )
 
-[node name="Lantern3" type="StaticBody2D" parent="Map/Overlay" groups=[
-"Stuckables",
-]]
+[node name="Lantern3" type="StaticBody2D" parent="Map/Overlay" groups=["Stuckables"]]
 position = Vector2( 735.246, 511.366 )
 rotation = 4.14521
 collision_layer = 5
 collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern3"]
-polygon = PoolVector2Array( 11.3941, -72.8238, -21.2429, -54.0893, -51.8212, -10.5172, -67.9749, 38.4791, -41.7529, 71.1803, 10.1185, 56.2286, 44.8611, 30.9905, 66.4515, 1.77173, 42.3067, -47.4863 )
+polygon = PoolVector2Array( 10.5912, -58.7557, -16.3349, -46.2663, -46.8775, -7.62506, -55.7164, 34.1706, -35.9423, 64.5513, 0.798645, 57.1283, 37.7015, 30.838, 57.655, 3.23624, 39.1924, -44.0938 )
 
-[node name="Lantern4" type="StaticBody2D" parent="Map/Overlay" groups=[
-"Stuckables",
-]]
+[node name="Lantern4" type="StaticBody2D" parent="Map/Overlay" groups=["Stuckables"]]
 position = Vector2( 205.054, 146.264 )
 rotation = 2.9008
 collision_layer = 5
 collision_mask = 5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Overlay/Lantern4"]
-polygon = PoolVector2Array( -7.12758, -73.8231, -41.7975, -32.4824, -58.4288, -4.69249, -67.0944, 40.5818, -43.8608, 72.4399, -11.7312, 68.0704, 44.8611, 30.9905, 64.2357, 4.99666, 59.1477, -13.4567, 28.5596, -56.0697 )
+polygon = PoolVector2Array( -6.31752, -57.9134, -35.0409, -24.808, -47.5451, 0.953323, -59.0262, 39.3223, -35.3939, 64.6899, -10.9112, 61.4344, 34.7814, 26.3177, 46.7914, -1.6244, 41.6108, -22.461, 21.1304, -48.0842 )
 
 [node name="Collectors" type="Node2D" parent="."]
 

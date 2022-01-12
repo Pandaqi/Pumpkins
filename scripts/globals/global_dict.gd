@@ -27,7 +27,7 @@ var base_cfg = {
 	'predefined_powerup_locations': null,
 	
 	# version 2 improvement settings
-	'use_control_scheme_with_constant_moving': true,
+	'use_control_scheme_with_joystick_aim': false,
 	'limit_fire_rate': true,
 	
 	'invincibility_after_hit': true,
@@ -69,7 +69,7 @@ var arenas = {
 	"dark_jungle": { "frame": 3, "num_starting_knives": 3, "demo": true },
 	"ghost_town": { "frame": 2, "demo": true },
 	"graveyard": { "frame": 1 },
-	"spooky_forest": { "frame": 0 },
+	"spooky_forest": { "frame": 0, "starting_shape_scale": 0.75 },
 	"bogus_blackouts": { "frame": 7 },
 	"swimming_pool": { "frame": 6 },
 	"family_dinner": { "frame": 8, "ghost_part_target": 10 },
@@ -93,7 +93,7 @@ var configurable_settings = {
 	"stun_after_hit": { "frame": 11, "def": true },
 	"invincibility_after_hit": { "frame": 12, "def": true },
 	"move_faster_if_big": { "frame": 13, "def": true },
-	"use_control_scheme_with_constant_moving": { "frame": 14, "def": true, "demo": true }
+	"use_control_scheme_with_joystick_aim": { "frame": 14, "def": false, "demo": true }
 }
 
 var throwables = {
@@ -163,15 +163,15 @@ var predefined_shapes = {
 }
 
 var powerups = {
-	"grow": { "frame": 0, "category": "shape", "prob": 5, "demo": true },
+	"grow": { "frame": 0, "category": "shape", "prob": 5, "demo": true, "max_per_game": 4 },
 	"shrink": { "frame": 1, "category": "shape", "prob": 5, "bad": true, "demo": true },
-	"morph": { "frame": 2, "category": "shape" },
-	"ghost": { "frame": 3, "temporary": true, "category": "shape" },
-	"hungry": { "frame": 4, "temporary": true, "category": "shape" },
+	"morph": { "frame": 2, "category": "shape", "max_per_game": 3 },
+	"ghost": { "frame": 3, "temporary": true, "category": "shape", "max_per_game": 7 },
+	"hungry": { "frame": 4, "temporary": true, "category": "shape", "max_per_game": 4 },
 	
 	#"grow_range": { "frame": 5, "category": "slashing" },
 	#"shrink_range": { "frame": 6, "category": "slashing" },
-	"repel_knives": { "frame": 7, "temporary": true, "category": "slashing", "prob": 3 },
+	"repel_knives": { "frame": 7, "temporary": true, "category": "slashing", "prob": 3, "max_per_game": 4 },
 	"lose_knife": { "frame": 8, "category": "slashing", "bad": true },
 	"faster_throw": { "frame": 11, "temporary": true, "category": "slashing" },
 	"slower_throw": { "frame": 12, "temporary": true, "category": "slashing", "bad": true },

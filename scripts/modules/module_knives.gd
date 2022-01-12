@@ -142,13 +142,13 @@ func remove_specific(obj):
 func count():
 	return knives_held.size()
 
-func at_max_capacity():
+func at_max_capacity(body = null):
 	var max_cap = (knives_held.size() >= max_knives)
-	if max_cap: particles.general_feedback(body.global_position, "Full!")
+	if max_cap and body and body.modules.has('particles'): body.modules.particles.continuous_feedback("Full!")
 	return max_cap
 
 func grab_knife(knife):
-	if at_max_capacity(): return
+	if at_max_capacity(body): return
 	if pickup_disabled: return
 	if disabled: return
 	

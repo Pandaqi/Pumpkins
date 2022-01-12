@@ -50,8 +50,18 @@ func load_predefined_shapes():
 	
 	# ModeManager not loaded yet, need to grab it this way
 	var mode_data = GlobalDict.modes[GlobalDict.cfg.game_mode]
+	var scale_modifier : float = 1.0
 	if mode_data.has("starting_shape_scale"):
-		shape_size *= mode_data.starting_shape_scale
+		scale_modifier = mode_data.starting_shape_scale
+	
+	var arena_data = GlobalDict.arenas[GlobalDict.cfg.arena]
+	if arena_data.has("starting_shape_scale"):
+		scale_modifier = arena_data.starting_shape_scale
+	
+	if mode_data.has('starting_shape_scale') and arena_data.has('starting_shape_scale'):
+		scale_modifier = min(mode_data.starting_shape_scale, arena_data.starting_shape_scale)
+	
+	shape_size *= scale_modifier
 	
 	for child in list.get_children():
 		if not (child is CollisionPolygon2D): continue

@@ -137,7 +137,7 @@ func _on_Input_move_vec(vec : Vector2, dt : float):
 	if disabled: return
 	if not slashing_enabled: return
 	
-	if GlobalDict.cfg.use_control_scheme_with_constant_moving and not body.modules.status.is_bot:
+	if not GlobalDict.cfg.use_control_scheme_with_joystick_aim and not body.modules.status.is_bot:
 		vec = Vector2.RIGHT
 	
 	if body.modules.status.in_water:
