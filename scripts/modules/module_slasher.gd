@@ -191,6 +191,7 @@ func snap_to_closest_target(aim_vec):
 
 func start_slash():
 	if body.modules.knives.has_no_knives(): return
+	if not body.modules.knives.get_first_knife(): return # in case we do have SOMETHING but it's not allowed to be THROWN
 	
 	GlobalAudio.play_dynamic_sound(body, "windup_throw")
 	throw_strength_sprite.set_visible(true)

@@ -55,6 +55,12 @@ func start_game():
 		particles.general_feedback(screen_center, "Max " + str(max_teams) + " teams!", main)
 		return
 	
+	var a_data = settings.get_arena_data()
+	var mode_and_arena_incompatible = a_data.has('forbidden_modes') and (settings.get_mode() in a_data.forbidden_modes)
+	if mode_and_arena_incompatible:
+		particles.general_feedback(screen_center, "Mode and Arena incompatible!", main)
+		return
+	
 	Global.start_game()
 
 func open_settings():

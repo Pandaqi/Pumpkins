@@ -23,8 +23,14 @@ func _ready():
 func get_mode_data():
 	return GlobalDict.modes[cur_mode]
 
+func get_mode():
+	return cur_mode
+
 func get_arena_data():
 	return GlobalDict.arenas[cur_arena]
+
+func get_arena():
+	return cur_arena
 
 func read_mode():
 	var val = GlobalConfig.read_game_config("modes", "final_val")

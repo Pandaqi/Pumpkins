@@ -105,6 +105,8 @@ func create_starting_knives():
 	randomly_position_knives()
 
 func move_knife(knife, new_ang):
+	if not knife or not is_instance_valid(knife): return
+	
 	unsnap_knife_angle(knife.rotation)
 	
 	# if taken, SWITCH the knives first

@@ -75,7 +75,7 @@ var arenas = {
 	"family_dinner": { "frame": 8, "ghost_part_target": 10 },
 	"pirate_curse": { "frame": 9 },
 	"haunted_house": { "frame": 5 },
-	"training_ravines": { "frame": 10, "def": true, "num_starting_knives": 3, "special_starting_positions": true, "demo": true }
+	"training_ravines": { "frame": 10, "def": true, "num_starting_knives": 3, "special_starting_positions": true, "demo": true, "forbidden_modes": ["dwarfing_dumplings"] }
 }
 
 var configurable_settings = {

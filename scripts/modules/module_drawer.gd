@@ -101,10 +101,11 @@ func calculate_shape_list():
 	return shape_list
 
 func cartoony_draw():
-	var shape_list
+	var shape_list = []
 	if body.modules.has('shaper'): 
 		shape_list = body.modules.shaper.shape_list + []
-	else:
+	
+	if shape_list.size() <= 0:
 		shape_list = calculate_shape_list()
 	
 	# pre-inflate all shapes (to ensure merges work)

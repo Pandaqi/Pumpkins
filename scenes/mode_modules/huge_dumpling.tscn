@@ -65,11 +65,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[node name="HugeDumpling" type="StaticBody2D" groups=[
-"HugeDumplings",
-"KeepAlives",
-"Sliceables",
-]]
+[node name="HugeDumpling" type="StaticBody2D" groups=["HugeDumplings", "KeepAlives", "Sliceables"]]
 script = ExtResource( 4 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
@@ -133,8 +129,8 @@ anims/DumplingFlickerBad = ExtResource( 8 )
 anims/RESET = SubResource( 2 )
 
 [connection signal="shape_updated" from="Shaper" to="Status" method="_on_Shaper_shape_updated"]
+[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Area" method="_on_Shaper_shape_updated"]
 [connection signal="shape_updated" from="Shaper" to="Invincibility" method="_on_Shaper_shape_updated"]
-[connection signal="shape_updated" from="Shaper" to="Drawer" method="_on_Shaper_shape_updated"]
 [connection signal="body_entered" from="Area/Area2D" to="Area" method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="Invincibility/Timer" to="Invincibility" method="_on_Timer_timeout"]

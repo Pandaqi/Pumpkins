@@ -24,7 +24,7 @@ func activate():
 			lights.append(child)
 	
 	is_day = false
-	change_mode()
+	_on_Timer_timeout()
 
 func on_player_death(p) -> Dictionary:
 	dead_players.append(p)
